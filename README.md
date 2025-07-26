@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Temp Analysis
 
 A beginner-friendly Python project to analyze daily temperature data of a city.  
@@ -42,3 +43,7 @@ Setup instructions and sample usage will be added as the project develops.
 ## Collaboration
 
 This project is developed in collaboration with a teammate as a learning exercise. Contributions, ideas, or suggestions are always welcome.
+=======
+# temp-analysis
+Analyze daily city temperature data using Pandas &amp; Matplotlib
+>>>>>>> 45e7ac919e6a17bbfad247fb73e47795b4afe183
