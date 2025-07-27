@@ -1,11 +1,5 @@
 import pandas as pd
 from main import df
-# from data_cleaning import df
-
-# def get_df_from_data_cleaning():
-#     df = validate_data()
-#     return df
-# df = get_df_from_data_cleaning()
 
 def get_months():
     df["Month"] = (pd.to_datetime(df["Date_Time"]).dt.month)        # convert "Date_Time" to datetime and add to "Month" series
@@ -29,8 +23,6 @@ def get_season():
 get_season()
 
 def summry_statistic():
-    # df.drop(columns= ["Month"])
     print(f"\nSummary of statistics:\n{df.drop(columns= ["Month"]).describe()}")
-    print(df)
 
 summry_statistic()
