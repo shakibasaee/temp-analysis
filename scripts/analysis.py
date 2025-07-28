@@ -24,19 +24,28 @@ def get_season():
     df["Season"] = df["Month"].apply(conver_to_season)
     print(df)
 
-    print (print(df["Month"].value_counts().sort_index()))    
-    print (print(df["Season"].value_counts())
-)
-
 get_season()
 
-def month_season_temprature_statistics():
-    temperature_mean = df.groupby(["Month", "Season"])["Temperature_C"].mean().reset_index()
-    temperature_max = df["Temperature_C"].max()
-    temperature_min = df["Temperature_C"].min()
-    return temperature_mean
+def month_temp_statistics():
+    month_temp_statistic_df = df.groupby("Month")["Temperature_C"].agg(
+        Mean_temp_c = "mean",
+        Min_temp_c = "min",
+        Max_temp_c = "max"
+    ).reset_index()
+    
+    return month_temp_statistic_df
 
-print(month_season_temprature_statistics())
+print(month_temp_statistics())
+
+def season_temp_statistic():
+    season_temp_statistic_df = df.groupby("Season")["Temperature_C"].agg(
+        Mean_temp_C = "mean",
+        Max_temp_C = "max",
+        Min_temp_C = "min"
+    ).reset_index()
+    return season_temp_statistic_df
+
+print(season_temp_statistic())
 
 def summry_statistic():
     df.drop(columns= ["Month"], inplace = True)
@@ -62,4 +71,4 @@ def get_date():
     plt.show()
 
 
-get_date()
+# get_date()
