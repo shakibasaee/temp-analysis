@@ -71,4 +71,4 @@ def get_date():
     plt.show()
 
 
-# get_date()
+get_date()
