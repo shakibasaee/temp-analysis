@@ -8,6 +8,8 @@ def load_data(file_path):
 
 def filter_data(df):
     missing_values = ["na","n.a","n.a.","NA",0,0.0]
+    df.replace(missing_values, pd.NA, replace = True)
+    missing_values = ["na","n.a","n.a.","NA",0,0.0]
     df.replace(missing_values, pd.NA, inplace = True)
     df = df.dropna()
     return df
