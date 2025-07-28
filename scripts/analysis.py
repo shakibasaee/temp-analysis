@@ -18,7 +18,7 @@ def conver_to_season(month):
     elif month in [6,7,8]:
         return "Summer"
     elif month in [9,10,11]:
-        return "Fall"
+        return "Autumn"
     
 def get_season():
     df["Season"] = df["Month"].apply(conver_to_season)
@@ -37,11 +37,6 @@ def month_season_temprature_statistics():
     return temperature_mean
 
 print(month_season_temprature_statistics())
-
-def summry_statistic():
-    print(f"\nSummary of statistics:\n{df.drop(columns= ["Month"]).describe()}")
-
-summry_statistic()
 
 def summry_statistic():
     df.drop(columns= ["Month"], inplace = True)
