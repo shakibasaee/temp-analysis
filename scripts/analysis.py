@@ -2,7 +2,6 @@ from matplotlib import pyplot as plt
 import pandas as pd
 from main import df
 
-
 def get_months():
     df["Month"] = pd.to_datetime(
         df["Date_Time"]
@@ -32,7 +31,7 @@ get_season()
 
 
 def summry_statistic():
-    df.drop(columns=["Month"], inplace=True)
+    df.drop(columns= ["Month"], inplace = True)
     print(f"\nSummary of statistics:\n{df.describe()}")
 
 
