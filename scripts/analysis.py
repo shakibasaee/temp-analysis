@@ -32,6 +32,7 @@ get_season()
 
 def summry_statistic():
     df.drop(columns= ["Month"], inplace = True)
+    df.drop(columns=["Month"], inplace=True)
     print(f"\nSummary of statistics:\n{df.describe()}")
 
 
