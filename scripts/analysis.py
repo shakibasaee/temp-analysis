@@ -2,13 +2,11 @@ from matplotlib import pyplot as plt
 import pandas as pd
 from main import df
 
+
 def get_months():
-    df["Month"] = pd.to_datetime(
-        df["Date_Time"]
-    ).dt.month  # convert "Date_Time" to datetime and add to "Month" series
+    df["Month"] = pd.to_datetime(df["Date_Time"]).dt.month  # convert "Date_Time" to datetime and add to "Month" series
+    return df
 
-
-get_months()
 
 def conver_to_season(month):
     if month in [12,1,2]:
@@ -19,12 +17,11 @@ def conver_to_season(month):
         return "Summer"
     elif month in [9,10,11]:
         return "Autumn"
-    
+
+
 def get_season():
     df["Season"] = df["Month"].apply(conver_to_season)
-    print(df)
 
-get_season()
 
 def month_temp_statistics():
     month_temp_statistic_df = df.groupby("Month")["Temperature_C"].agg(
@@ -35,7 +32,6 @@ def month_temp_statistics():
     
     return month_temp_statistic_df
 
-print(month_temp_statistics())
 
 def season_temp_statistic():
     season_temp_statistic_df = df.groupby("Season")["Temperature_C"].agg(
@@ -45,14 +41,12 @@ def season_temp_statistic():
     ).reset_index()
     return season_temp_statistic_df
 
-print(season_temp_statistic())
 
 def summry_statistic():
     df.drop(columns= ["Month"], inplace = True)
     print(f"\nSummary of statistics:\n{df.describe()}")
 
 
-summry_statistic()
 
 
 def get_date():
