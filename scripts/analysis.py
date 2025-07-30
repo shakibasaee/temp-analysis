@@ -61,5 +61,3 @@ def get_date(df):
     plt.xticks(fontsize=7)
 
     plt.show()
-
-
