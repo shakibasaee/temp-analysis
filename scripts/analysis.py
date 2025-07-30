@@ -17,6 +17,8 @@ def convert_to_season(month):
         return "Summer"
     elif month in [9,10,11]:
         return "Autumn"
+    else:
+        return "Unknown"
 
 
 def month_temp_statistics(df):
@@ -59,5 +61,3 @@ def get_date(df):
     plt.xticks(fontsize=7)
 
     plt.show()
-
-
