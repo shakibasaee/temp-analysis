@@ -21,5 +21,8 @@ save_data(df, "data/cleaned_weather_data.csv")
 
 df = get_months(df)
 df["Season"] = df["Month"].apply(convert_to_season)
+print(f"Weather data is:\n{df}")
 month_temp_statistic_df = month_temp_statistics(df)
+print(f"Statistics based on month:\n{month_temp_statistic_df}")
 season_temp_statistic_df = season_temp_statistic(df)
+print(print(f"Statistics based on season:\n{season_temp_statistic_df}"))
