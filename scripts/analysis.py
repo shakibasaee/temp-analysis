@@ -1,7 +1,5 @@
 from matplotlib import pyplot as plt
 import pandas as pd
-# from main import df
-
 
 def get_months(df):
     df["Month"] = pd.to_datetime(df["Date_Time"]).dt.month  # convert "Date_Time" to datetime and add to "Month" series
