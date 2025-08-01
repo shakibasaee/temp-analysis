@@ -76,3 +76,24 @@ def months_plot(df):
     plt.style.use("ggplot")
 
     plt.show()
+
+
+def season_plot(df):
+    stats = season_temp_statistic(df)
+    stats.set_index("Season", inplace=True)
+    plt.style.use("ggplot")
+
+    plt.figure(figsize=(8, 8))
+    plt.pie(
+        stats["Mean_temp_C"],
+        labels=stats.index,
+        autopct="%1.1f%%",
+        startangle=90,
+        colors=["#ff9999", "#66b3ff", "#99ff99", "#ffcc99"],
+    )
+    plt.title("Average Seasonal Temperature")
+    plt.axis("equal")
+    plt.tight_layout()
+
+    plt.show()
+    return df
