@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
+from matplotlib.pylab import save
 import pandas as pd
-# from
+import os
 
 
 def get_months(df):
@@ -58,9 +59,13 @@ def get_date(df):
     plt.ylabel("Temperature (C)")
     plt.grid(True)
     plt.style.use("ggplot")
-    plt.xticks(fontsize=7)
+    plt.tight_layout()
 
-    plt.show()
+    if save:
+        plt.savefig("outputs/daily_avg_temperature.png", dpi=300)
+        plt.close()
+    else:
+        plt.show()
 
 
 def months_plot(df):
@@ -75,7 +80,11 @@ def months_plot(df):
     plt.grid(True)
     plt.style.use("ggplot")
 
-    plt.show()
+    if save:
+        plt.savefig("outputs/monthly_avg_temperature.png", dpi=300)
+        plt.close()
+    else:
+        plt.show()
 
 
 def season_plot(df):
@@ -95,5 +104,18 @@ def season_plot(df):
     plt.axis("equal")
     plt.tight_layout()
 
-    plt.show()
-    return df
+    if save:
+        plt.savefig("outputs/seasonal_avg_temperature.png", dpi=300)
+        plt.close()
+    else:
+        plt.show()
+
+
+def save_all_plots(df):
+    os.makedirs("outputs", exist_ok=True)
+
+    get_date(df, save=True)
+    months_plot(df, save=True)
+    season_plot(df, save=True)
+
+    print("All plots saved in 'outputs/' folder.")
