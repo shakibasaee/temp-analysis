@@ -3,10 +3,7 @@ from analysis import (
     convert_to_season,
     month_temp_statistics,
     season_temp_statistic,
-    summry_statistic,
-    get_date,
-    months_plot,
-    season_plot,
+    # summry_statistic,
 )
 from data_cleaning import (
     load_data,
@@ -14,6 +11,12 @@ from data_cleaning import (
     validate_data,
     simplify_data,
     save_data,
+)
+from plots import (
+    months_plot,
+    season_plot,
+    get_date,
+    save_all_plots,
 )
 
 df = load_data("data/weather_data.csv")
@@ -33,4 +36,5 @@ season_temp_statistic_df = season_temp_statistic(df)
 print(f"Statistics based on season:\n{season_temp_statistic_df}")
 months_plot(df)
 season_plot(df)
-df = get_date(df)
+get_date(df)
+save_all_plots(df)
