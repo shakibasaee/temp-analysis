@@ -75,4 +75,4 @@ def save_all_plots(df):
     months_plot(df, save=True)
     season_plot(df, save=True)
 
-    print("All plots saved in 'outputs/' folder.")
+    print('\nAll plots saved in "visualization/figures" folder.')
