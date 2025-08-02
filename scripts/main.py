@@ -12,7 +12,7 @@ from data_cleaning import (
     simplify_data,
     save_data,
 )
-from plots import (
+from visualization.plots import (
     months_plot,
     season_plot,
     get_date,

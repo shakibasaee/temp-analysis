@@ -18,7 +18,7 @@ def get_date(df, save=True):
     plt.tight_layout()
 
     if save:
-        plt.savefig("outputs/daily_avg_temperature.png", dpi=300)
+        plt.savefig("figures/daily_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
@@ -37,7 +37,8 @@ def months_plot(df, save=True):
     plt.style.use("ggplot")
 
     if save:
-        plt.savefig("outputs/monthly_avg_temperature.png", dpi=300)
+        os.makedirs("figures", exist_ok=True)
+        plt.savefig("figures/monthly_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
@@ -61,14 +62,14 @@ def season_plot(df, save=True):
     plt.tight_layout()
 
     if save:
-        plt.savefig("outputs/seasonal_avg_temperature.png", dpi=300)
+        plt.savefig("figures/seasonal_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
 
 
 def save_all_plots(df):
-    os.makedirs("outputs", exist_ok=True)
+    os.makedirs("figures", exist_ok=True)
 
     get_date(df, save=True)
     months_plot(df, save=True)

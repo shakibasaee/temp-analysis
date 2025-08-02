@@ -1,8 +1,6 @@
 from matplotlib import pyplot as plt
 from matplotlib.pylab import save
 import pandas as pd
-# from plots import get_date, months_plot, season_plot, save_all_plots
-
 
 def get_months(df):
     df["Month"] = pd.to_datetime(
@@ -109,13 +107,3 @@ def season_plot(df):
         plt.close()
     else:
         plt.show()
-
-
-def save_all_plots(df):
-    os.makedirs("outputs", exist_ok=True)
-
-    get_date(df, save=True)
-    months_plot(df, save=True)
-    season_plot(df, save=True)
-
-    print("All plots saved in 'outputs/' folder.")
