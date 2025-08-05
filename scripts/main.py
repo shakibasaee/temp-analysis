@@ -19,10 +19,12 @@ from visualization.plots import (
     save_all_plots,
 )
 
-df = load_data("data/weather_data.csv")
+df = load_data("data/new_weather_data.csv")
 df = filter_data(df)
 df = validate_data(df)
-df = simplify_data(df)
+if (len(df)>200_000):
+    df = simplify_data(df)
+
 save_data(df, "data/cleaned_weather_data.csv")
 
 

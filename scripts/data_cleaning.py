@@ -15,14 +15,15 @@ def filter_data(df):
 
 def validate_data(df):
     df_unvalid = df[
-        (df["Humidity_pct"] < 0)
-        | (df["Humidity_pct"] > 100)
-        | (df["Temperature_C"] > 60)
+        
+          (df["Temperature_C"] > 60)
         | (df["Temperature_C"] < -90)
         | (df["Precipitation_mm"] < 0)
         | (df["Precipitation_mm"] > 500)
         | (df["Wind_Speed_kmh"] < 0)
         | (df["Wind_Speed_kmh"] > 250)
+        |  (df["Pressure_hPa"] < 980)
+        | (df["Pressure_hPa"] > 1045)
     ]
     return df.drop(df_unvalid.index)
 

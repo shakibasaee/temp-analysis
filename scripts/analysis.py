@@ -42,8 +42,8 @@ def season_temp_statistic(df):
 
 
 def summry_statistic(df):
-    df.drop(columns=["Month"])
-    print(f"\nSummary of statistics:\n{df.describe()}")
+    summry_df = df.drop(columns=["Month"])
+    print(f"\nSummary of statistics:\n{summry_df.describe()}")
 
 
 def get_date(df):
