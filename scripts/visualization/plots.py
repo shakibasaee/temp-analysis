@@ -18,7 +18,7 @@ def get_date(df, save=True):
     plt.tight_layout()
 
     if save:
-        plt.savefig("figures/daily_avg_temperature.png", dpi=300)
+        plt.savefig("scripts/visualization/figures/daily_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
@@ -38,7 +38,7 @@ def months_plot(df, save=True):
 
     if save:
         os.makedirs("figures", exist_ok=True)
-        plt.savefig("figures/monthly_avg_temperature.png", dpi=300)
+        plt.savefig("scripts/visualization/figures/monthly_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
@@ -62,7 +62,7 @@ def season_plot(df, save=True):
     plt.tight_layout()
 
     if save:
-        plt.savefig("figures/seasonal_avg_temperature.png", dpi=300)
+        plt.savefig("scripts/visualization/figures/seasonal_avg_temperature.png", dpi=300)
         plt.close()
     else:
         plt.show()
