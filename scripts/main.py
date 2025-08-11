@@ -21,6 +21,11 @@ from processing_data.load_data import (
     load_data
 )
 
+file_path = input("Add your file address plz:\n")
+delimiter = input("Enter column separator:\n")
+encoding = input("Enter your encoding:\n")
+df = load_data(file_path)
+
 df = load_data("data/new_weather_data.csv")
 df = filter_data(df)
 df = validate_data(df)

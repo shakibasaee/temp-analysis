@@ -1,13 +1,8 @@
 import pandas as pd
 
 
-def load_data(file_path):
-    df = pd.read_csv(file_path)
-    return df
-
-
 def filter_data(df):
-    missing_values = ["na","n.a","n.a.","NA"]
+    missing_values = ["na","n.a","n.a.","NA", " "]
     df.replace(missing_values, pd.NA, inplace = True)
     df = df.dropna()
     return df
