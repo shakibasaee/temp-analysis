@@ -5,8 +5,7 @@ from analysis import (
     season_temp_statistic,
     summry_statistic,
 )
-from data_cleaning import (
-    load_data,
+from processing_data.data_cleaning import (
     filter_data,
     validate_data,
     simplify_data,
@@ -17,6 +16,9 @@ from visualization.plots import (
     season_plot,
     get_date,
     save_all_plots,
+)
+from processing_data.load_data import (
+    load_data
 )
 
 df = load_data("data/new_weather_data.csv")
