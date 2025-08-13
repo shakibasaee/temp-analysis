@@ -10,6 +10,7 @@ from processing_data.data_cleaning import (
     validate_data,
     simplify_data,
     save_data,
+    filter_by_date
 )
 from visualization.plots import (
     months_plot,
@@ -26,7 +27,12 @@ delimiter = input("Enter column separator:\n")
 encoding = input("Enter your encoding:\n")
 df = load_data(file_path)
 
-df = load_data("data/new_weather_data.csv")
+start_date = input("Enter start date (YYYY/MM/DD):\n")
+end_date = input("Enter end date (YYYY/MM/DD):\n")
+df = filter_by_date(df,start_date,end_date)
+print(df)
+
+# df = load_data("data/new_weather_data.csv")
 df = filter_data(df)
 df = validate_data(df)
 if (len(df)>200_000):

@@ -1,8 +1,17 @@
 import pandas as pd
 
 
+def filter_by_date(df, start_date, end_date):
+    start_date = pd.to_datetime(start_date)
+    end_date = pd.to_datetime(end_date)
+    df["Date_Time"] = pd.to_datetime(df["Date_Time"])
+    if (start_date > end_date):
+        raise ValueError (f"Start date ({start_date.date()}) is bigger than end date ({end_date.date()})!")
+    return df.loc[(df["Date_Time"]>= start_date) & (df["Date_Time"]<= end_date)]
+
+
 def filter_data(df):
-    missing_values = ["na","n.a","n.a.","NA", " "]
+    missing_values = ["na","n.a","n.a.","NA"]
     df.replace(missing_values, pd.NA, inplace = True)
     df = df.dropna()
     return df
