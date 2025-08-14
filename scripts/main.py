@@ -24,27 +24,23 @@ from processing_data.load_data import (
 
 
 file_type = input("Enter your file type (csv, excel or json):\n").strip().lower()
-file_path = input("Add your file address plz:\n")
+file_path = input("Add your file address plz:\n").strip().lower()
 
-if (file_type == "csv"): 
-    delimiter = input("Enter column separator:\n")
-    encoding = input("Enter your encoding:\n")
-    df = load_data(file_path, file_type)
+new_kwargs = {}
+while True:
+    key = input("Enter parameter (fill this fild blank and enter when your don):\n").strip()
+    if not key:
+        break
+    value = input(f"Enter value of {key}:\n").strip()
+    if value.lower() == "true":
+        value = True
+    elif value.lower() == "false":
+        value = False
+    elif value.isdigit():
+        value = int(value)
+    new_kwargs[key] = value
 
-elif (file_type == "exel"):
-    sheet_name = input("Enter sheet name:\n")
-    header = input("Enter number of row that your headers are there:\n")
-    df = load_data(file_path, file_type)
-
-elif (file_type == "json"):
-    structur = input("Enter jason's structur (record, index or columns):\n")
-    lines = input("Is jason saved line by line (Yes/No)?\n")
-    encoding = input("Enter your encoding:\n")
-    df = load_data(file_path, file_type)
-
-
-
-# df = load_data(file_path)
+df = load_data(file_path, file_type, **new_kwargs)
 
 start_date = input("Enter start date (YYYY/MM/DD):\n")
 end_date = input("Enter end date (YYYY/MM/DD):\n")
