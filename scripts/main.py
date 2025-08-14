@@ -22,10 +22,29 @@ from processing_data.load_data import (
     load_data
 )
 
+
+file_type = input("Enter your file type (csv, excel or json):\n").strip().lower()
 file_path = input("Add your file address plz:\n")
-delimiter = input("Enter column separator:\n")
-encoding = input("Enter your encoding:\n")
-df = load_data(file_path)
+
+if (file_type == "csv"): 
+    delimiter = input("Enter column separator:\n")
+    encoding = input("Enter your encoding:\n")
+    df = load_data(file_path, file_type)
+
+elif (file_type == "exel"):
+    sheet_name = input("Enter sheet name:\n")
+    header = input("Enter number of row that your headers are there:\n")
+    df = load_data(file_path, file_type)
+
+elif (file_type == "json"):
+    structur = input("Enter jason's structur (record, index or columns):\n")
+    lines = input("Is jason saved line by line (Yes/No)?\n")
+    encoding = input("Enter your encoding:\n")
+    df = load_data(file_path, file_type)
+
+
+
+# df = load_data(file_path)
 
 start_date = input("Enter start date (YYYY/MM/DD):\n")
 end_date = input("Enter end date (YYYY/MM/DD):\n")
@@ -45,10 +64,13 @@ df = get_months(df)
 
 df["Season"] = df["Month"].apply(convert_to_season)
 print(f"Weather data is:\n{df}")
+
 month_temp_statistic_df = month_temp_statistics(df)
 print(f"Statistics based on month:\n{month_temp_statistic_df}")
+
 season_temp_statistic_df = season_temp_statistic(df)
 print(f"Statistics based on season:\n{season_temp_statistic_df}")
+
 df_summry= summry_statistic(df)
 print (df_summry)
 months_plot(df)
