@@ -28,7 +28,7 @@ file_path = input("Add your file address plz:\n").strip().lower()
 
 new_kwargs = {}
 while True:
-    key = input("Enter parameter (fill this fild blank and enter when your don):\n").strip()
+    key = input("Enter parameter (fill this fild blank and enter when your done):\n").strip()
     if not key:
         break
     value = input(f"Enter value of {key}:\n").strip()
@@ -44,10 +44,10 @@ df = load_data(file_path, file_type, **new_kwargs)
 
 start_date = input("Enter start date (YYYY/MM/DD):\n")
 end_date = input("Enter end date (YYYY/MM/DD):\n")
-df = filter_by_date(df,start_date,end_date)
-print(df)
+if start_date or end_date != "":
+    df = filter_by_date(df,start_date,end_date)
+    print(df)
 
-# df = load_data("data/new_weather_data.csv")
 df = filter_data(df)
 df = validate_data(df)
 if (len(df)>200_000):
