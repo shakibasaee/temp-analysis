@@ -42,11 +42,11 @@ while True:
 
 df = load_data(file_path, file_type, **new_kwargs)
 
-start_date = input("Enter start date (YYYY/MM/DD):\n")
-end_date = input("Enter end date (YYYY/MM/DD):\n")
-if start_date or end_date != "":
-    df = filter_by_date(df,start_date,end_date)
-    print(df)
+# start_date = input("Enter start date (YYYY/MM/DD):\n")
+# end_date = input("Enter end date (YYYY/MM/DD):\n")
+# if start_date or end_date != "":
+#     df = filter_by_date(df,start_date,end_date)
+#     print(df)
 
 df = filter_data(df)
 df = validate_data(df)

@@ -1,11 +1,9 @@
 from matplotlib import pyplot as plt
-from matplotlib.pylab import save
 import pandas as pd
 
+
 def get_months(df):
-    df["Month"] = pd.to_datetime(
-        df["Date_Time"]
-    ).dt.month  # convert "Date_Time" to datetime and add to "Month" series
+    df["Month"] = pd.to_datetime(df["Date_Time"]).dt.month
     return df
 
 
@@ -23,22 +21,19 @@ def convert_to_season(month):
 
 
 def month_temp_statistics(df):
-    month_temp_statistic_df = (
+    return (
         df.groupby("Month")["Temperature_C"]
         .agg(Mean_temp_c="mean", Min_temp_c="min", Max_temp_c="max")
         .reset_index()
     )
 
-    return month_temp_statistic_df
-
 
 def season_temp_statistic(df):
-    season_temp_statistic_df = (
+    return (
         df.groupby("Season")["Temperature_C"]
         .agg(Mean_temp_C="mean", Max_temp_C="max", Min_temp_C="min")
         .reset_index()
     )
-    return season_temp_statistic_df
 
 
 def summry_statistic(df):
@@ -51,59 +46,45 @@ def get_date(df):
     df["Date"] = df["Date_Time"].dt.date
 
     daily_avg = df.groupby("Date")["Temperature_C"].mean()
-    daily_avg.plot(kind="bar", figsize=(10, 6), color="purple")
-    plt.title("Daily Average Temperature")
-    plt.xlabel("Date")
-    plt.ylabel("Temperature (C)")
-    plt.grid(True)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    daily_avg.plot(kind="bar", ax=ax, color="purple")
+    ax.set_title("Daily Average Temperature")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Temperature (°C)")
+    ax.grid(True)
     plt.style.use("ggplot")
     plt.tight_layout()
-
-    if save:
-        plt.savefig("outputs/daily_avg_temperature.png", dpi=300)
-        plt.close()
-    else:
-        plt.show()
+    return fig
 
 
 def months_plot(df):
     stats = month_temp_statistics(df)
     stats.set_index("Month", inplace=True)
 
-    stats["Mean_temp_c"].plot(kind="bar", figsize=(10, 6), color="red")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    stats["Mean_temp_c"].plot(kind="bar", ax=ax, color="red")
+    ax.set_title("Average Monthly Temperature")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Mean Temperature (°C)")
+    ax.grid(True)
     plt.style.use("ggplot")
-    plt.title("Average Monthly Temperature")
-    plt.xlabel("Month")
-    plt.ylabel("Mean Temperature (°C)")
-    plt.grid(True)
-    plt.style.use("ggplot")
-
-    if save:
-        plt.savefig("outputs/monthly_avg_temperature.png", dpi=300)
-        plt.close()
-    else:
-        plt.show()
+    return fig
 
 
 def season_plot(df):
     stats = season_temp_statistic(df)
     stats.set_index("Season", inplace=True)
-    plt.style.use("ggplot")
 
-    plt.figure(figsize=(8, 8))
-    plt.pie(
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.pie(
         stats["Mean_temp_C"],
         labels=stats.index,
         autopct="%1.1f%%",
         startangle=90,
         colors=["#ff9999", "#66b3ff", "#99ff99", "#ffcc99"],
     )
-    plt.title("Average Seasonal Temperature")
-    plt.axis("equal")
+    ax.set_title("Average Seasonal Temperature")
+    ax.axis("equal")
     plt.tight_layout()
-
-    if save:
-        plt.savefig("outputs/seasonal_avg_temperature.png", dpi=300)
-        plt.close()
-    else:
-        plt.show()
+    return fig
