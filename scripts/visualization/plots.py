@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-from analysis import save, month_temp_statistics, season_temp_statistic
+from analysis import month_temp_statistics, season_temp_statistic
 
 
 def get_date(df, save=True):

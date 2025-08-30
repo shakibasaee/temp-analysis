@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 def load_data(file_path = None, file_type = None, **kwargs):
-    default_file_path = "C:\\Users\\MSI\\temp-analysis\\data\\new_weather_data.csv"
+    default_file_path = "..\\temp-analysis\\data\\new_weather_data.csv"
     default_file_type = "csv"
 
     if not file_path:
