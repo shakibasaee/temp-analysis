@@ -21,20 +21,17 @@ from visualization.plots import (
 from processing_data.load_data import (
     load_data
 )
-from app import streamlit
-
-import streamlit as st
 
 def main():
-    file_type = st.text_input("Enter your file type (csv, excel or json):\n").strip().lower()
-    file_path = st.text_input("Add your file address plz:\n").strip().lower()
+    file_type = input("Enter your file type (csv, excel or json):\n").strip().lower()
+    file_path = input("Add your file address plz:\n").strip().lower()
 
     new_kwargs = {}
     while True:
-        key = st.text_input("Enter parameter (fill this fild blank and enter when your done):\n").strip()
+        key = input("Enter parameter (fill this fild blank and enter when your done):\n").strip()
         if not key:
             break
-        value = st.text_input(f"Enter value of {key}:\n").strip()
+        value = input(f"Enter value of {key}:\n").strip()
         if value.lower() == "true":
             value = True
         elif value.lower() == "false":
@@ -71,7 +68,6 @@ def main():
     get_date(df)
     save_all_plots(df)
 
-    streamlit()
 
 if __name__ == "__main__":
     main()

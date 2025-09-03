@@ -39,3 +39,5 @@ def streamlit():
         st.subheader("Seasonal Temperature Statistics")
         season_plot(filtered_df)
         st.pyplot(plt)
+
+streamlit()
