@@ -4,6 +4,7 @@ from processing_data.data_cleaning import (
     validate_data,
     simplify_data,
     save_data,
+    filter_by_date,
     get_clean_data,
 )
 # from processing_data.detect_outliers import OutlierDetector
@@ -37,6 +38,9 @@ import pandas as pd
 def get_user_inputs():
     file_type = input("Enter file type (csv, excel, json): ").strip().lower()
     file_path = input("Enter file path: ").strip()
+    start_date = input("Enter start date (YYYY/MM/DD):\n")
+    end_date = input("Enter start date (YYYY/MM/DD):\n")
+    city = input("Enter city: ").capitalize()
     kwargs = {}
     while True:
         key = input("Enter parameter (leave blank to finish): ").strip()
@@ -48,12 +52,15 @@ def get_user_inputs():
         elif value.isdigit():
             value = int(value)
         kwargs[key] = value
-    return file_path, file_type, kwargs
+    return file_path, file_type, kwargs, start_date, end_date, city
 
 
 def main():
-    file_path, file_type, kwargs = get_user_inputs()
+    file_path, file_type, kwargs, start_date, end_date, city = get_user_inputs()
     df = load_data(file_path, file_type, **kwargs)
+
+    df= filter_by_date(df,start_date,end_date)
+    print(df)
 
     df = filter_data(df)
     df = validate_data(df)
@@ -80,7 +87,7 @@ def main():
     pred_df = pd.DataFrame(
         {
             "Date_Time" : future_dates,
-            "City" : ["Sanandaj"],
+            "City" : [city],
         }
     )
 
@@ -104,7 +111,7 @@ def main():
     result = pd.DataFrame(
         {
             "Date": date_col,
-            "City": "Sanandaj",
+            "City": city,
             "Predicted_Temprature" : y_future_pred
         }
     )
