@@ -129,3 +129,21 @@ def season_plot(df):
     ax.axis("equal")
     plt.tight_layout()
     return fig
+
+def reg_plot(df, result_pred_df, city):
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(df["Date_Time"], df["Temperature_C"], 
+            label="Actual", color="blue")
+    
+    ax.scatter(result_pred_df["Date"], result_pred_df["Predicted_Temprature"], 
+               color="red", marker="o", s=120, label="Predicted")
+    
+    ax.set_title(f"Predicted Temperature on {result_pred_df['Date'].iloc[0].date()} - {city}")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Temperature (°C)")
+    ax.legend()
+    ax.grid(True, linestyle="--", alpha=0.7)
+    plt.style.use("ggplot")
+    
+    return fig
