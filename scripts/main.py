@@ -38,8 +38,8 @@ import pandas as pd
 def get_user_inputs():
     file_type = input("Enter file type (csv, excel, json): ").strip().lower()
     file_path = input("Enter file path: ").strip()
-    start_date = input("Enter start date (YYYY/MM/DD):\n")
-    end_date = input("Enter start date (YYYY/MM/DD):\n")
+    start_date = input("Enter start date (YYYY/MM/DD):")
+    end_date = input("Enter start date (YYYY/MM/DD):")
     city = input("Enter city: ").capitalize()
     kwargs = {}
     while True:
@@ -59,8 +59,9 @@ def main():
     file_path, file_type, kwargs, start_date, end_date, city = get_user_inputs()
     df = load_data(file_path, file_type, **kwargs)
 
-    df= filter_by_date(df,start_date,end_date)
-    print(df)
+    if start_date or end_date != "":
+        df= filter_by_date(df,start_date,end_date)
+        print(df)
 
     df = filter_data(df)
     df = validate_data(df)
