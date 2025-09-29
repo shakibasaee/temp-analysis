@@ -4,15 +4,23 @@ from processing_data.data_cleaning import (
     validate_data,
     simplify_data,
     save_data,
+    filter_by_date,
     get_clean_data,
 )
-from processing_data.detect_outliers import WeatherOutlierAnalyzer
 from analysis import (
     get_months,
     convert_to_season,
     month_temp_statistics,
     season_temp_statistic,
     summry_statistic,
+    regression_alg
+)
+from processing_data.data_cleaning import(
+    filter_data,
+    validate_data,
+    simplify_data,
+    save_data,
+    filter_by_date
 )
 from visualization.plots import (
     months_plot,
@@ -20,6 +28,8 @@ from visualization.plots import (
     get_date,
     save_all_plots,
 )
+import pandas as pd
+from processing_data.regression_runner import reg_runner
 
 import os
 
@@ -27,6 +37,9 @@ import os
 def get_user_inputs():
     file_type = input("Enter file type (csv, excel, json): ").strip().lower()
     file_path = input("Enter file path: ").strip()
+    start_date = input("Enter start date (YYYY/MM/DD): ")
+    end_date = input("Enter start date (YYYY/MM/DD): ")
+    city = input("Enter city: ").capitalize()
     kwargs = {}
     while True:
         key = input("Enter parameter (leave blank to finish): ").strip()
@@ -38,11 +51,11 @@ def get_user_inputs():
         elif value.isdigit():
             value = int(value)
         kwargs[key] = value
-    return file_path, file_type, kwargs
+    return file_path, file_type, kwargs, start_date, end_date, city
 
 
 def main():
-    file_path, file_type, kwargs = get_user_inputs()
+    file_path, file_type, kwargs, start_date, end_date, city = get_user_inputs()
     df = load_data(file_path, file_type, **kwargs)
     df = filter_data(df)
     df = validate_data(df)
@@ -82,6 +95,10 @@ def main():
     print(f"ML method found {len(ml_outliers)} outliers")
 
     print("✅ Finished detecting outliers!")
+    start_day = input("Enter date:\n")
+    result = reg_runner(regression_alg, df, city, start_day)
+
+    print (result)
 
 
 if __name__ == "__main__":

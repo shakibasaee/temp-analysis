@@ -1,5 +1,10 @@
 from matplotlib import pyplot as plt
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
+
 
 
 def get_months(df):
@@ -38,7 +43,43 @@ def season_temp_statistic(df):
 
 def summry_statistic(df):
     summry_df = df.drop(columns=["Month"])
-    print(f"\nSummary of statistics:\n{summry_df.describe()}")
+    return summry_df.describe()
+
+
+
+def regression_alg(df):
+    df["Date_Time"] = pd.to_datetime(df["Date_Time"])
+    df["Day_of_year"] = df["Date_Time"].dt.dayofyear
+
+    df["Year"] = df["Date_Time"].dt.year
+
+    df = pd.get_dummies(df, columns=["City"], dtype= int)
+    
+    
+    x = df [["Day_of_year", "Year",
+            "City_Bandar_Abbas", "City_Mashhad", 
+            "City_Rasht", "City_Sanandaj", "City_Yazd"]]
+    y = df["Temperature_C"]
+
+    x_train , x_test , y_train , y_test = train_test_split(x, y, test_size=0.2 , shuffle = False)
+
+    model_columns = x_train.columns
+
+    model = LinearRegression()
+    model.fit(x_train , y_train)
+    
+    
+    y_pred = model.predict(x_test)
+    MEA = mean_absolute_error(y_test, y_pred)
+    MSE = mean_squared_error(y_test, y_pred)
+    RMSE = np.sqrt(MSE)
+    R2 = r2_score(y_test, y_pred)
+    # print (f"MEA: {MEA}")
+    # print (f"RMSE: {RMSE}")
+    # print (f"R2: {R2}")
+
+
+    return model, model_columns
 
 
 def get_date(df):
@@ -87,4 +128,22 @@ def season_plot(df):
     ax.set_title("Average Seasonal Temperature")
     ax.axis("equal")
     plt.tight_layout()
+    return fig
+
+def reg_plot(df, result_pred_df, city):
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(df["Date_Time"], df["Temperature_C"], 
+            label="Actual", color="blue")
+    
+    ax.scatter(result_pred_df["Date"], result_pred_df["Predicted_Temprature"], 
+               color="red", marker="o", s=120, label="Predicted")
+    
+    ax.set_title(f"Predicted Temperature on {result_pred_df['Date'].iloc[0].date()} - {city}")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Temperature (°C)")
+    ax.legend()
+    ax.grid(True, linestyle="--", alpha=0.7)
+    plt.style.use("ggplot")
+    
     return fig
