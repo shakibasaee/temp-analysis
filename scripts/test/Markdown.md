@@ -3,11 +3,11 @@
 ### processing_data
 
 #### data_cleaning.py
-- [ ] filter_by_date()
-- [ ] filter_data()
-- [ ] validate_data()
-- [ ] simplify_data()
-- [ ] save_data()
+- [*] filter_by_date()
+- [*] filter_data()
+- [*] validate_data()
+- [*] simplify_data()
+- [*] save_data()
 - [ ] get_clean_data()
 
 #### detect_outliers.py
