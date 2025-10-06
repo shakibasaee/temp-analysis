@@ -49,3 +49,29 @@ def test_filter_data(load_filter_by_date):
     assert len(clean_data) <= len(df)
     for i in missing_values:
         assert i not in clean_data.values
+
+
+@pytest.fixture
+def load_filter_data(load_df):
+    loaded_df = load_df
+    start_date = pd.to_datetime("2023-10-10")   
+    end_date = pd.to_datetime("2023-12-12")
+    df_filtered = filter_by_date(loaded_df, start_date, end_date)
+    df = filter_data(df_filtered)
+    return df
+
+
+def test_validate_data(load_filter_data):
+    df = load_filter_data
+    validate_df = validate_data(df)
+    valid_ranges = {
+        "Temperature_C": (-90 , 60),
+        "Precipitation_mm": (0 , 500),
+        "Wind_Speed_kmh": (0 , 250),
+        "Pressure_hPa": (980 , 1045)
+    }
+
+    assert isinstance (df, pd.DataFrame)
+    assert len(df) >= len(validate_df)
+    for col, (min_val, max_val) in valid_ranges.items():
+        assert ((validate_df[col]>=min_val) & (validate_df[col]<=max_val)).all()
