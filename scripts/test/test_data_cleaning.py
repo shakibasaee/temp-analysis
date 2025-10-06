@@ -30,9 +30,22 @@ def test_filter_by_date(load_df):
     assert len(filtered_data) <= len(load_df)
 
 
-# def test_filter_by_date_empty(df):
-#     start_date = "2025-1-1"
-#     end_date = "2024-2-2"
-#     filtered_data = filter_by_date(df, start_date, end_date)
-    
-#     assert filtered_data.empty
+@pytest.fixture
+def load_filter_by_date(load_df):
+    loaded_df = load_df
+    start_date = pd.to_datetime("2023-10-10")   
+    end_date = pd.to_datetime("2023-12-12")
+    df = filter_by_date(loaded_df, start_date, end_date)
+    return df
+
+
+def test_filter_data(load_filter_by_date):
+    df = load_filter_by_date
+    clean_data = filter_data(load_filter_by_date)
+    missing_values = ["na", "n.a", "n.a.", "NA"]
+
+    assert not clean_data.isna().any().any()
+    assert isinstance (clean_data, pd.DataFrame)
+    assert len(clean_data) <= len(df)
+    for i in missing_values:
+        assert i not in clean_data.values

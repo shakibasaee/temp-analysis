@@ -14,6 +14,7 @@ def filter_by_date(df, start_date, end_date):
 
 def filter_data(df):
     missing_values = ["na", "n.a", "n.a.", "NA"]
+    df = df.copy()
     df.replace(missing_values, pd.NA, inplace=True)
     df = df.dropna()
     return df
