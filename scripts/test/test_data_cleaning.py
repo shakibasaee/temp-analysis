@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime as dt
 import pytest
+import os
 from processing_data.load_data import load_data
 from processing_data.data_cleaning import (
     filter_by_date,
@@ -75,3 +76,62 @@ def test_validate_data(load_filter_data):
     assert len(df) >= len(validate_df)
     for col, (min_val, max_val) in valid_ranges.items():
         assert ((validate_df[col]>=min_val) & (validate_df[col]<=max_val)).all()
+
+
+
+@pytest.fixture
+def load_validate_date(load_df):
+    loaded_df = load_df
+    start_date = pd.to_datetime("2023-10-10")   
+    end_date = pd.to_datetime("2023-12-12")
+    df_filtered = filter_by_date(loaded_df, start_date, end_date)
+    clean_df = filter_data(df_filtered)
+    df = validate_data(clean_df)
+    return df
+
+
+
+def test_simplify_data(load_validate_date):
+    df = load_validate_date
+    df_large = pd.concat([df]*1000, ignore_index = True)
+    simplify_df = simplify_data(df_large)
+    sample1 = simplify_data(df_large)
+    sample2 = simplify_data(df_large)
+
+    assert isinstance (simplify_df, pd.DataFrame)
+    assert len(simplify_df) == 200_000
+    assert all(simplify_df.columns == df.columns)
+    pd.testing.assert_frame_equal(sample1, sample2)
+
+
+
+
+# @pytest.fixture
+# def load_simplify_data(load_df):
+#     loaded_df = load_df
+#     df_large = pd.concat([loaded_df]*1000, ignore_index = True)
+#     start_date = pd.to_datetime("2023-10-10")   
+#     end_date = pd.to_datetime("2023-12-12")
+#     df_filtered = filter_by_date(df_large, start_date, end_date)
+#     clean_df = filter_data(df_filtered)
+#     validate_df = validate_data(clean_df)
+#     df = simplify_data(validate_df)
+#     return df
+
+
+def test_save_data(load_validate_date, capfd):
+    df = load_validate_date
+    output_path = "data/cleaned_weather_data.csv"
+    save_data(df , output_path)
+    df_loaded = pd.read_csv(output_path)
+    out , err = capfd.readouterr()
+    
+
+    assert os.path.exists(output_path)
+    # pd.testing.assert_frame_equal(df , df_loaded)
+    assert df.shape[0] == df_loaded.shape[0] , "Numbers of rows mismatch"
+    assert df.shape[1] == df_loaded.shape[1] , "Numbers of columns mismatch"
+    assert list(df.columns) == list(df_loaded.columns)
+    assert f"Cleaned data saved to {output_path}" in out
+
+    os.remove(output_path)
