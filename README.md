@@ -1,96 +1,243 @@
-# Temp-Analysis
+# Temperature Analysis Platform
 
-A clean and modular toolkit for analyzing and visualizing temperature data.
+A modular data analysis toolkit for exploring, visualizing, and forecasting temperature data across multiple cities and years.  
 
-## Overview
+Use it to upload CSV datasets, detect anomalies, run machine learning–based forecasts, and explore results in an interactive Streamlit dashboard. You can also export reports as PDFs for sharing.
 
-Temp-Analysis started as an exploratory project for computing and visualizing monthly temperature statistics. It has since evolved into a structured and maintainable pipeline, designed with modularity and reusability in mind.
+---
 
-### This project allows you to:
+## 🚀 Features
 
-- Calculate monthly temperature statistics (mean, min, max)
-- Generate bar plots using a clean "ggplot" style
-- Save plots automatically with proper directory handling
-- Extend and maintain the codebase with ease
+- Dynamic CSV dataset upload
+- Multi-city and multi-year support
+- Date range filtering
+- Temperature forecasting (Linear Regression)
+- Outlier detection for anomaly identification
+- Interactive Streamlit dashboard
+- PDF report generation
+- Optional integration with live weather data via API
+- Configurable settings via `config.yaml`
+- Modular code structure for scalability
+- Unit testing with PyTest
 
-## Features
+---
 
-- Monthly descriptive statistics from raw CSV temperature data
-- Visual output via bar plots of average monthly temperatures
-- Automatic creation of output directories to prevent save errors
-- Modular structure separating analysis, visualization, and cleaning logic
-- Option to either save plots or display them interactively
+## 🔧 Tech Stack
 
-## Project Structure
+- **Language:** Python  
+- **Data Processing:** pandas, NumPy, scikit-learn  
+- **Visualization:** Matplotlib, Seaborn  
+- **UI / Frontend:** Streamlit  
+- **Reporting:** ReportLab (PDF generation)  
+- **API Integration (optional):** OpenWeather API  
+- **Database (optional):** SQLite / PostgreSQL  
+- **Testing:** PyTest  
 
-temp-analysis/
+---
+
+## 📂 Project Structure
+
+```bash
+project/
+project/
+├── README.md
+├── requirements.txt
+├── data/
 ├── scripts/
-│ ├── analysis.py # Statistical computations
-│ ├── visualization/
-│ │ └── plots.py # Plotting functions
-│ │ └── figures/ # Output directory for saved plots
-| ├── data_cleaning.py # Data cleaning functions
-│ └── main.py # Script entry point
-├── data/ # Input data files
-├── requirements.txt # Python package dependencies
-└── README.md
+│   ├── app.py
+│   ├── main.py
+│   ├── processing_data/
+│   └── visualization/
+└── plots/
 
-## Installation
 
-1. Clone the repository:
+📊 Dashboard Overview
+The Streamlit dashboard lets you:
 
-   ```bash
-   git clone https://github.com/shakibasaee/temp-analysis.git
-   cd temp-analysis
+Upload CSV datasets
 
-    (Optional) Create and activate a virtual environment:
-   ```
+Configure filters by date range and city
 
-python -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
+Explore interactive charts of temperature trends
 
-Install the required packages:
+Detect anomalies and outliers
 
-    pip install -r requirements.txt
+Generate forecasts using a Linear Regression model
 
-Usage
+Compare historical CSV data with live weather data (optional API integration)
 
-To run the program and generate the monthly temperature statistics and plots:
+Export the current analysis and plots as a PDF report
 
-python scripts/main.py
+📁 Data Format
+The platform expects CSV files with at least the following columns:
 
-This script will:
+date – date or datetime (e.g. YYYY-MM-DD)
 
-    Load and clean the temperature dataset
+city – city name (string)
 
-    Calculate monthly temperature averages
+temperature – numeric temperature value (°C or °F; see config)
 
-    Save a bar plot of the average monthly temperatures in the figures/ directory
+Example:
 
-You can also choose whether to save or display the plot by setting the save parameter in the months_plot() function.
-Example Output
+csv
+Copy code
+date,city,temperature
+2023-01-01,Berlin,3.5
+2023-01-02,Berlin,2.1
+2023-01-01,Paris,5.2
+You can extend this with additional features (e.g. humidity, wind_speed); just ensure they are handled in preprocess.py.
 
-(Add plot image here if available)
-Example plot path: figures/monthly_avg_temperature.png
-Roadmap
+⚙️ Configuration (config.yaml)
+Key settings are managed in config.yaml, for example:
 
-    Support for additional plot types (line charts, heatmaps, etc.)
+Default unit (C / F)
 
-    More flexible data input handling (e.g., JSON, APIs)
+Forecast horizon (e.g. days ahead)
 
-    Automated summary reporting
+Outlier detection thresholds
 
-    Improved documentation and unit tests
+Paths for data and output
 
-Contributing
+API configuration (OpenWeather API key, base URL)
 
-Contributions are welcome. Please submit a pull request or open an issue to suggest improvements or report bugs. Make sure to follow the repository’s contribution guidelines.
-Authors
+Database connection settings (if using SQLite/PostgreSQL)
+
+Example snippet:
+
+yaml
+Copy code
+units: "C"
+forecast_horizon_days: 7
+outlier:
+  zscore_threshold: 3.0
+api:
+  enabled: false
+  provider: "openweather"
+  api_key: "YOUR_API_KEY_HERE"
+database:
+  enabled: false
+  uri: "sqlite:///data/temperature.db"
+🔑 API Integration (Optional)
+To use live weather data:
+
+Create an account on OpenWeather and generate an API key.
+
+Set the API key in config.yaml or as an environment variable, e.g.:
+
+bash
+Copy code
+export OPENWEATHER_API_KEY="your_real_key_here"
+Enable API integration in config.yaml:
+
+yaml
+Copy code
+api:
+  enabled: true
+When enabled, the dashboard can fetch and compare live weather data against your CSV historical data.
+
+📦 Installation & Setup
+1️⃣ Clone the repository
+bash
+Copy code
+git clone https://github.com/shakibasaee/temp-analysis.git
+cd temp-analysis
+2️⃣ Create and activate a virtual environment (recommended)
+bash
+Copy code
+python -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\Scripts\activate
+3️⃣ Install dependencies
+bash
+Copy code
+pip install -r requirements.txt
+4️⃣ Run the dashboard
+bash
+Copy code
+streamlit run app.py
+Then open the URL that Streamlit prints in your terminal (usually http://localhost:8501).
+
+🚀 Quickstart Workflow
+Once the dashboard is running:
+
+Upload a CSV with temperature data.
+
+Select city/cities and a date range.
+
+Explore charts showing trends and seasonality.
+
+Run anomaly detection to highlight outliers.
+
+Generate a forecast for the next N days (configurable).
+
+Export results as PDF, including plots and key metrics.
+
+🧠 Methodology
+The system is designed with modularity and testability in mind:
+
+Each component (data loading, preprocessing, forecasting, visualization, reporting) lives in its own module.
+
+Forecasting currently uses a Linear Regression model as a baseline for temperature prediction.
+
+Outlier detection uses statistical methods (e.g. z-scores or IQR-based rules; see outliers.py).
+
+Configuration is centralized in config.yaml so behavior can be tuned without changing code.
+
+Automated tests (PyTest) help ensure reliability of core data and model logic.
+
+You can easily swap out the forecasting backend (e.g. replace Linear Regression with Prophet or an LSTM model) while reusing the existing data and visualization pipeline.
+
+✅ Running Tests
+Use PyTest to run the test suite:
+
+bash
+Copy code
+pytest
+You can also run tests for a specific module:
+
+bash
+Copy code
+pytest tests/test_forecasting.py
+✨ Roadmap / Future Improvements
+Planned / potential enhancements:
+
+Advanced forecasting models (e.g. LSTM, Prophet)
+
+Deployment to Streamlit Community Cloud or other hosting platforms
+
+Full CI/CD pipeline (linting, tests, deployment)
+
+Real-time caching and rate limiting for API calls
+
+More advanced dashboards (e.g. correlations, climatology metrics)
+
+Role-based access and multi-user workspaces
+
+👨‍💻 Contributing
+Contributions are welcome!
+
+Fork the repository.
+
+Create a feature branch:
+
+bash
+Copy code
+git checkout -b feature/my-new-thing
+Make your changes and add tests where appropriate.
+
+Commit with clear messages:
+
+bash
+Copy code
+git commit -m "Add XYZ feature"
+Open a pull request describing what you changed and why.
+
+📜 License
+This project is licensed under the MIT License.
+You’re free to use it for personal and commercial projects.
+
+🎯 Authors
+Team of 2:
 
     Shakiba
 
     Kasra
-
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details
