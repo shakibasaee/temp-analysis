@@ -1,37 +1,37 @@
 # Temperature Analysis Platform
 
-A modular data analysis toolkit for exploring, visualizing, and forecasting temperature data across multiple cities and years.  
+A modular data analysis toolkit for exploring, visualizing, and forecasting temperature data across multiple cities and years.
 
-Use it to upload CSV datasets, detect anomalies, run machine learning–based forecasts, and explore results in an interactive Streamlit dashboard. You can also export reports as PDFs for sharing.
+The platform focuses on **clarity, extensibility, and honest baselines**: upload CSV datasets, explore trends in an interactive Streamlit dashboard, detect anomalies, and generate short-horizon forecasts using a transparent baseline model. Results can be exported as shareable PDF reports.
 
 ---
 
 ## 🚀 Features
 
 - Dynamic CSV dataset upload
-- Multi-city and multi-year support
-- Date range filtering
-- Temperature forecasting (Linear Regression)
-- Outlier detection for anomaly identification
+- Multi-city and multi-year analysis
+- Date-range filtering
+- Temperature forecasting using **Linear Regression as a simple, interpretable baseline**
+- Outlier / anomaly detection (statistical methods)
 - Interactive Streamlit dashboard
 - PDF report generation
-- Optional integration with live weather data via API
-- Configurable settings via `config.yaml`
-- Modular code structure for scalability
+- Optional live weather data integration (API-based)
+- Centralized configuration via `config.yaml`
+- Modular, scalable code structure
 - Unit testing with PyTest
 
 ---
 
 ## 🔧 Tech Stack
 
-- **Language:** Python  
-- **Data Processing:** pandas, NumPy, scikit-learn  
-- **Visualization:** Matplotlib, Seaborn  
-- **UI / Frontend:** Streamlit  
-- **Reporting:** ReportLab (PDF generation)  
-- **API Integration (optional):** OpenWeather API  
-- **Database (optional):** SQLite / PostgreSQL  
-- **Testing:** PyTest  
+- **Language:** Python
+- **Data Processing:** pandas, NumPy, scikit-learn
+- **Visualization:** Matplotlib, Seaborn
+- **UI / Frontend:** Streamlit
+- **Reporting:** ReportLab (PDF generation)
+- **API Integration (optional):** OpenWeather API
+- **Database (optional / planned):** SQLite, PostgreSQL
+- **Testing:** PyTest
 
 ---
 
@@ -39,73 +39,70 @@ Use it to upload CSV datasets, detect anomalies, run machine learning–based fo
 
 ```bash
 project/
-project/
 ├── README.md
 ├── requirements.txt
+├── config.yaml
 ├── data/
 ├── scripts/
-│   ├── app.py
-│   ├── main.py
-│   ├── processing_data/
-│   └── visualization/
-└── plots/
+│   ├── app.py            # Streamlit dashboard entry point
+│   ├── main.py           # Core orchestration logic
+│   ├── processing_data/  # Data loading & preprocessing
+│   └── visualization/    # Plotting and chart utilities
+├── plots/
+└── tests/
+```
 
+---
 
-📊 Dashboard Overview
-The Streamlit dashboard lets you:
+## 📊 Dashboard Overview
 
-Upload CSV datasets
+The Streamlit dashboard allows you to:
 
-Configure filters by date range and city
+- Upload CSV datasets
+- Filter data by city and date range
+- Explore interactive temperature trend visualizations
+- Detect anomalies and outliers
+- Generate short-term forecasts using a Linear Regression baseline
+- Compare historical CSV data with live weather data (optional)
+- Export the current analysis and plots as a PDF report
 
-Explore interactive charts of temperature trends
+---
 
-Detect anomalies and outliers
+## 📁 Data Format
 
-Generate forecasts using a Linear Regression model
-
-Compare historical CSV data with live weather data (optional API integration)
-
-Export the current analysis and plots as a PDF report
-
-📁 Data Format
 The platform expects CSV files with at least the following columns:
 
-date – date or datetime (e.g. YYYY-MM-DD)
+- `date` — date or datetime (e.g. `YYYY-MM-DD`)
+- `city` — city name (string)
+- `temperature` — numeric temperature value (°C or °F; configurable)
 
-city – city name (string)
+**Example:**
 
-temperature – numeric temperature value (°C or °F; see config)
-
-Example:
-
-csv
-Copy code
+```csv
 date,city,temperature
 2023-01-01,Berlin,3.5
 2023-01-02,Berlin,2.1
 2023-01-01,Paris,5.2
-You can extend this with additional features (e.g. humidity, wind_speed); just ensure they are handled in preprocess.py.
+```
 
-⚙️ Configuration (config.yaml)
-Key settings are managed in config.yaml, for example:
+Additional features (e.g. `humidity`, `wind_speed`) can be added as long as they are handled in the preprocessing pipeline.
 
-Default unit (C / F)
+---
 
-Forecast horizon (e.g. days ahead)
+## ⚙️ Configuration (`config.yaml`)
 
-Outlier detection thresholds
+Key settings are centralized in `config.yaml`, allowing behavior changes without modifying code:
 
-Paths for data and output
+- Default temperature unit (C / F)
+- Forecast horizon (days ahead)
+- Outlier detection thresholds
+- Data and output paths
+- API configuration
+- Database configuration (if enabled)
 
-API configuration (OpenWeather API key, base URL)
+**Example:**
 
-Database connection settings (if using SQLite/PostgreSQL)
-
-Example snippet:
-
-yaml
-Copy code
+```yaml
 units: "C"
 forecast_horizon_days: 7
 outlier:
@@ -117,127 +114,134 @@ api:
 database:
   enabled: false
   uri: "sqlite:///data/temperature.db"
-🔑 API Integration (Optional)
-To use live weather data:
+```
 
-Create an account on OpenWeather and generate an API key.
+---
 
-Set the API key in config.yaml or as an environment variable, e.g.:
+## 🔑 API Integration (Optional)
 
-bash
-Copy code
+Live weather data integration is **optional and disabled by default**.
+
+When enabled, the dashboard can fetch and compare live weather data against historical CSV-based datasets.
+
+**Steps:**
+
+1. Create an account on OpenWeather and generate an API key.
+2. Set the API key in `config.yaml` or as an environment variable:
+
+```bash
 export OPENWEATHER_API_KEY="your_real_key_here"
-Enable API integration in config.yaml:
+```
 
-yaml
-Copy code
+3. Enable API integration in `config.yaml`:
+
+```yaml
 api:
   enabled: true
-When enabled, the dashboard can fetch and compare live weather data against your CSV historical data.
+```
 
-📦 Installation & Setup
-1️⃣ Clone the repository
-bash
-Copy code
+---
+
+## 📦 Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
 git clone https://github.com/shakibasaee/temp-analysis.git
 cd temp-analysis
-2️⃣ Create and activate a virtual environment (recommended)
-bash
-Copy code
+```
+
+### 2️⃣ Create and activate a virtual environment (recommended)
+
+```bash
 python -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\Scripts\activate
-3️⃣ Install dependencies
-bash
-Copy code
+source .venv/bin/activate
+```
+
+### 3️⃣ Install dependencies
+
+```bash
 pip install -r requirements.txt
-4️⃣ Run the dashboard
-bash
-Copy code
-streamlit run app.py
-Then open the URL that Streamlit prints in your terminal (usually http://localhost:8501).
+```
 
-🚀 Quickstart Workflow
-Once the dashboard is running:
+### 4️⃣ Run the dashboard
 
-Upload a CSV with temperature data.
+```bash
+streamlit run scripts/app.py
+```
 
-Select city/cities and a date range.
+Then open the URL printed by Streamlit (usually `http://localhost:8501`).
 
-Explore charts showing trends and seasonality.
+---
 
-Run anomaly detection to highlight outliers.
+## 🚀 Quickstart Workflow
 
-Generate a forecast for the next N days (configurable).
+1. Upload a CSV file containing temperature data.
+2. Select one or more cities and a date range.
+3. Explore charts showing trends and seasonal patterns.
+4. Run anomaly detection to highlight outliers.
+5. Generate a forecast for the next _N_ days (configurable).
+6. Export the analysis and visualizations as a PDF report.
 
-Export results as PDF, including plots and key metrics.
+---
 
-🧠 Methodology
-The system is designed with modularity and testability in mind:
+## 🧠 Methodology
 
-Each component (data loading, preprocessing, forecasting, visualization, reporting) lives in its own module.
+The system is designed with **modularity and testability** in mind:
 
-Forecasting currently uses a Linear Regression model as a baseline for temperature prediction.
+- Each major responsibility (data loading, preprocessing, forecasting, visualization, reporting) lives in its own module.
+- Forecasting currently relies on a **Linear Regression baseline**, chosen for its simplicity and interpretability.
+- This baseline provides a clear reference point for evaluating more advanced models in future iterations.
+- Outlier detection uses statistical techniques such as z-scores or IQR-based rules.
+- Configuration is centralized in `config.yaml` to allow rapid experimentation.
 
-Outlier detection uses statistical methods (e.g. z-scores or IQR-based rules; see outliers.py).
+The forecasting backend can be replaced (e.g. Prophet, LSTM) while reusing the existing data and visualization pipeline.
 
-Configuration is centralized in config.yaml so behavior can be tuned without changing code.
+---
 
-Automated tests (PyTest) help ensure reliability of core data and model logic.
+## ✅ Running Tests
 
-You can easily swap out the forecasting backend (e.g. replace Linear Regression with Prophet or an LSTM model) while reusing the existing data and visualization pipeline.
+Run the full test suite:
 
-✅ Running Tests
-Use PyTest to run the test suite:
-
-bash
-Copy code
+```bash
 pytest
-You can also run tests for a specific module:
+```
 
-bash
-Copy code
+Run tests for a specific module:
+
+```bash
 pytest tests/test_forecasting.py
-✨ Roadmap / Future Improvements
-Planned / potential enhancements:
+```
 
-Advanced forecasting models (e.g. LSTM, Prophet)
+---
 
-Deployment to Streamlit Community Cloud or other hosting platforms
+## ✨ Roadmap / Future Improvements
 
-Full CI/CD pipeline (linting, tests, deployment)
+- Advanced forecasting models (e.g. Prophet, LSTM)
+- Deployment to Streamlit Community Cloud or similar platforms
+- CI/CD pipeline (linting, testing, automated deployment)
+- Caching and rate limiting for API calls
+- More advanced analytics dashboards (correlations, climatology metrics)
+- Role-based access and multi-user workspaces
 
-Real-time caching and rate limiting for API calls
+---
 
-More advanced dashboards (e.g. correlations, climatology metrics)
+## 👨‍💻 Authors & Collaboration
 
-Role-based access and multi-user workspaces
+This project was developed by a **two-person team with rotating roles** throughout different phases of development.
+Both contributors participated in system design, implementation, experimentation, and review, with responsibilities shifting as the project evolved.
 
-👨‍💻 Contributing
-Contributions are welcome!
+- **Shakiba**
+  GitHub: [https://github.com/shakibasaee](https://github.com/shakibasaee)
 
-Fork the repository.
+- **Kasra**
+  GitHub: [https://github.com/kasra-2004](https://github.com/kasra-2004)
 
-Create a feature branch:
+This role-rotating workflow encouraged shared ownership of the codebase and a deeper understanding of the system as a whole.
 
-bash
-Copy code
-git checkout -b feature/my-new-thing
-Make your changes and add tests where appropriate.
+---
 
-Commit with clear messages:
+## 📜 License
 
-bash
-Copy code
-git commit -m "Add XYZ feature"
-Open a pull request describing what you changed and why.
-
-📜 License
-This project is licensed under the MIT License.
-You’re free to use it for personal and commercial projects.
-
-🎯 Authors
-Team of 2:
-
-    Shakiba
-
-    Kasra
+This project is licensed under the **MIT License**.
+You are free to use, modify, and distribute it for personal or commercial purposes.
