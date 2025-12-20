@@ -13,7 +13,6 @@ from analysis import (
 )
 from processing_data.data_cleaning import filter_by_date
 
-# from processing_data.load_data import load_data
 from processing_data.regression_runner import reg_runner
 
 
@@ -61,12 +60,14 @@ def streamlit():
             value=(pd.to_datetime(date_range[1]) + dt.timedelta(days=1)).date(),
         )
 
-        cities = ["Sanandaj", "Mashhad", "Yazd", "Bandar Abbas", "Rasht"]
+        cities = ["Sanandaj", "Mashhad", "Yazd", "Bandar_Abbas", "Rasht"]
         city = st.selectbox("Select city", cities)
 
-        st.subheader("Temprature prediction")
+        city_df = filtered_df[filtered_df["City"] == city].copy()
+        st.subheader("temo predicttion")
         result_pred_df = reg_runner(regression_alg, df, city, pre_date)
-        fig = reg_plot(filtered_df, result_pred_df, city)
+
+        fig = reg_plot(city_df, result_pred_df, city)
         st.pyplot(fig)
 
 
