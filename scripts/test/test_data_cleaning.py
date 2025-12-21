@@ -2,6 +2,7 @@ import pandas as pd
 import datetime as dt
 import pytest
 import os
+from pathlib import Path
 from processing_data.load_data import load_data
 from processing_data.data_cleaning import (
     filter_by_date,
@@ -105,20 +106,6 @@ def test_simplify_data(load_validate_date):
 
 
 
-
-# @pytest.fixture
-# def load_simplify_data(load_df):
-#     loaded_df = load_df
-#     df_large = pd.concat([loaded_df]*1000, ignore_index = True)
-#     start_date = pd.to_datetime("2023-10-10")   
-#     end_date = pd.to_datetime("2023-12-12")
-#     df_filtered = filter_by_date(df_large, start_date, end_date)
-#     clean_df = filter_data(df_filtered)
-#     validate_df = validate_data(clean_df)
-#     df = simplify_data(validate_df)
-#     return df
-
-
 def test_save_data(load_validate_date, capfd):
     df = load_validate_date
     output_path = "data/cleaned_weather_data.csv"
@@ -128,10 +115,28 @@ def test_save_data(load_validate_date, capfd):
     
 
     assert os.path.exists(output_path)
-    # pd.testing.assert_frame_equal(df , df_loaded)
     assert df.shape[0] == df_loaded.shape[0] , "Numbers of rows mismatch"
     assert df.shape[1] == df_loaded.shape[1] , "Numbers of columns mismatch"
     assert list(df.columns) == list(df_loaded.columns)
     assert f"Cleaned data saved to {output_path}" in out
 
     os.remove(output_path)
+
+
+def test_get_clean_data_valid(tmp_path):
+    df = pd.DataFrame({
+        "Data_Time": ["2023-01-01"],
+        "City": ["Sanandaj"],
+        "Temperature_C": [10],
+        "Precipitation_mm": [0],
+        "Wind_Speed_kmh": [10],
+        "Pressure_hPa": [1010]
+    })
+
+    input_csv = tmp_path / "temp_weather.csv"
+    df.to_csv(input_csv, index = False)\
+    
+    result = get_clean_data(input_csv)
+
+    assert isinstance(result, pd.DataFrame)
+    assert len(result) == 1
