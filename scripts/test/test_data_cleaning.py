@@ -159,3 +159,23 @@ def test_get_clean_big_data(tmp_path):
     result = get_clean_data(input_csv , simplify = True)
 
     assert len(result) == 200_000
+
+
+
+def test_get_clean_invalid(tmp_path):
+    df = pd.DataFrame({
+        "Date_Time": ["2023-01-01", "2023-01-02"],
+        "City": ["Sanadaj", "Bandar_Abbas"],
+        "Temperature_C": [10 , 100],
+        "Precipitation_mm": [0 , 10],
+        "Wind_Speed_kmh": [10, 70],
+        "Pressure_hPa": [1000, 1250]
+    })
+
+
+    input_csv = tmp_path / "tmp_weather.csv"
+    df.to_csv(input_csv , index = False)
+
+    result = get_clean_data(input_csv)
+
+    assert len(result) == 1
