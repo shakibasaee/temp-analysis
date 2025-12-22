@@ -134,30 +134,46 @@ def season_plot(df):
     return fig
 
 
-def reg_plot(df, result_pred_df, city):
+
+def reg_plot(df, result_pred_df, cities):
+    if isinstance(cities, str):
+        cities = [cities]
+
     df = df.copy()
     df["Date_Time"] = pd.to_datetime(df["Date_Time"])
     df = df.sort_values("Date_Time")
 
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df["Date_Time"], df["Temperature_C"], label="Actual", color="blue")
 
-    ax.scatter(
-        result_pred_df["Date"],
-        result_pred_df["Predicted_Temprature"],
-        color="red",
-        marker="o",
-        s=120,
-        label="Predicted",
-    )
+    for city in cities:
+        sub = df[df["City"] == city].sort_values("Date_Time")
+        if sub.empty:
+            continue
+        ax.plot(sub["Date_Time"], sub["Temperature_C"], label=f"Actual - {city}")
 
-    ax.set_title(
-        f"Predicted Temperature on {result_pred_df['Date'].iloc[0].date()} - {city}"
-    )
+    if "City" in result_pred_df.columns:
+        for city in cities:
+            psub = result_pred_df[result_pred_df["City"] == city]
+            if psub.empty:
+                continue
+            ax.scatter(
+                psub["Date"],
+                psub["Predicted_Temprature"],
+                marker="o",
+                s=120,
+                label=f"Predicted - {city}",
+            )
+        pred_date = pd.to_datetime(result_pred_df["Date"].iloc[0]).date()
+    else:
+        # fallback if City wasn't attached
+        ax.scatter(result_pred_df["Date"], result_pred_df["Predicted_Temprature"],
+                   marker="o", s=120, label="Predicted")
+        pred_date = pd.to_datetime(result_pred_df["Date"].iloc[0]).date()
+
+    ax.set_title(f"Predicted Temperature on {pred_date}")
     ax.set_xlabel("Date")
     ax.set_ylabel("Temperature (°C)")
     ax.legend()
     ax.grid(True, linestyle="--", alpha=0.7)
-    plt.style.use("ggplot")
 
     return fig

@@ -60,15 +60,34 @@ def streamlit():
             value=(pd.to_datetime(date_range[1]) + dt.timedelta(days=1)).date(),
         )
 
-        cities = ["Sanandaj", "Mashhad", "Yazd", "Bandar_Abbas", "Rasht"]
-        city = st.selectbox("Select city", cities)
+        cities = sorted(df["City"].dropna().unique().tolist())
 
-        city_df = filtered_df[filtered_df["City"] == city].copy()
-        st.subheader("temo predicttion")
-        result_pred_df = reg_runner(regression_alg, df, city, pre_date)
+        selected_cities = st.multiselect(
+            "Select cities",
+            cities,
+            default=[cities[0]],
+        )
 
-        fig = reg_plot(city_df, result_pred_df, city)
+        if not selected_cities:
+            st.warning("Please select at least one city.")
+            st.stop()
+
+        cities_df = filtered_df[filtered_df["City"].isin(selected_cities)].copy()
+
+        st.subheader("temp prediction")
+
+        pred_frames = []
+        for c in selected_cities:
+            pred = reg_runner(regression_alg, df, c, pre_date)
+            pred["City"] = c
+            pred_frames.append(pred)
+
+            result_pred_df = pd.concat(pred_frames, ignore_index=True)
+
+        fig = reg_plot(cities_df, result_pred_df, selected_cities)
+
         st.pyplot(fig)
 
 
-streamlit()
+if __name__ == "__main__":
+    streamlit()
