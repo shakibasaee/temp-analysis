@@ -2,7 +2,6 @@ import pandas as pd
 import datetime as dt
 import pytest
 import os
-from pathlib import Path
 from processing_data.load_data import load_data
 from processing_data.data_cleaning import (
     filter_by_date,
@@ -140,3 +139,23 @@ def test_get_clean_data_valid(tmp_path):
 
     assert isinstance(result, pd.DataFrame)
     assert len(result) == 1
+
+
+
+def test_get_clean_big_data(tmp_path):
+    df = pd.DataFrame({
+        "Date_Time": ["2023-01-01"] * 500_000,
+        "City": ["Sanandaj"] * 500_000,
+        "Temperature_C": [10] * 500_000,
+        "Precipitation_mm": [0] * 500_000,
+        "Wind_Speed_kmh": [10] * 500_000,
+        "Pressure_hPa": [1010] * 500_000
+    })
+
+
+    input_csv = tmp_path / "tmp_weather.csv"
+    df.to_csv(input_csv , index = False)
+
+    result = get_clean_data(input_csv , simplify = True)
+
+    assert len(result) == 200_000
