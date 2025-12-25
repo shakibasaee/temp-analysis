@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from data_cleaning import get_clean_data
+from processing_data.data_cleaning import get_clean_data
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
