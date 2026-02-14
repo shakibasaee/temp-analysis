@@ -26,3 +26,15 @@ def test_iqr_no_outlier():
     outliers = detector._iqr(df , "temprature_c")
 
     assert outliers.empty
+
+
+def test_iqr_with_outlier():
+    df = pd.DataFrame({
+        "Temprature_C": [10,11,12,13,14,100]
+    })
+
+    detector = OutlierDetector(df)
+    outliers = detector._iqr(df, "temprature_c")
+
+    assert len(outliers) == 1
+    assert outliers.iloc[0]["temprature_c"] == 100
