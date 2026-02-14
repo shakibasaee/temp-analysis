@@ -14,3 +14,15 @@ def test__init__():
     assert detector.threshold == 2.5
     assert "city" in detector.df.columns
     assert "temprature_c" in detector.df.columns
+
+
+
+def test_iqr_no_outlier():
+    df = pd.DataFrame({
+        "Temprature_C": [10,11,12,13,14,15]
+    })
+
+    detector = OutlierDetector(df)
+    outliers = detector._iqr(df , "temprature_c")
+
+    assert outliers.empty
