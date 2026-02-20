@@ -1,6 +1,8 @@
 import pandas as pd
 import pytest 
 from processing_data.detect_outliers import OutlierDetector
+import tempfile
+import os
 
 
 def test__init__():
@@ -99,3 +101,23 @@ def test_detect_per_city_invalid_method():
 
     with pytest.raises(ValueError):
         detector.detect_per_city("temprature_c", method = "unknown")
+
+
+def test_save_creates_folder():
+    df = pd.DataFrame({
+        "City": ["Sanandaj", "Sanandaj"],
+        "Temprature_C": [10, 100]
+    })
+
+    detector = OutlierDetector(df)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        output_path = os.path.join(tmpdir, "plots")
+
+        detector.save_all_city_outlier_plots(
+            column="temprature_c",
+            # method="iqr",
+            output_dir=output_path
+        )
+
+        assert os.path.exists(output_path)
