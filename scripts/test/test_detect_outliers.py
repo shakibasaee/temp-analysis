@@ -76,3 +76,14 @@ def test_detect_per_city():
     assert "Shiraz" in result
     assert len(result["Tehran"]) == 1
     assert result["Tehran"].iloc[0]["temprature_c"] == 100
+
+
+def test_detect_per_city_without_city_column():
+    df = pd.DataFrame({
+        "Temprature_C": [10, 20, 30]
+    })
+
+    detector = OutlierDetector(df)
+    result = detector.detect_per_city("temprature_c")
+
+    assert result == {}
