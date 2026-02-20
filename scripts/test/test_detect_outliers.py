@@ -140,3 +140,22 @@ def test_save_creates_file_per_city():
 
         assert any("Sanandaj"  in f for f in files)
         assert any("Mashhad"  in f for f in files)
+
+
+def test_filename_format():
+    df = pd.DataFrame({
+        "City": ["Sanandaj", "Sanadaj"],
+        "Temprature_C": [10, 100]
+    })
+
+    detector = OutlierDetector(df)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        detector.save_all_city_outlier_plots(
+            column="temprature_c",
+            output_dir=tmpdir
+        )
+
+        files = os.listdir(tmpdir)
+
+        assert "Sanandaj_iqr.png" in files
