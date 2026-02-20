@@ -61,3 +61,18 @@ def test_zscore_with_outliers():
 
     assert len(outliers) == 1
     assert outliers.iloc[0]["temprature_c"] == 200
+
+
+def test_detect_per_city():
+    df = pd.DataFrame({
+        "City": ["Tehran", "Tehran", "Shiraz", "Shiraz", "Tehran", "Tehran", "Tehran"],
+        "Temprature_C": [10, 100, 20, 21, 11, 12, 13]
+    })
+
+    detector = OutlierDetector(df, threshold=2)
+    result = detector.detect_per_city("temprature_c", method="IQR")
+
+    assert "Tehran" in result
+    assert "Shiraz" in result
+    assert len(result["Tehran"]) == 1
+    assert result["Tehran"].iloc[0]["temprature_c"] == 100
