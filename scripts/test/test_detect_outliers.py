@@ -65,17 +65,17 @@ def test_zscore_with_outliers():
 
 def test_detect_per_city():
     df = pd.DataFrame({
-        "City": ["Tehran", "Tehran", "Shiraz", "Shiraz", "Tehran", "Tehran", "Tehran"],
+        "City": ["Sanadaj", "Sanadaj", "Mashhad", "Mashhad", "Sanadaj", "Sanadaj", "Sanadaj"],
         "Temprature_C": [10, 100, 20, 21, 11, 12, 13]
     })
 
     detector = OutlierDetector(df, threshold=2)
     result = detector.detect_per_city("temprature_c", method="IQR")
 
-    assert "Tehran" in result
-    assert "Shiraz" in result
-    assert len(result["Tehran"]) == 1
-    assert result["Tehran"].iloc[0]["temprature_c"] == 100
+    assert "Sanadaj" in result
+    assert "Mashhad" in result
+    assert len(result["Sanadaj"]) == 1
+    assert result["Sanadaj"].iloc[0]["temprature_c"] == 100
 
 
 def test_detect_per_city_without_city_column():
