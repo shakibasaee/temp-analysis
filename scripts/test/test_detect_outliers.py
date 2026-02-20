@@ -116,8 +116,27 @@ def test_save_creates_folder():
 
         detector.save_all_city_outlier_plots(
             column="temprature_c",
-            # method="iqr",
             output_dir=output_path
         )
 
         assert os.path.exists(output_path)
+
+
+def test_save_creates_file_per_city():
+    df = pd.DataFrame({
+        "City": ["Sanandaj", "Sanandaj", "Mashhad", "Mashhad"],
+        "Temprature_C": [10, 100, 20, 21]
+    })
+
+    detector = OutlierDetector(df)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        detector.save_all_city_outlier_plots(
+            column="temprature_c",
+            output_dir=tmpdir
+        )
+
+        files = os.listdir(tmpdir)
+
+        assert any("Sanandaj"  in f for f in files)
+        assert any("Mashhad"  in f for f in files)
