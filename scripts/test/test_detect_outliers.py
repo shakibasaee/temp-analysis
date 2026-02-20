@@ -87,3 +87,15 @@ def test_detect_per_city_without_city_column():
     result = detector.detect_per_city("temprature_c")
 
     assert result == {}
+
+
+def test_detect_per_city_invalid_method():
+    df = pd.DataFrame({
+        "City": ["Sanandaj", "Mashhad"],
+        "Temprature_C": [10,20]
+    })
+
+    detector= OutlierDetector(df)
+
+    with pytest.raises(ValueError):
+        detector.detect_per_city("temprature_c", method = "unknown")
