@@ -77,7 +77,7 @@ class OutlierDetector:
 
 if __name__ == "__main__":
     df = get_clean_data("data/new_weather_data.csv")
-    detector = OutlierDetector(df, threshold=2.5)
+    detector = OutlierDetector(df, threshold=2)
 
     plots_folder = r"C:\Users\Nitro 5\Documents\GitHub\temp-analysis\scripts\processing_data\plots"
     detector.save_all_city_outlier_plots("temperature_c", plots_folder)
