@@ -13,8 +13,11 @@ from analysis import (
     month_temp_statistics,
     season_temp_statistic,
     summry_statistic,
-    regression_alg
 )
+
+from processing_data.load_data import load_data
+from processing_data.regression_runner import train_model, predict_future
+
 from processing_data.data_cleaning import(
     filter_data,
     validate_data,
@@ -29,7 +32,6 @@ from visualization.plots import (
     save_all_plots,
 )
 import pandas as pd
-from processing_data.regression_runner import reg_runner
 
 import os
 
@@ -99,6 +101,17 @@ def main():
     result = reg_runner(regression_alg, df, city, start_day)
 
     print (result)
+
+df = load_data("data/cleaned_weather_data.csv")
+
+# Train the model
+os.makedirs("models", exist_ok=True)   # ensure folder exists before saving
+model, cols = train_model(df, save_path="models/temperature_model.pkl")
+
+# Predict just one day
+pred = predict_future(model, cols, "Tehran", "2025-06-01")
+print(pred)
+
 
 
 if __name__ == "__main__":
