@@ -18,12 +18,12 @@ from analysis import (
 from processing_data.load_data import load_data
 from processing_data.regression_runner import train_model, predict_future
 
-from processing_data.data_cleaning import(
+from processing_data.data_cleaning import (
     filter_data,
     validate_data,
     simplify_data,
     save_data,
-    filter_by_date
+    filter_by_date,
 )
 from visualization.plots import (
     months_plot,
@@ -100,18 +100,18 @@ def main():
     start_day = input("Enter date:\n")
     result = reg_runner(regression_alg, df, city, start_day)
 
-    print (result)
+    print(result)
+
 
 df = load_data("data/cleaned_weather_data.csv")
 
 # Train the model
-os.makedirs("models", exist_ok=True)   # ensure folder exists before saving
+os.makedirs("models", exist_ok=True)  # ensure folder exists before saving
 model, cols = train_model(df, save_path="models/temperature_model.pkl")
 
 # Predict just one day
 pred = predict_future(model, cols, "Tehran", "2025-06-01")
 print(pred)
-
 
 
 if __name__ == "__main__":
