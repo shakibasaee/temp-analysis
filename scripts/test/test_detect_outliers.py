@@ -1,5 +1,5 @@
 import pandas as pd
-import pytest 
+import pytest # type: ignore
 from processing_data.detect_outliers import OutlierDetector
 import tempfile
 import os

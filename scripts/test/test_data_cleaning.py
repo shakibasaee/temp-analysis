@@ -1,6 +1,6 @@
 import pandas as pd
 import datetime as dt
-import pytest
+import pytest # type: ignore
 import os
 from processing_data.load_data import load_data
 from processing_data.data_cleaning import (

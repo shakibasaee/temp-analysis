@@ -1,5 +1,4 @@
 import pandas as pd
-import pytest
 from processing_data.regression_runner import reg_runner
 
 class DummyModel:
