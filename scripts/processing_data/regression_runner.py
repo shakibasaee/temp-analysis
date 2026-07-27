@@ -1,40 +1,49 @@
 import pandas as pd
-import datetime as dt
+
+try:
+    from ..model_config import LinearRegressionConfig
+    from ..models.linear_regression import LinearRegressionModel
+except ImportError:
+    from model_config import LinearRegressionConfig
+    from models.linear_regression import LinearRegressionModel
 
 
-def reg_runner(regression_alg, df, city, start_day):
-    
-    model, model_columns = regression_alg(df)
-    future_dates = pd.date_range(start_day, periods=1)
-    pred_df = pd.DataFrame(
+def reg_runner(
+    model_or_factory,
+    df: pd.DataFrame,
+    city: str,
+    start_day,
+    config: LinearRegressionConfig | None = None,
+) -> pd.DataFrame:
+    """Predict one future date while preserving the legacy call signature.
+
+    ``model_or_factory`` may be a fitted ``LinearRegressionModel`` (preferred)
+    or the legacy ``regression_alg`` callable. Passing a fitted model lets the
+    dashboard predict several cities without retraining for every city.
+    """
+    if isinstance(model_or_factory, LinearRegressionModel):
+        model = model_or_factory
+    elif callable(model_or_factory):
+        trained = model_or_factory(df, config=config) if config else model_or_factory(df)
+        model = trained[0] if isinstance(trained, tuple) else trained
+    else:
+        model = LinearRegressionModel(config).fit(df)
+
+    if not isinstance(model, LinearRegressionModel):
+        raise TypeError("Regression factory must return a LinearRegressionModel")
+
+    prediction_frame = pd.DataFrame(
         {
-            "Date_Time" : future_dates,
-            "City" : [city],
+            model.config.date_column: [pd.to_datetime(start_day)],
+            model.config.city_column: [city],
         }
     )
-
-    pred_df["Date_Time"] = pd.to_datetime(pred_df["Date_Time"])
-    pred_df["Day_of_year"] = pred_df["Date_Time"].dt.dayofyear
-    pred_df["Year"] = pred_df["Date_Time"].dt.year
-    pred_df = pd.get_dummies(pred_df, columns=["City"])
-    cols_to_int = [col for col in pred_df.columns if col not in ["Date_Time"]]
-    pred_df[cols_to_int] = pred_df[cols_to_int].astype(int)
-
-    date_col = pred_df["Date_Time"].copy()
-
-    for col in model_columns:
-        if col not in pred_df.columns:
-            pred_df[col] = 0
-
-    pred_df = pred_df[model_columns]
-
-    y_future_pred = model.predict(pred_df)
-
-    result = pd.DataFrame(
+    prediction = model.predict(prediction_frame)
+    return pd.DataFrame(
         {
-            "Date": date_col,
-            "City": city,
-            "Predicted_Temprature" : y_future_pred
+            "Date": prediction_frame[model.config.date_column],
+            "City": [city],
+            # Keep the historical misspelling for dashboard compatibility.
+            "Predicted_Temprature": prediction,
         }
     )
-    return result

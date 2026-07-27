@@ -1,0 +1,176 @@
+report_metadata:
+  title: Temperature Linear Regression Model Report
+  generated_at_utc: '2026-07-27T17:39:58.928373+00:00'
+  schema_version: '1.0'
+model:
+  class: LinearRegressionModel
+  estimator: LinearRegression
+  configuration:
+    random_seed: 42
+    test_size: 0.2
+    shuffle: false
+    normalize_features: true
+    feature_selection_mode: all
+    selected_cities: null
+    target_column: Temperature_C
+    date_column: Date_Time
+    city_column: City
+    temporal_features:
+    - day_of_year
+    - month
+    - year
+    - day_of_week
+dataset_summary:
+  rows: 3655
+  columns: 6
+  column_names:
+  - Date_Time
+  - City
+  - Temperature_C
+  - Precipitation_mm
+  - Wind_Speed_kmh
+  - Pressure_hPa
+  date_range:
+    start: '2023-01-01T00:00:00'
+    end: '2024-12-31T00:00:00'
+  cities:
+  - Bandar_Abbas
+  - Mashhad
+  - Rasht
+  - Sanandaj
+  - Yazd
+  city_count: 5
+  missing_values:
+    Date_Time: 0
+    City: 0
+    Temperature_C: 0
+    Precipitation_mm: 19
+    Wind_Speed_kmh: 0
+    Pressure_hPa: 10
+  target_summary:
+    count: 3655.0
+    mean: 20.21116279069767
+    std: 9.716112774324305
+    min: -15.4
+    25%: 12.7
+    50%: 20.9
+    75%: 27.9
+    max: 39.7
+  split:
+    train_rows: 2920
+    test_rows: 735
+    strategy: chronological_by_unique_date
+metrics:
+  train:
+    metadata:
+      sample_size: 2920
+      confidence_level: 0.95
+      bootstrap_iterations: 1000
+      bootstrap_method: paired_moving_block
+      bootstrap_block_size: 54
+      random_seed: 42
+      mape_unit: percent
+      mape_excluded_zero_targets: 1
+    metrics:
+      mae:
+        value: 2.697686951985655
+        confidence_interval:
+          lower: 2.5124442415681316
+          upper: 2.8671131909242287
+      rmse:
+        value: 3.4625847308011406
+        confidence_interval:
+          lower: 3.185425057944457
+          upper: 3.695151288902612
+      mape:
+        value: 50.9675278595192
+        confidence_interval:
+          lower: 29.571643562386573
+          upper: 72.21058859339512
+      r2:
+        value: 0.8743825311082031
+        confidence_interval:
+          lower: 0.8513515126317619
+          upper: 0.8893148602039811
+  test:
+    metadata:
+      sample_size: 735
+      confidence_level: 0.95
+      bootstrap_iterations: 1000
+      bootstrap_method: paired_moving_block
+      bootstrap_block_size: 27
+      random_seed: 42
+      mape_unit: percent
+      mape_excluded_zero_targets: 0
+    metrics:
+      mae:
+        value: 3.095820363082777
+        confidence_interval:
+          lower: 2.6884224899703817
+          upper: 3.597406886842596
+      rmse:
+        value: 4.064304520752002
+        confidence_interval:
+          lower: 3.4970662694470627
+          upper: 4.697291816168644
+      mape:
+        value: 84.73292536889325
+        confidence_interval:
+          lower: 29.294488591787516
+          upper: 163.55653254171278
+      r2:
+        value: 0.816737329975914
+        confidence_interval:
+          lower: 0.7752831457283687
+          upper: 0.8415605842121218
+feature_importance:
+  method: linear_regression_coefficients
+  intercept: 20.211162790697703
+  interpretation_note: Magnitude is affected by preprocessing. Numeric temporal features
+    are standardized when normalize_features is enabled.
+  values:
+  - feature: city__City_Bandar_Abbas
+    coefficient: 7.801559507523933
+    absolute_coefficient: 7.801559507523933
+  - feature: temporal__day_of_year_cos
+    coefficient: -7.7209264988433395
+    absolute_coefficient: 7.7209264988433395
+  - feature: city__City_Mashhad
+    coefficient: -3.4296306429548533
+    absolute_coefficient: 3.4296306429548533
+  - feature: city__City_Sanandaj
+    coefficient: -3.1568536251709887
+    absolute_coefficient: 3.1568536251709887
+  - feature: temporal__day_of_year_sin
+    coefficient: -2.8259781915871063
+    absolute_coefficient: 2.8259781915871063
+  - feature: city__City_Rasht
+    coefficient: -2.7961149110807066
+    absolute_coefficient: 2.7961149110807066
+  - feature: city__City_Yazd
+    coefficient: 1.5810396716826294
+    absolute_coefficient: 1.5810396716826294
+  - feature: temporal__month
+    coefficient: 0.795135829990882
+    absolute_coefficient: 0.795135829990882
+  - feature: temporal__day_of_year
+    coefficient: -0.6826309626093847
+    absolute_coefficient: 0.6826309626093847
+  - feature: temporal__month_sin
+    coefficient: 0.2866653277975657
+    absolute_coefficient: 0.2866653277975657
+  - feature: temporal__year
+    coefficient: 0.2426035388326085
+    absolute_coefficient: 0.2426035388326085
+  - feature: temporal__month_cos
+    coefficient: 0.15997918665160765
+    absolute_coefficient: 0.15997918665160765
+  - feature: temporal__day_of_week_cos
+    coefficient: 0.05045296096783435
+    absolute_coefficient: 0.05045296096783435
+  - feature: temporal__day_of_week_sin
+    coefficient: 0.02969145064503644
+    absolute_coefficient: 0.02969145064503644
+  - feature: temporal__day_of_week
+    coefficient: -0.01627592289353169
+    absolute_coefficient: 0.01627592289353169

@@ -1,9 +1,11 @@
 from matplotlib import pyplot as plt
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-import numpy as np
+try:
+    from .model_config import DEFAULT_CONFIG, LinearRegressionConfig
+    from .models.linear_regression import LinearRegressionModel
+except ImportError:
+    from model_config import DEFAULT_CONFIG, LinearRegressionConfig
+    from models.linear_regression import LinearRegressionModel
 
 
 def get_months(df):
@@ -45,44 +47,23 @@ def summry_statistic(df):
     return summry_df.describe()
 
 
-def regression_alg(df):
-    df = df.copy()
+def regression_alg(
+    df, config: LinearRegressionConfig | None = None
+):
+    """Train and evaluate the reusable linear-regression baseline.
 
-    df["Date_Time"] = pd.to_datetime(df["Date_Time"])
-    df["Day_of_year"] = df["Date_Time"].dt.dayofyear
-    df["Year"] = df["Date_Time"].dt.year
-
-    df = pd.get_dummies(df, columns=["City"], dtype=int)
-
-    x = df[
-        [
-            "Day_of_year",
-            "Year",
-            "City_Bandar_Abbas",
-            "City_Mashhad",
-            "City_Rasht",
-            "City_Sanandaj",
-            "City_Yazd",
-        ]
-    ]
-    y = df["Temperature_C"]
-
-    x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.2, shuffle=False
+    The tuple return is retained for compatibility with existing callers. The
+    first item is now a ``LinearRegressionModel`` and the second contains the
+    fitted pipeline's generated feature names.
+    """
+    model = LinearRegressionModel(config or DEFAULT_CONFIG)
+    metrics = model.fit_evaluate(df, refit_full=True)
+    print(
+        f"MAE={metrics['mae']:.3f} "
+        f"RMSE={metrics['rmse']:.3f} "
+        f"R2={metrics['r2']:.3f}"
     )
-
-    model_columns = x_train.columns
-
-    model = LinearRegression()
-    model.fit(x_train, y_train)
-
-    y_pred = model.predict(x_test)
-    MAE = mean_absolute_error(y_test, y_pred)
-    RMSE = np.sqrt(mean_squared_error(y_test, y_pred))
-    R2 = r2_score(y_test, y_pred)
-    print(f"MAE={MAE:.3f} RMSE={RMSE:.3f} R2={R2:.3f}")
-
-    return model, model_columns
+    return model, model.feature_names_
 
 
 def get_date(df):

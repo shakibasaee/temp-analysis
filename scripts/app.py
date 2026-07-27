@@ -76,13 +76,16 @@ def streamlit():
 
         st.subheader("temp prediction")
 
+        # Train once, then reuse the same fitted preprocessing/model pipeline
+        # for every selected city.
+        regression_model, _ = regression_alg(df)
         pred_frames = []
         for c in selected_cities:
-            pred = reg_runner(regression_alg, df, c, pre_date)
+            pred = reg_runner(regression_model, df, c, pre_date)
             pred["City"] = c
             pred_frames.append(pred)
 
-            result_pred_df = pd.concat(pred_frames, ignore_index=True)
+        result_pred_df = pd.concat(pred_frames, ignore_index=True)
 
         fig = reg_plot(cities_df, result_pred_df, selected_cities)
 
