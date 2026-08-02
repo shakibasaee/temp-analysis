@@ -2,14 +2,14 @@ import pandas as pd
 import datetime as dt
 
 
-def reg_runner(regression_alg, df, city, start_day):
+def reg_runner(regression_alg, df, cities, start_day):
     
     model, model_columns = regression_alg(df)
     future_dates = pd.date_range(start_day, periods=1)
     pred_df = pd.DataFrame(
         {
             "Date_Time" : future_dates,
-            "City" : [city],
+            "City" : [cities],
         }
     )
 
@@ -33,7 +33,7 @@ def reg_runner(regression_alg, df, city, start_day):
     result = pd.DataFrame(
         {
             "Date": date_col,
-            "City": city,
+            "City": cities,
             "Predicted_Temprature" : y_future_pred
         }
     )
