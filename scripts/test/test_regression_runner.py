@@ -14,7 +14,7 @@ def test_regression_runner_output_structure():
     result = reg_runner(
         regression_alg = dummy_regression,
         df = df,
-        city = "Tehran",
+        cities = "Tehran",
         start_day = "2024-01-01"
     )
 
@@ -47,7 +47,7 @@ def test_predict_called():
     result = reg_runner(
         regression_alg=lambda df: (model, cols),
         df=df,
-        city="Tehran",
+        cities="Tehran",
         start_day="2024-01-01"
     )
 
