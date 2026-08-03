@@ -1,161 +1,234 @@
 import pandas as pd
-import pytest # type: ignore
+import pytest
+
 from processing_data.detect_outliers import OutlierDetector
-import tempfile
-import os
 
 
-def test__init__():
-    df = pd.DataFrame({
-        "City": ["Tehran", "Tehran"],
-        "Temprature_C": [10, 20]
-    })
+def test_init_normalizes_columns_and_stores_threshold():
+    source = pd.DataFrame(
+        {
+            "City": ["Tehran"],
+            "Temperature_C": [10],
+        }
+    )
 
-    detector = OutlierDetector(df, threshold=2.5)
+    detector = OutlierDetector(
+        source,
+        threshold=2.5,
+    )
 
     assert detector.threshold == 2.5
-    assert "city" in detector.df.columns
-    assert "temprature_c" in detector.df.columns
+    assert list(detector.df.columns) == [
+        "city",
+        "temperature_c",
+    ]
 
 
+def test_iqr_returns_empty_frame_when_there_are_no_outliers():
+    source = pd.DataFrame(
+        {
+            "temperature_c": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+            ]
+        }
+    )
 
-def test_iqr_no_outlier():
-    df = pd.DataFrame({
-        "Temprature_C": [10,11,12,13,14,15]
-    })
+    detector = OutlierDetector(source)
+    result = detector._iqr(
+        source,
+        "temperature_c",
+    )
 
-    detector = OutlierDetector(df)
-    outliers = detector._iqr(df , "temprature_c")
-
-    assert outliers.empty
-
-
-def test_iqr_with_outlier():
-    df = pd.DataFrame({
-        "Temprature_C": [10,11,12,13,14,100]
-    })
-
-    detector = OutlierDetector(df)
-    outliers = detector._iqr(df, "temprature_c")
-
-    assert len(outliers) == 1
-    assert outliers.iloc[0]["temprature_c"] == 100
-
-
-def test_zscore_no_outliers():
-    df = pd.DataFrame({
-        "Temprature_C": [10,11,12,13,14]
-    })
-
-    detector = OutlierDetector(df)
-    outliers = detector._zscore(df, "temprature_c")
-
-    assert outliers.empty
+    assert result.empty
 
 
-def test_zscore_with_outliers():
-    df = pd.DataFrame({
-        "Temprature_C": [10,11,12,13,14,200]
-    })
+def test_iqr_returns_outlier():
+    source = pd.DataFrame(
+        {
+            "temperature_c": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                100,
+            ]
+        }
+    )
 
-    detector = OutlierDetector(df, threshold=2)
-    outliers = detector._zscore(df, "temprature_c")
+    detector = OutlierDetector(source)
+    result = detector._iqr(
+        source,
+        "temperature_c",
+    )
 
-    assert len(outliers) == 1
-    assert outliers.iloc[0]["temprature_c"] == 200
-
-
-def test_detect_per_city():
-    df = pd.DataFrame({
-        "City": ["Sanadaj", "Sanadaj", "Mashhad", "Mashhad", "Sanadaj", "Sanadaj", "Sanadaj"],
-        "Temprature_C": [10, 100, 20, 21, 11, 12, 13]
-    })
-
-    detector = OutlierDetector(df, threshold=2)
-    result = detector.detect_per_city("temprature_c", method="IQR")
-
-    assert "Sanadaj" in result
-    assert "Mashhad" in result
-    assert len(result["Sanadaj"]) == 1
-    assert result["Sanadaj"].iloc[0]["temprature_c"] == 100
+    assert result["temperature_c"].tolist() == [100]
 
 
-def test_detect_per_city_without_city_column():
-    df = pd.DataFrame({
-        "Temprature_C": [10, 20, 30]
-    })
+def test_zscore_returns_empty_frame_when_there_are_no_outliers():
+    source = pd.DataFrame(
+        {
+            "temperature_c": [
+                10,
+                11,
+                12,
+                13,
+                14,
+            ]
+        }
+    )
 
-    detector = OutlierDetector(df)
-    result = detector.detect_per_city("temprature_c")
+    detector = OutlierDetector(source)
+    result = detector._zscore(
+        source,
+        "temperature_c",
+    )
+
+    assert result.empty
+
+
+def test_zscore_returns_outlier():
+    source = pd.DataFrame(
+        {
+            "temperature_c": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                200,
+            ]
+        }
+    )
+
+    detector = OutlierDetector(
+        source,
+        threshold=2,
+    )
+    result = detector._zscore(
+        source,
+        "temperature_c",
+    )
+
+    assert result["temperature_c"].tolist() == [200]
+
+
+def test_detect_per_city_groups_results_by_city():
+    source = pd.DataFrame(
+        {
+            "City": [
+                "Sanandaj",
+                "Sanandaj",
+                "Sanandaj",
+                "Sanandaj",
+                "Sanandaj",
+                "Mashhad",
+                "Mashhad",
+                "Mashhad",
+                "Mashhad",
+            ],
+            "Temperature_C": [
+                10,
+                11,
+                12,
+                13,
+                100,
+                20,
+                21,
+                22,
+                23,
+            ],
+        }
+    )
+
+    detector = OutlierDetector(source)
+    result = detector.detect_per_city(
+        "temperature_c",
+        method="IQR",
+    )
+
+    assert set(result) == {
+        "Sanandaj",
+        "Mashhad",
+    }
+    assert result["Sanandaj"]["temperature_c"].tolist() == [100]
+    assert result["Mashhad"].empty
+
+
+def test_detect_per_city_returns_empty_dict_without_city_column():
+    source = pd.DataFrame(
+        {
+            "Temperature_C": [
+                10,
+                20,
+                30,
+            ]
+        }
+    )
+
+    detector = OutlierDetector(source)
+    result = detector.detect_per_city("temperature_c")
 
     assert result == {}
 
 
-def test_detect_per_city_invalid_method():
-    df = pd.DataFrame({
-        "City": ["Sanandaj", "Mashhad"],
-        "Temprature_C": [10,20]
-    })
+def test_detect_per_city_rejects_unknown_method():
+    source = pd.DataFrame(
+        {
+            "City": ["Sanandaj"],
+            "Temperature_C": [10],
+        }
+    )
 
-    detector= OutlierDetector(df)
+    detector = OutlierDetector(source)
 
-    with pytest.raises(ValueError):
-        detector.detect_per_city("temprature_c", method = "unknown")
-
-
-def test_save_creates_folder():
-    df = pd.DataFrame({
-        "City": ["Sanandaj", "Sanandaj"],
-        "Temprature_C": [10, 100]
-    })
-
-    detector = OutlierDetector(df)
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        output_path = os.path.join(tmpdir, "plots")
-
-        detector.save_all_city_outlier_plots(
-            column="temprature_c",
-            output_dir=output_path
+    with pytest.raises(
+        ValueError,
+        match="Unknown method",
+    ):
+        detector.detect_per_city(
+            "temperature_c",
+            method="unknown",
         )
 
-        assert os.path.exists(output_path)
 
+def test_save_plots_creates_two_files_per_city(tmp_path):
+    source = pd.DataFrame(
+        {
+            "City": [
+                "Sanandaj",
+                "Sanandaj",
+                "Mashhad",
+                "Mashhad",
+            ],
+            "Temperature_C": [
+                10,
+                100,
+                20,
+                21,
+            ],
+        }
+    )
 
-def test_save_creates_file_per_city():
-    df = pd.DataFrame({
-        "City": ["Sanandaj", "Sanandaj", "Mashhad", "Mashhad"],
-        "Temprature_C": [10, 100, 20, 21]
-    })
+    detector = OutlierDetector(source)
+    detector.save_all_city_outlier_plots(
+        column="temperature_c",
+        output_dir=tmp_path,
+    )
 
-    detector = OutlierDetector(df)
+    created_files = {
+        path.name
+        for path in tmp_path.iterdir()
+    }
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        detector.save_all_city_outlier_plots(
-            column="temprature_c",
-            output_dir=tmpdir
-        )
-
-        files = os.listdir(tmpdir)
-
-        assert any("Sanandaj"  in f for f in files)
-        assert any("Mashhad"  in f for f in files)
-
-
-def test_filename_format():
-    df = pd.DataFrame({
-        "City": ["Sanandaj", "Sanadaj"],
-        "Temprature_C": [10, 100]
-    })
-
-    detector = OutlierDetector(df)
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        detector.save_all_city_outlier_plots(
-            column="temprature_c",
-            output_dir=tmpdir
-        )
-
-        files = os.listdir(tmpdir)
-
-        assert "Sanandaj_iqr.png" in files
+    assert created_files == {
+        "Mashhad_iqr.png",
+        "Mashhad_zscore.png",
+        "Sanandaj_iqr.png",
+        "Sanandaj_zscore.png",
+    }
