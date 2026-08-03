@@ -1,5 +1,5 @@
 import pandas as pd
-import pytest
+import pytest # type: ignore
 
 from processing_data.data_cleaning import (
     filter_by_date,
