@@ -3,22 +3,24 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import datetime as dt
 from analysis import (
-    months_plot, 
-    season_plot, 
-    get_date, 
-    get_months, 
+    months_plot,
+    season_plot,
+    get_date,
+    get_months,
     convert_to_season,
-    regression_alg, 
-    reg_plot)
+    regression_alg,
+    reg_plot,
+)
 from processing_data.data_cleaning import filter_by_date
-from processing_data.load_data import load_data
+
 from processing_data.regression_runner import reg_runner
+
 
 def streamlit():
     st.title("Weather Data Analysis")
     st.write("This app analyzes weather data.")
 
-    df = load_data()
+    df = pd.read_csv("..\\temp-analysis\\data\\new_weather_data.csv")
     df["Date_Time"] = pd.to_datetime(df["Date_Time"])
 
     min_date = df["Date_Time"].min()
@@ -32,7 +34,10 @@ def streamlit():
     )
 
     if len(date_range) == 2:
-        start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
+        start_date, end_date = (
+            pd.to_datetime(date_range[0]),
+            pd.to_datetime(date_range[1]),
+        )
         filtered_df = filter_by_date(df, start_date, end_date)
         filtered_df = get_months(filtered_df)
 
@@ -51,17 +56,41 @@ def streamlit():
 
         st.subheader("Prediction section")
         pre_date = st.date_input(
-            "Select date to predect", 
-            value=(pd.to_datetime(date_range[1]) + dt.timedelta(days = 1)).date()
+            "Select date to predect",
+            value=(pd.to_datetime(date_range[1]) + dt.timedelta(days=1)).date(),
         )
 
-        cities = ["Sanandaj", "Mashhad", "Yazd", "Bandar Abbas", "Rasht"]
-        city = st.selectbox("Select city", cities)
-        
-        st.subheader("Temprature prediction")
-        result_pred_df = reg_runner(regression_alg, df, city, pre_date)
-        fig = reg_plot(filtered_df, result_pred_df, city)
+        cities = sorted(df["City"].dropna().unique().tolist())
+
+        selected_cities = st.multiselect(
+            "Select cities",
+            cities,
+            default=[cities[0]],
+        )
+
+        if not selected_cities:
+            st.warning("Please select at least one city.")
+            st.stop()
+
+        cities_df = filtered_df[filtered_df["City"].isin(selected_cities)].copy()
+
+        st.subheader("temp prediction")
+
+        # Train once, then reuse the same fitted preprocessing/model pipeline
+        # for every selected city.
+        regression_model, _ = regression_alg(df)
+        pred_frames = []
+        for c in selected_cities:
+            pred = reg_runner(regression_model, df, c, pre_date)
+            pred["City"] = c
+            pred_frames.append(pred)
+
+        result_pred_df = pd.concat(pred_frames, ignore_index=True)
+
+        fig = reg_plot(cities_df, result_pred_df, selected_cities)
+
         st.pyplot(fig)
 
 
-streamlit()
+if __name__ == "__main__":
+    streamlit()

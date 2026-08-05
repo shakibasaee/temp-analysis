@@ -7,7 +7,6 @@ from processing_data.data_cleaning import (
     filter_by_date,
     get_clean_data,
 )
-# from processing_data.detect_outliers import OutlierDetector
 from analysis import (
     get_months,
     convert_to_season,
@@ -29,11 +28,10 @@ from visualization.plots import (
     get_date,
     save_all_plots,
 )
-from processing_data.load_data import (
-    load_data
-)
 import pandas as pd
 from processing_data.regression_runner import reg_runner
+
+import os
 
 
 def get_user_inputs():
@@ -59,30 +57,44 @@ def get_user_inputs():
 def main():
     file_path, file_type, kwargs, start_date, end_date, city = get_user_inputs()
     df = load_data(file_path, file_type, **kwargs)
-
-    if start_date or end_date != "":
-        df= filter_by_date(df,start_date,end_date)
-        print(df)
-
     df = filter_data(df)
     df = validate_data(df)
     if len(df) > 200_000:
         df = simplify_data(df)
-    save_data(df, "data/cleaned_weather_data.csv")
+    os.makedirs("data", exist_ok=True)
+    save_data(df, os.path.join("data", "cleaned_weather_data.csv"))
 
     df = get_months(df)
     df["Season"] = df["Month"].apply(convert_to_season)
 
-    print("Weather data:\n", df)
+    print("Weather data:\n", df.head())
     print("Monthly statistics:\n", month_temp_statistics(df))
     print("Seasonal statistics:\n", season_temp_statistic(df))
     print("Summary:\n", summry_statistic(df))
-
     months_plot(df)
     season_plot(df)
     get_date(df)
     save_all_plots(df)
 
+    print("\n--- Outlier Detection ---")
+
+    simple_detector = WeatherOutlierAnalyzer(method="iqr")
+    simple_outliers = simple_detector.detect(df["Temperature"])
+    os.makedirs("plots", exist_ok=True)
+    simple_detector.plot(
+        df["Temperature"], simple_outliers, os.path.join("plots", "simple_outliers.png")
+    )
+    print(f"Simple method found {len(simple_outliers)} outliers")
+
+    # روش ML (IsolationForest)
+    ml_detector = WeatherOutlierAnalyzer(method="isolationforest")
+    ml_outliers = ml_detector.detect(df["Temperature"])
+    ml_detector.plot(
+        df["Temperature"], ml_outliers, os.path.join("plots", "ml_outliers.png")
+    )
+    print(f"ML method found {len(ml_outliers)} outliers")
+
+    print("✅ Finished detecting outliers!")
     start_day = input("Enter date:\n")
     result = reg_runner(regression_alg, df, city, start_day)
 
