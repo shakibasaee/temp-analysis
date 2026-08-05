@@ -33,6 +33,8 @@ from processing_data.regression_runner import reg_runner
 
 import os
 
+from scripts.processing_data.detect_outliers import WeatherOutlierAnalyzer
+
 
 def get_user_inputs():
     file_type = input("Enter file type (csv, excel, json): ").strip().lower()
