@@ -145,7 +145,7 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
         test_metrics = _metrics(test["target"], _predict(name, test_model, test))
         results[name]["test"] = test_metrics
     return {
-        "task": "Next-day daily mean temperature (C) by city; forecast issued after today's observation",
+        "task": "Next-day recorded daily temperature (C) by city; forecast issued after today's observation",
         "selection_rule": "Minimum validation MAE, provided relative gain over persistence meets configured threshold; test untouched until selection",
         "config": config.to_dict(),
         "data": {
