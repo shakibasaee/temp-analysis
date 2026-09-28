@@ -1,247 +1,86 @@
 # Temperature Analysis Platform
 
-A modular data analysis toolkit for exploring, visualizing, and forecasting temperature data across multiple cities and years.
+Daily city temperature analysis with an exploratory Streamlit dashboard and a reproducible **one-day-ahead** forecasting benchmark. The historical notebooks, plots, reports, and data remain in the repository.
 
-The platform focuses on **clarity, extensibility, and honest baselines**: upload CSV datasets, explore trends in an interactive Streamlit dashboard, detect anomalies, and generate short-horizon forecasts using a transparent baseline model. Results can be exported as shareable PDF reports.
+## Current Project Status
 
----
+Active development resumed on 2026-09-28. The supported forecasting workflow validates daily city data, compares five models on chronological splits, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard and interactive console remain available for exploratory charts and calendar-only estimates. They do not display the newly selected one-day model.
 
-## 🚀 Features
+The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
 
-- Dynamic CSV dataset upload
-- Multi-city and multi-year analysis
-- Date-range filtering
-- Temperature forecasting using **Linear Regression as a simple, interpretable baseline**
-- Outlier / anomaly detection (statistical methods)
-- Interactive Streamlit dashboard
-- PDF report generation
-- Optional live weather data integration (API-based)
-- Centralized configuration via `config.yaml`
-- Modular, scalable code structure
-- Unit testing with PyTest
+## Install
 
----
-
-## 🔧 Tech Stack
-
-- **Language:** Python
-- **Data Processing:** pandas, NumPy, scikit-learn
-- **Visualization:** Matplotlib, Seaborn
-- **UI / Frontend:** Streamlit
-- **Reporting:** ReportLab (PDF generation)
-- **API Integration (optional):** OpenWeather API
-- **Database (optional / planned):** SQLite, PostgreSQL
-- **Testing:** PyTest
-
----
-
-## 📂 Project Structure
-
-```bash
-project/
-├── README.md
-├── requirements.txt
-├── config.yaml
-├── data/
-├── scripts/
-│   ├── app.py            # Streamlit dashboard entry point
-│   ├── main.py           # Core orchestration logic
-│   ├── processing_data/  # Data loading & preprocessing
-│   └── visualization/    # Plotting and chart utilities
-├── plots/
-└── tests/
-```
-
----
-
-## 📊 Dashboard Overview
-
-The Streamlit dashboard allows you to:
-
-- Upload CSV datasets
-- Filter data by city and date range
-- Explore interactive temperature trend visualizations
-- Detect anomalies and outliers
-- Generate short-term forecasts using a Linear Regression baseline
-- Compare historical CSV data with live weather data (optional)
-- Export the current analysis and plots as a PDF report
-
----
-
-## 📁 Data Format
-
-The platform expects CSV files with at least the following columns:
-
-- `date` — date or datetime (e.g. `YYYY-MM-DD`)
-- `city` — city name (string)
-- `temperature` — numeric temperature value (°C or °F; configurable)
-
-**Example:**
-
-```csv
-date,city,temperature
-2023-01-01,Berlin,3.5
-2023-01-02,Berlin,2.1
-2023-01-01,Paris,5.2
-```
-
-Additional features (e.g. `humidity`, `wind_speed`) can be added as long as they are handled in the preprocessing pipeline.
-
----
-
-## ⚙️ Configuration (`config.yaml`)
-
-Key settings are centralized in `config.yaml`, allowing behavior changes without modifying code:
-
-- Default temperature unit (C / F)
-- Forecast horizon (days ahead)
-- Outlier detection thresholds
-- Data and output paths
-- API configuration
-- Database configuration (if enabled)
-
-**Example:**
-
-```yaml
-units: "C"
-forecast_horizon_days: 7
-outlier:
-  zscore_threshold: 3.0
-api:
-  enabled: false
-  provider: "openweather"
-  api_key: "YOUR_API_KEY_HERE"
-database:
-  enabled: false
-  uri: "sqlite:///data/temperature.db"
-```
-
----
-
-## 🔑 API Integration (Optional)
-
-Live weather data integration is **optional and disabled by default**.
-
-When enabled, the dashboard can fetch and compare live weather data against historical CSV-based datasets.
-
-**Steps:**
-
-1. Create an account on OpenWeather and generate an API key.
-2. Set the API key in `config.yaml` or as an environment variable:
-
-```bash
-export OPENWEATHER_API_KEY="your_real_key_here"
-```
-
-3. Enable API integration in `config.yaml`:
-
-```yaml
-api:
-  enabled: true
-```
-
----
-
-## 📦 Installation & Setup
-
-### 1️⃣ Clone the repository
-
-```bash
-git clone https://github.com/shakibasaee/temp-analysis.git
-cd temp-analysis
-```
-
-### 2️⃣ Create and activate a virtual environment (recommended)
+Python 3.11 or newer is recommended. From the repository root:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -r requirements-forecast.txt
 ```
 
-### 3️⃣ Install dependencies
+For the dashboard, console charts, and PDF reporting tests, also install `requirements.txt`.
+
+## Forecasting commands
+
+Run from the repository root. The default input and split dates are in `configs/forecast.json`; all commands accept explicit paths.
 
 ```bash
-pip install -r requirements.txt
+# Evaluate the five candidates on the same chronological periods.
+python -m forecasting.cli benchmark --data data/new_weather_data.csv --config configs/forecast.json
+
+# Benchmark, select on validation, refit on all labelled observations, and save outputs.
+python -m forecasting.cli train --data data/new_weather_data.csv --config configs/forecast.json
+
+# Forecast 2025-01-01 from the supplied data, one row per city.
+python -m forecasting.cli predict --data data/new_weather_data.csv --model artifacts/temperature_model.joblib
 ```
 
-### 4️⃣ Run the dashboard
+`train` writes `artifacts/benchmark.json` and `artifacts/temperature_model.joblib`. The report includes the source file SHA-256, splits, metrics, and selection rule. Artifacts are ignored by Git. Load joblib files only from trusted sources.
+
+Input CSV columns: `Date_Time`, `City`, `Temperature_C` (daily mean in Celsius). Each city must have unique, contiguous midnight daily dates, finite targets, and at least 30 days of history. An invalid or incomplete series is rejected rather than silently filled. Prediction requires at least the history used to train the saved artifact and rejects unseen cities.
+
+### Actual benchmark on the supplied data
+
+Forecasts are issued after today's observation for tomorrow's recorded daily temperature. Examples are partitioned by **target date**: train 2023-01-31 to 2023-12-31 (1,675 rows), validation 2024-01-01 to 2024-06-30 (910), test 2024-07-01 to 2024-12-31 (920). During validation and test, yesterday's actual temperature is available before forecasting the next day. No randomly shuffled time-series split is used.
+
+| Model | Validation MAE (°C) | Test MAE (°C) | Test RMSE (°C) | Note |
+|---|---:|---:|---:|---|
+| Persistence | 1.5051 | 1.1568 | 1.6839 | Selected forecast policy |
+| Seasonal naive, 7 days | 3.4230 | 2.6522 | 3.6169 | Same weekday last week |
+| Original calendar linear | 2.9239 | 2.9943 | 3.7948 | Existing implementation, same split |
+| Ridge with lags | **1.4937** | **1.1490** | **1.6114** | Best numeric MAE, marginal gain |
+| Extra Trees with lags | 1.5521 | 1.1950 | 1.7095 | No gain over persistence |
+
+The selected policy is persistence: ridge improves validation MAE by only 0.8%, below the preconfigured 2% practical improvement threshold. Ridge's test MAE advantage is also under 1%. The test period was not used to choose the policy. sMAPE and R² are included in the machine-readable benchmark; MAPE is avoided because temperatures can be near zero. Two years of data and one held-out period are insufficient to establish a durable performance advantage.
+
+## Explore and test
 
 ```bash
+python -m unittest discover -s tests -q
 streamlit run scripts/app.py
+python scripts/main.py
 ```
 
-Then open the URL printed by Streamlit (usually `http://localhost:8501`).
+The dashboard reads the bundled daily CSV via a repository-relative path. Its date-picker estimate and the console's regression estimate are **exploratory calendar-only predictions**. The console saves generated output under ignored `artifacts/`. The validated next-day workflow is the CLI above. `Report.md` and `plots/RESULTS.md` are historical project artifacts, not reports from the current benchmark.
 
----
+## Architecture
 
-## 🚀 Quickstart Workflow
+- `forecasting/config.py`: validated experiment settings.
+- `forecasting/data.py`: CSV ingestion and daily-series validation.
+- `forecasting/features.py`: lag, rolling, and calendar features known at issue time.
+- `forecasting/experiment.py`: chronological splits, comparable baselines/models, metrics, model selection, save/load, inference.
+- `forecasting/cli.py`: benchmark, train, predict commands.
+- `scripts/`: existing dashboard, console, visualizations, reporting, outlier analysis, and calendar model.
+- `tests/`: data, leakage, training, persistence, CLI, dashboard, and legacy-model checks.
+- `docs/WORKLOG.md`: decisions, tests, results, and team handoff.
 
-1. Upload a CSV file containing temperature data.
-2. Select one or more cities and a date range.
-3. Explore charts showing trends and seasonal patterns.
-4. Run anomaly detection to highlight outliers.
-5. Generate a forecast for the next _N_ days (configurable).
-6. Export the analysis and visualizations as a PDF report.
+## Next team work
 
----
+1. Establish provenance, collection method, units, and update process for the five-city dataset. Validate on genuinely later observations and several rolling origins.
+2. Add reliable observations or forecasts of humidity, pressure, wind, cloud, precipitation, and solar radiation before testing them as predictors. Same-day *future* observations must never enter a forecast.
+3. Decide with the team how to manage the historical 103 MB `data/weather_data.csv` and old virtual-environment blobs still present in Git history. The current tree no longer tracks `.venv`; rewriting shared history would need coordination.
 
-## 🧠 Methodology
+## Collaboration
 
-The system is designed with **modularity and testability** in mind:
-
-- Each major responsibility (data loading, preprocessing, forecasting, visualization, reporting) lives in its own module.
-- Forecasting currently relies on a **Linear Regression baseline**, chosen for its simplicity and interpretability.
-- This baseline provides a clear reference point for evaluating more advanced models in future iterations.
-- Outlier detection uses statistical techniques such as z-scores or IQR-based rules.
-- Configuration is centralized in `config.yaml` to allow rapid experimentation.
-
-The forecasting backend can be replaced (e.g. Prophet, LSTM) while reusing the existing data and visualization pipeline.
-
----
-
-## ✅ Running Tests
-
-Run the full test suite:
-
-```bash
-pytest
-```
-
-Run tests for a specific module:
-
-```bash
-pytest tests/test_forecasting.py
-```
-
----
-
-## ✨ Roadmap / Future Improvements
-
-- Advanced forecasting models (e.g. Prophet, LSTM)
-- Deployment to Streamlit Community Cloud or similar platforms
-- CI/CD pipeline (linting, testing, automated deployment)
-- Caching and rate limiting for API calls
-- More advanced analytics dashboards (correlations, climatology metrics)
-- Role-based access and multi-user workspaces
-
----
-
-## 👨‍💻 Authors & Collaboration
-
-This project was developed by a **two-person team with rotating roles** throughout different phases of development.
-Both contributors participated in system design, implementation, experimentation, and review, with responsibilities shifting as the project evolved.
-
-- **Shakiba**
-  GitHub: [https://github.com/shakibasaee](https://github.com/shakibasaee)
-
-- **Kasra**
-  GitHub: [https://github.com/kasra-2004](https://github.com/kasra-2004)
-
-This role-rotating workflow encouraged shared ownership of the codebase and a deeper understanding of the system as a whole.
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-You are free to use, modify, and distribute it for personal or commercial purposes.
+The previous README credited [Shakiba](https://github.com/shakibasaee) and [Kasra](https://github.com/kasra-2004) as core collaborators. Git history records all contributors and retains their original authorship. New work is described in `docs/WORKLOG.md` and separate commits.

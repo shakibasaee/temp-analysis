@@ -85,6 +85,8 @@ class LinearRegressionModelTests(unittest.TestCase):
     def test_invalid_configuration_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "test_size"):
             LinearRegressionModel(LinearRegressionConfig(test_size=1.0))
+        with self.assertRaisesRegex(ValueError, "shuffle"):
+            LinearRegressionModel(LinearRegressionConfig(shuffle=True))
 
 
 if __name__ == "__main__":

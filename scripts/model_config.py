@@ -22,7 +22,7 @@ class LinearRegressionConfig:
     Attributes:
         random_seed (int): Random seed for reproducibility across train/test split
         test_size (float): Fraction of data to use for testing (0.0-1.0)
-        shuffle (bool): Whether to shuffle before splitting (False maintains temporal order)
+        shuffle (bool): Must be False; random time-series splits are rejected
         normalize_features (bool): Whether to standardize features (zero mean, unit variance)
         feature_selection_mode (str): 'all' for all cities, 'specific' for selected cities
         selected_cities (Optional[List[str]]): Cities to include if using specific mode
@@ -37,7 +37,7 @@ class LinearRegressionConfig:
     
     # Train/test split parameters
     test_size: float = 0.2  # 80/20 split
-    shuffle: bool = False   # Maintain temporal order for time series
+    shuffle: bool = False   # Random time-series splits are invalid
     
     # Feature scaling
     normalize_features: bool = True
