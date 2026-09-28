@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 from matplotlib import pyplot as plt
 import datetime as dt
-from analysis import (
+from pathlib import Path
+from scripts.analysis import (
     months_plot,
     season_plot,
     get_date,
@@ -11,16 +12,17 @@ from analysis import (
     regression_alg,
     reg_plot,
 )
-from processing_data.data_cleaning import filter_by_date
+from scripts.processing_data.data_cleaning import filter_by_date
 
-from processing_data.regression_runner import reg_runner
+from scripts.processing_data.regression_runner import reg_runner
 
 
 def streamlit():
     st.title("Weather Data Analysis")
     st.write("This app analyzes weather data.")
 
-    df = pd.read_csv("..\\temp-analysis\\data\\new_weather_data.csv")
+    data_path = Path(__file__).resolve().parents[1] / "data" / "new_weather_data.csv"
+    df = pd.read_csv(data_path)
     df["Date_Time"] = pd.to_datetime(df["Date_Time"])
 
     min_date = df["Date_Time"].min()
@@ -42,22 +44,27 @@ def streamlit():
         filtered_df = get_months(filtered_df)
 
         st.subheader("Daily Average Temperature")
-        get_date(filtered_df)
-        st.pyplot(plt)
+        figure = get_date(filtered_df)
+        st.pyplot(figure)
+        plt.close(figure)
 
         st.subheader("Monthly Temperature Statistics")
-        months_plot(filtered_df)
-        st.pyplot(plt)
+        figure = months_plot(filtered_df)
+        st.pyplot(figure)
+        plt.close(figure)
 
         filtered_df["Season"] = filtered_df["Month"].apply(convert_to_season)
         st.subheader("Seasonal Temperature Statistics")
-        season_plot(filtered_df)
-        st.pyplot(plt)
+        figure = season_plot(filtered_df)
+        st.pyplot(figure)
+        plt.close(figure)
 
         st.subheader("Prediction section")
+        st.caption("Exploratory calendar-only estimate. For validated next-day forecasts, use the forecasting CLI.")
         pre_date = st.date_input(
             "Select date to predect",
-            value=(pd.to_datetime(date_range[1]) + dt.timedelta(days=1)).date(),
+            value=(max_date + dt.timedelta(days=1)).date(),
+            min_value=(max_date + dt.timedelta(days=1)).date(),
         )
 
         cities = sorted(df["City"].dropna().unique().tolist())
@@ -90,6 +97,7 @@ def streamlit():
         fig = reg_plot(cities_df, result_pred_df, selected_cities)
 
         st.pyplot(fig)
+        plt.close(fig)
 
 
 if __name__ == "__main__":
