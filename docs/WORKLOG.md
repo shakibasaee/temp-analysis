@@ -1,5 +1,17 @@
 # Project work log
 
+## 2026-10-07 — Rolling evaluation and dashboard forecast
+
+**Plan.** First add expanding monthly validation folds and per-city held-out metrics. Then make the dashboard consume the selected next-day policy. Finally document the bundled data's provenance gap and validate the complete path.
+
+**Changes and decisions.** Validation now uses six monthly folds from January through June 2024. Each fold trains on labels strictly before that month; earlier validation months become training history only after they have elapsed. Candidate selection uses pooled out-of-fold MAE with the existing 2% gain requirement. The July–December 2024 test remains held out until selection. The report includes fold dates/rows, fold metrics, and per-city test metrics. The dashboard calls the same benchmark, final fit, and prediction functions as the CLI; Streamlit caches the fitted result until the data or config file changes. It displays the selected model, per-city forecast and historical held-out error, and warns when bundled observations are stale. The older console model remains available.
+
+**Experiments.** On the bundled five-city data, pooled rolling-validation MAE (°C) was persistence 1.5051, seasonal naive 3.4230, calendar linear 2.9260, ridge with lags 1.4916, and Extra Trees with lags 1.5744. Held-out test MAE remains 1.1568, 2.6522, 2.9943, 1.1490, and 1.1950 respectively. Ridge's roughly 0.9% validation gain remains below the 2% selection threshold, so persistence is still selected. Its per-city test MAE is 0.5658 Bandar_Abbas, 1.6630 Mashhad, 0.9859 Rasht, 1.2799 Sanandaj, and 1.2897 Yazd.
+
+**Validation.** The expanded suite passed 23 tests locally, including fold-boundary checks and a Streamlit smoke test with default and multi-city selections. Ruff lint/format checks and the CLI benchmark also passed. The bundled data ends on 2024-12-31; the app's next-day output is for 2025-01-01 and is explicitly marked historical.
+
+**Known issues and next steps.** Data source, measurement definition, timezone, and update process are still unknown; see `data/README.md`. Acquire later trusted observations before drawing stronger model conclusions. After that, assess calibrated forecast intervals and add point-in-time available weather covariates only if they improve rolling validation. Large historical Git data still needs a team storage decision.
+
 ## 2026-09-28 — Forecasting and repository recovery
 
 **Assessment.** The existing repository had useful modular analysis, a reusable calendar linear model, metrics with bootstrap intervals, a dashboard, and tests. Forecasting was not compared with persistence, forecast horizon and inference inputs were unclear, the console called an obsolete outlier API, and several paths depended on a particular workstation. A random split was still permitted by configuration.
