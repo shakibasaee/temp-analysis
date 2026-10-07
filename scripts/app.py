@@ -1,103 +1,126 @@
-import streamlit as st
-import pandas as pd
-from matplotlib import pyplot as plt
-import datetime as dt
+"""Streamlit exploration and the selected next-day forecast."""
+
+from datetime import date
 from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+from matplotlib import pyplot as plt
+
+from forecasting.config import ForecastConfig
+from forecasting.data import load_daily_data
+from forecasting.experiment import benchmark, predict_next_day, train_final
 from scripts.analysis import (
-    months_plot,
-    season_plot,
+    convert_to_season,
     get_date,
     get_months,
-    convert_to_season,
-    regression_alg,
+    months_plot,
     reg_plot,
+    season_plot,
 )
 from scripts.processing_data.data_cleaning import filter_by_date
 
-from scripts.processing_data.regression_runner import reg_runner
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = PROJECT_ROOT / "data" / "new_weather_data.csv"
+CONFIG_PATH = PROJECT_ROOT / "configs" / "forecast.json"
 
 
-def streamlit():
+@st.cache_resource(show_spinner="Evaluating and fitting the next-day forecast...")
+def forecast_bundle(
+    data_path: str, config_path: str, data_modified: int, config_modified: int
+):
+    """Cache a forecast until the input data or configuration changes."""
+    data = load_daily_data(data_path)
+    config = ForecastConfig.from_json(config_path)
+    report = benchmark(data, config)
+    artifact = train_final(data, config, report["selected_model"])
+    predictions = predict_next_day(artifact, data)
+    return data, report, predictions
+
+
+def streamlit() -> None:
     st.title("Weather Data Analysis")
-    st.write("This app analyzes weather data.")
+    st.write("Explore historical temperatures and the selected next-day forecast.")
 
-    data_path = Path(__file__).resolve().parents[1] / "data" / "new_weather_data.csv"
-    df = pd.read_csv(data_path)
-    df["Date_Time"] = pd.to_datetime(df["Date_Time"])
+    try:
+        data, report, predictions = forecast_bundle(
+            str(DATA_PATH),
+            str(CONFIG_PATH),
+            DATA_PATH.stat().st_mtime_ns,
+            CONFIG_PATH.stat().st_mtime_ns,
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        st.error(f"Forecast data is unavailable: {exc}")
+        st.stop()
 
-    min_date = df["Date_Time"].min()
-    max_date = df["Date_Time"].max()
+    cities = sorted(data["City"].unique().tolist())
+    selected_cities = st.multiselect("Select cities", cities, default=[cities[0]])
+    if not selected_cities:
+        st.warning("Please select at least one city.")
+        st.stop()
 
+    min_date = data["Date_Time"].min().date()
+    max_date = data["Date_Time"].max().date()
     date_range = st.date_input(
-        "Select date range:",
+        "Select historical date range:",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
     )
+    if len(date_range) != 2:
+        st.info("Select both start and end dates.")
+        st.stop()
 
-    if len(date_range) == 2:
-        start_date, end_date = (
-            pd.to_datetime(date_range[0]),
-            pd.to_datetime(date_range[1]),
+    start_date, end_date = map(pd.Timestamp, date_range)
+    filtered = filter_by_date(
+        data.loc[data["City"].isin(selected_cities)].copy(), start_date, end_date
+    )
+    if filtered.empty:
+        st.info("No observations in the selected date range.")
+        st.stop()
+    filtered = get_months(filtered)
+
+    st.subheader("Daily Average Temperature")
+    figure = get_date(filtered.copy())
+    st.pyplot(figure)
+    plt.close(figure)
+
+    st.subheader("Monthly Temperature Statistics")
+    figure = months_plot(filtered)
+    st.pyplot(figure)
+    plt.close(figure)
+
+    filtered["Season"] = filtered["Month"].apply(convert_to_season)
+    st.subheader("Seasonal Temperature Statistics")
+    figure = season_plot(filtered)
+    st.pyplot(figure)
+    plt.close(figure)
+
+    st.subheader("Next-day forecast")
+    selected_model = report["selected_model"]
+    selected_report = report["models"][selected_model]
+    st.caption(
+        f"Latest observation: {max_date}; forecast date: {predictions['Date'].iloc[0]}. "
+        f"Selected model: {selected_model}. Historical held-out MAE: "
+        f"{selected_report['test']['mae']:.2f} °C."
+    )
+    if predictions["Date"].min() < date.today():
+        st.warning(
+            "The bundled observations are stale. This is a historical next-day "
+            "estimate, not a current weather forecast."
         )
-        filtered_df = filter_by_date(df, start_date, end_date)
-        filtered_df = get_months(filtered_df)
+    shown = predictions.loc[predictions["City"].isin(selected_cities)].copy()
+    shown["Held_out_MAE_C"] = shown["City"].map(
+        {
+            city: values["mae"]
+            for city, values in selected_report["test_by_city"].items()
+        }
+    )
+    st.dataframe(shown, hide_index=True)
 
-        st.subheader("Daily Average Temperature")
-        figure = get_date(filtered_df)
-        st.pyplot(figure)
-        plt.close(figure)
-
-        st.subheader("Monthly Temperature Statistics")
-        figure = months_plot(filtered_df)
-        st.pyplot(figure)
-        plt.close(figure)
-
-        filtered_df["Season"] = filtered_df["Month"].apply(convert_to_season)
-        st.subheader("Seasonal Temperature Statistics")
-        figure = season_plot(filtered_df)
-        st.pyplot(figure)
-        plt.close(figure)
-
-        st.subheader("Prediction section")
-        st.caption("Exploratory calendar-only estimate. For validated next-day forecasts, use the forecasting CLI.")
-        pre_date = st.date_input(
-            "Select date to predect",
-            value=(max_date + dt.timedelta(days=1)).date(),
-            min_value=(max_date + dt.timedelta(days=1)).date(),
-        )
-
-        cities = sorted(df["City"].dropna().unique().tolist())
-
-        selected_cities = st.multiselect(
-            "Select cities",
-            cities,
-            default=[cities[0]],
-        )
-
-        if not selected_cities:
-            st.warning("Please select at least one city.")
-            st.stop()
-
-        cities_df = filtered_df[filtered_df["City"].isin(selected_cities)].copy()
-
-        st.subheader("temp prediction")
-
-        # Train once, then reuse the same fitted preprocessing/model pipeline
-        # for every selected city.
-        regression_model, _ = regression_alg(df)
-        pred_frames = []
-        for c in selected_cities:
-            pred = reg_runner(regression_model, df, c, pre_date)
-            pred["City"] = c
-            pred_frames.append(pred)
-
-        result_pred_df = pd.concat(pred_frames, ignore_index=True)
-
-        fig = reg_plot(cities_df, result_pred_df, selected_cities)
-
-        st.pyplot(fig)
-        plt.close(fig)
+    figure = reg_plot(filtered, shown, selected_cities)
+    st.pyplot(figure)
+    plt.close(figure)
 
 
 if __name__ == "__main__":
