@@ -14,7 +14,9 @@ class DashboardSmokeTests(unittest.TestCase):
         app = AppTest.from_file(str(app_path), default_timeout=120).run()
         self.assertEqual([error.message for error in app.exception], [])
         self.assertEqual(app.title[0].value, "Weather Data Analysis")
-        self.assertIn("Selected model: persistence", app.caption[0].value)
+        self.assertTrue(
+            any("Selected model: persistence" in caption.value for caption in app.caption)
+        )
         forecast = app.dataframe[0].value
         self.assertEqual(forecast["City"].tolist(), ["Bandar_Abbas"])
         self.assertEqual(str(forecast["Date"].iloc[0]), "2025-01-01")

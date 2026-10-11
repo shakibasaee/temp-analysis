@@ -1,15 +1,16 @@
 """Streamlit exploration and the selected next-day forecast."""
 
+import os
 from datetime import date
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-from matplotlib import pyplot as plt
-
 from forecasting.config import ForecastConfig
 from forecasting.data import load_daily_data
 from forecasting.experiment import benchmark, predict_next_day, train_final
+from matplotlib import pyplot as plt
+
 from scripts.analysis import (
     convert_to_season,
     get_date,
@@ -21,14 +22,14 @@ from scripts.analysis import (
 from scripts.processing_data.data_cleaning import filter_by_date
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_PATH = PROJECT_ROOT / "data" / "new_weather_data.csv"
+DATA_PATH = Path(
+    os.environ.get("TEMP_ANALYSIS_DATA", PROJECT_ROOT / "data" / "new_weather_data.csv")
+)
 CONFIG_PATH = PROJECT_ROOT / "configs" / "forecast.json"
 
 
 @st.cache_resource(show_spinner="Evaluating and fitting the next-day forecast...")
-def forecast_bundle(
-    data_path: str, config_path: str, data_modified: int, config_modified: int
-):
+def forecast_bundle(data_path: str, config_path: str, data_modified: int, config_modified: int):
     """Cache a forecast until the input data or configuration changes."""
     data = load_daily_data(data_path)
     config = ForecastConfig.from_json(config_path)
@@ -41,6 +42,7 @@ def forecast_bundle(
 def streamlit() -> None:
     st.title("Weather Data Analysis")
     st.write("Explore historical temperatures and the selected next-day forecast.")
+    st.caption(f"Data source: {DATA_PATH}")
 
     try:
         data, report, predictions = forecast_bundle(
@@ -111,10 +113,7 @@ def streamlit() -> None:
         )
     shown = predictions.loc[predictions["City"].isin(selected_cities)].copy()
     shown["Held_out_MAE_C"] = shown["City"].map(
-        {
-            city: values["mae"]
-            for city, values in selected_report["test_by_city"].items()
-        }
+        {city: values["mae"] for city, values in selected_report["test_by_city"].items()}
     )
     st.dataframe(shown, hide_index=True)
 

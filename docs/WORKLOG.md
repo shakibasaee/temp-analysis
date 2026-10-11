@@ -1,5 +1,15 @@
 # Project work log
 
+## 2026-10-11 — Reproducibility review
+
+**Plan.** Audit the shipped dashboard, CLI, legacy console, data, dependencies, tests, and CI; describe feature boundaries accurately; provide a source-independent demo dataset; then run the forecast, dashboard, and tests. Keep existing unrelated files and Git history intact.
+
+**Changes.** Documented the actual status of CSV input, anomaly analysis, PDF export, configuration, live weather, and forecasting. Added a deterministic two-city synthetic CSV generator and a dashboard data-path override. Removed the remaining workstation path from the standalone outlier script. Benchmark JSON now records validation and test row counts per model. Scoped CI lint and format checks to the supported forecast/dashboard path, and added tests for the sample schema and identical benchmark row counts. No virtual environment is tracked in this tree; `.venv/` remains ignored.
+
+**Verification.** On the bundled 3,655-row, five-city dataset, all candidates used 910 validation and 920 held-out test targets. Calendar linear test MAE was 2.9943 C, seasonal naive was 2.6522 C, and selected persistence was 1.1568 C. The data provider, measurement definition, and redistribution rights remain unknown. The synthetic 1,462-row demo generated, trained, predicted, and rendered in Streamlit without exceptions; its scores demonstrate the pipeline only. The 24-test suite and scoped Ruff lint/format checks passed. The standalone outlier module wrote to ignored `artifacts/plots/`.
+
+**Remaining blockers for promotion.** Confirm the bundled data's provider/license and a project code license; collect genuinely later observations; resolve the large legacy CSV's storage policy. The app has no upload widget, live weather, anomaly view, or PDF export.
+
 ## 2026-10-07 — Rolling evaluation and dashboard forecast
 
 **Plan.** First add expanding monthly validation folds and per-city held-out metrics. Then make the dashboard consume the selected next-day policy. Finally document the bundled data's provenance gap and validate the complete path.

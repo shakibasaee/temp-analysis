@@ -37,18 +37,13 @@ def split_examples(
     validation_end = pd.Timestamp(config.validation_end)
     train = labelled.loc[labelled["target_date"] <= train_end]
     validation = labelled.loc[
-        (labelled["target_date"] > train_end)
-        & (labelled["target_date"] <= validation_end)
+        (labelled["target_date"] > train_end) & (labelled["target_date"] <= validation_end)
     ]
     test = labelled.loc[labelled["target_date"] > validation_end]
     if min(map(len, (train, validation, test))) == 0:
-        raise ValueError(
-            "Train, validation and test periods must each contain examples"
-        )
+        raise ValueError("Train, validation and test periods must each contain examples")
     if not (
-        train["target_date"].max()
-        < validation["target_date"].min()
-        < test["target_date"].min()
+        train["target_date"].max() < validation["target_date"].min() < test["target_date"].min()
     ):
         raise ValueError("Chronological partitions overlap")
     return train, validation, test
@@ -64,9 +59,7 @@ def rolling_validation_folds(
     for _, month in validation.groupby(validation["target_date"].dt.to_period("M")):
         history = labelled.loc[labelled["target_date"] < month["target_date"].min()]
         if history.empty or history["target_date"].max() >= month["target_date"].min():
-            raise ValueError(
-                "A validation fold has no strictly earlier training history"
-            )
+            raise ValueError("A validation fold has no strictly earlier training history")
         folds.append((history, month))
     if not folds or len(train) == 0:
         raise ValueError("No rolling validation folds are available")
@@ -80,9 +73,7 @@ def _fit(name: str, train: pd.DataFrame, seed: int) -> Any:
         # Preserve the original project's calendar-only regression as a comparator.
         from scripts.models.linear_regression import LinearRegressionModel
 
-        calendar = train.rename(
-            columns={"target_date": "Date_Time", "target": "Temperature_C"}
-        )
+        calendar = train.rename(columns={"target_date": "Date_Time", "target": "Temperature_C"})
         return LinearRegressionModel().fit(calendar)
     transformer = ColumnTransformer(
         [
@@ -173,32 +164,35 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
             )
         pooled_prediction = np.concatenate(predicted_folds)
         pooled_actual = pd.concat([month["target"] for _, month in folds])
-        raw_validation_mae[name] = float(
-            mean_absolute_error(pooled_actual, pooled_prediction)
-        )
+        raw_validation_mae[name] = float(mean_absolute_error(pooled_actual, pooled_prediction))
         results[name] = {
+            "validation_rows": int(len(pooled_actual)),
             "validation": _metrics(pooled_actual, pooled_prediction),
             "validation_by_fold": fold_metrics,
         }
     best = min(MODEL_NAMES, key=raw_validation_mae.__getitem__)
     baseline_mae = raw_validation_mae["persistence"]
     relative_gain = (
-        (baseline_mae - raw_validation_mae[best]) / baseline_mae
-        if baseline_mae > 0
-        else 0.0
+        (baseline_mae - raw_validation_mae[best]) / baseline_mae if baseline_mae > 0 else 0.0
     )
-    selected = (
-        best if relative_gain >= config.minimum_relative_mae_gain else "persistence"
-    )
+    selected = best if relative_gain >= config.minimum_relative_mae_gain else "persistence"
     for name in MODEL_NAMES:
         test_model = _fit(name, pd.concat([train, validation]), config.random_seed)
         predicted = _predict(name, test_model, test)
         test_metrics = _metrics(test["target"], predicted)
         results[name]["test"] = test_metrics
+        results[name]["test_rows"] = int(len(test))
         results[name]["test_by_city"] = _by_city_metrics(test, predicted)
     return {
-        "task": "Next-day recorded daily temperature (C) by city; forecast issued after today's observation",
-        "selection_rule": "Minimum pooled monthly rolling-validation MAE, provided relative gain over persistence meets configured threshold; test untouched until selection",
+        "task": (
+            "Next-day recorded daily temperature (C) by city; forecast issued "
+            "after today's observation"
+        ),
+        "selection_rule": (
+            "Minimum pooled monthly rolling-validation MAE, provided relative "
+            "gain over persistence meets configured threshold; test untouched "
+            "until selection"
+        ),
         "validation_protocol": "Expanding training history; one fold per calendar month",
         "config": config.to_dict(),
         "data": {
@@ -234,9 +228,7 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
     }
 
 
-def train_final(
-    data: pd.DataFrame, config: ForecastConfig, selected_model: str
-) -> dict[str, Any]:
+def train_final(data: pd.DataFrame, config: ForecastConfig, selected_model: str) -> dict[str, Any]:
     """Fit the selected model on all known labelled dates for future inference."""
     if selected_model not in MODEL_NAMES:
         raise ValueError(f"Unknown model: {selected_model}")
@@ -261,15 +253,11 @@ def predict_next_day(artifact: dict[str, Any], data: pd.DataFrame) -> pd.DataFra
     latest = examples.groupby("City", sort=False).tail(1).sort_values("City").copy()
     missing_cities = set(artifact["cities"]) - set(latest["City"])
     if missing_cities:
-        raise ValueError(
-            f"Missing history for trained cities: {sorted(missing_cities)}"
-        )
+        raise ValueError(f"Missing history for trained cities: {sorted(missing_cities)}")
     unseen_cities = set(latest["City"]) - set(artifact["cities"])
     if unseen_cities:
         raise ValueError(f"No trained model for cities: {sorted(unseen_cities)}")
-    if (
-        latest["issue_date"].dt.date < date.fromisoformat(artifact["trained_through"])
-    ).any():
+    if (latest["issue_date"].dt.date < date.fromisoformat(artifact["trained_through"])).any():
         raise ValueError("Prediction history predates the model's training data")
     predicted = _predict(artifact["selected_model"], artifact["model"], latest)
     return pd.DataFrame(

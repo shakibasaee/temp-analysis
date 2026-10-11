@@ -34,15 +34,15 @@ def make_examples(data: pd.DataFrame, min_history_days: int = 30) -> pd.DataFram
         raise ValueError("At least 30 days are needed for the rolling features")
     daily = validate_daily_data(data)
     group = daily.groupby("City", sort=False)["Temperature_C"]
-    result = (
-        daily[["City", "Date_Time"]].rename(columns={"Date_Time": "issue_date"}).copy()
-    )
+    result = daily[["City", "Date_Time"]].rename(columns={"Date_Time": "issue_date"}).copy()
     result["target_date"] = result["issue_date"] + pd.Timedelta(days=1)
     result["temp_today"] = daily["Temperature_C"]
     for lag in (1, 6, 7):
         result[f"temp_lag_{lag}"] = group.shift(lag)
     for window in (3, 7, 30):
-        result[f"mean_{window}"] = group.transform(lambda s: s.rolling(window).mean())
+        result[f"mean_{window}"] = group.transform(
+            lambda s, window=window: s.rolling(window).mean()
+        )
     result["std_7"] = group.transform(lambda s: s.rolling(7).std())
     day_of_year = result["target_date"].dt.dayofyear
     result["day_of_year_sin"] = np.sin(2 * np.pi * day_of_year / 365.25)

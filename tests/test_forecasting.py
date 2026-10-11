@@ -1,7 +1,7 @@
 """Contract tests for the chronological one-day forecasting workflow."""
 
-import json
 import io
+import json
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -9,7 +9,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
 from forecasting.cli import main
 from forecasting.config import ForecastConfig
 from forecasting.data import load_daily_data, validate_daily_data
@@ -17,12 +16,14 @@ from forecasting.experiment import (
     benchmark,
     load_artifact,
     predict_next_day,
+    rolling_validation_folds,
     save_artifact,
     split_examples,
-    rolling_validation_folds,
     train_final,
 )
 from forecasting.features import FEATURES, make_examples
+
+from scripts.generate_sample_data import generate
 
 
 def sample_data(days: int = 120) -> pd.DataFrame:
@@ -43,9 +44,7 @@ def sample_data(days: int = 120) -> pd.DataFrame:
 class ForecastingTests(unittest.TestCase):
     def setUp(self) -> None:
         self.data = sample_data()
-        self.config = ForecastConfig(
-            train_end="2023-03-01", validation_end="2023-04-01"
-        )
+        self.config = ForecastConfig(train_end="2023-03-01", validation_end="2023-04-01")
 
     def test_load_and_validate_sorts_daily_data(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -139,6 +138,10 @@ class ForecastingTests(unittest.TestCase):
         for model_report in report["models"].values():
             self.assertEqual(len(model_report["validation_by_fold"]), 2)
             self.assertEqual(set(model_report["test_by_city"]), {"North", "South"})
+            self.assertEqual(
+                model_report["validation_rows"], report["splits"]["validation"]["rows"]
+            )
+            self.assertEqual(model_report["test_rows"], report["splits"]["test"]["rows"])
         artifact = train_final(
             validate_daily_data(self.data), self.config, report["selected_model"]
         )
@@ -147,17 +150,13 @@ class ForecastingTests(unittest.TestCase):
             save_artifact(artifact, path)
             loaded = load_artifact(path)
             predictions = predict_next_day(loaded, self.data)
-        self.assertEqual(
-            list(predictions.columns), ["Date", "City", "Predicted_Temperature_C"]
-        )
+        self.assertEqual(list(predictions.columns), ["Date", "City", "Predicted_Temperature_C"])
         self.assertEqual(len(predictions), 2)
         self.assertTrue(np.isfinite(predictions.Predicted_Temperature_C).all())
         self.assertEqual(predictions.Date.nunique(), 1)
         self.assertEqual(predictions.Date.iloc[0], pd.Timestamp("2023-05-01").date())
         with self.assertRaisesRegex(ValueError, "predates"):
-            predict_next_day(
-                loaded, self.data.iloc[:-1].loc[lambda d: d.Date_Time < "2023-04-30"]
-            )
+            predict_next_day(loaded, self.data.iloc[:-1].loc[lambda d: d.Date_Time < "2023-04-30"])
         extra = self.data.loc[self.data.City == "North"].assign(City="East")
         with self.assertRaisesRegex(ValueError, "No trained model"):
             predict_next_day(loaded, pd.concat([self.data, extra]))
@@ -188,11 +187,10 @@ class ForecastingTests(unittest.TestCase):
                     ),
                     0,
                 )
+
             self.assertTrue(model_path.exists())
             self.assertEqual(
-                json.loads(report_path.read_text(encoding="utf-8"))["data"][
-                    "observations"
-                ],
+                json.loads(report_path.read_text(encoding="utf-8"))["data"]["observations"],
                 240,
             )
             with redirect_stdout(io.StringIO()):
@@ -208,6 +206,16 @@ class ForecastingTests(unittest.TestCase):
                     ),
                     0,
                 )
+
+    def test_synthetic_sample_has_valid_schema_and_default_split(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.csv"
+            self.assertEqual(generate(path), 1462)
+            data = load_daily_data(path)
+        self.assertEqual(data["Date_Time"].min(), pd.Timestamp("2023-01-01"))
+        self.assertEqual(data["Date_Time"].max(), pd.Timestamp("2024-12-31"))
+        train, validation, test = split_examples(make_examples(data), ForecastConfig())
+        self.assertEqual((len(train), len(validation), len(test)), (670, 364, 368))
 
 
 if __name__ == "__main__":

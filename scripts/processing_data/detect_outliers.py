@@ -1,5 +1,6 @@
 import os
 import logging
+from pathlib import Path
 from typing import Optional
 import pandas as pd
 import numpy as np
@@ -128,12 +129,13 @@ class WeatherOutlierAnalyzer:
 
 
 if __name__ == "__main__":
-    df = get_clean_data("data/new_weather_data.csv")
+    project_root = Path(__file__).resolve().parents[2]
+    df = get_clean_data(project_root / "data" / "new_weather_data.csv")
     analyzer = WeatherOutlierAnalyzer(df, z_threshold=2.5, contamination=0.05)
 
     comparison_df = analyzer.analyze("Temperature_C")
     print("\n--- Comparison of Outliers ---")
     print(comparison_df.head(15))
 
-    plots_dir = r"C:\Users\Nitro 5\Documents\GitHub\temp-analysis\plots"
+    plots_dir = project_root / "artifacts" / "plots"
     analyzer.plot_outliers("Temperature_C", plots_dir)

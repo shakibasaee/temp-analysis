@@ -30,13 +30,9 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument(
                 "--model-out", default="artifacts/temperature_model.joblib", type=Path
             )
-            command.add_argument(
-                "--report-out", default="artifacts/benchmark.json", type=Path
-            )
+            command.add_argument("--report-out", default="artifacts/benchmark.json", type=Path)
         if name == "predict":
-            command.add_argument(
-                "--model", default="artifacts/temperature_model.joblib", type=Path
-            )
+            command.add_argument("--model", default="artifacts/temperature_model.joblib", type=Path)
     args = parser.parse_args(argv)
     data = load_daily_data(args.data)
     if args.command == "predict":
@@ -52,9 +48,7 @@ def main(argv: list[str] | None = None) -> int:
         artifact["source_sha256"] = report["data"]["source_sha256"]
         save_artifact(artifact, args.model_out)
         args.report_out.parent.mkdir(parents=True, exist_ok=True)
-        args.report_out.write_text(
-            json.dumps(report, indent=2) + "\n", encoding="utf-8"
-        )
+        args.report_out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return 0
 
 

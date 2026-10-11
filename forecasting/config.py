@@ -18,9 +18,7 @@ class ForecastConfig:
     def __post_init__(self) -> None:
         from datetime import date
 
-        if date.fromisoformat(self.train_end) >= date.fromisoformat(
-            self.validation_end
-        ):
+        if date.fromisoformat(self.train_end) >= date.fromisoformat(self.validation_end):
             raise ValueError("train_end must precede validation_end")
         if self.min_history_days < 30:
             raise ValueError("min_history_days must be at least 30")
