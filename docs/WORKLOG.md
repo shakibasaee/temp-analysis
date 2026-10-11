@@ -10,6 +10,8 @@
 
 **Remaining blockers for promotion.** Confirm the bundled data's provider/license and a project code license; collect genuinely later observations; resolve the large legacy CSV's storage policy. The app has no upload widget, live weather, anomaly view, or PDF export.
 
+**CI portability fix.** The first pushed CI run passed tests and lint but failed formatting because local Ruff inherited an unrelated parent checkout's configuration. Added this repository's own `pyproject.toml` to pin Ruff rules and line length for local and GitHub runs.
+
 ## 2026-10-07 — Rolling evaluation and dashboard forecast
 
 **Plan.** First add expanding monthly validation folds and per-city held-out metrics. Then make the dashboard consume the selected next-day policy. Finally document the bundled data's provenance gap and validate the complete path.

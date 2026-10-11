@@ -6,11 +6,11 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+from matplotlib import pyplot as plt
+
 from forecasting.config import ForecastConfig
 from forecasting.data import load_daily_data
 from forecasting.experiment import benchmark, predict_next_day, train_final
-from matplotlib import pyplot as plt
-
 from scripts.analysis import (
     convert_to_season,
     get_date,

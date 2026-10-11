@@ -9,6 +9,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
 from forecasting.cli import main
 from forecasting.config import ForecastConfig
 from forecasting.data import load_daily_data, validate_daily_data
@@ -22,7 +23,6 @@ from forecasting.experiment import (
     train_final,
 )
 from forecasting.features import FEATURES, make_examples
-
 from scripts.generate_sample_data import generate
 
 
