@@ -27,3 +27,13 @@ Ridge's validation improvement over persistence is about 0.8%, so persistence is
 **Known issues.** The dataset is only two years long and externally unverified. The dashboard/console use the older calendar model, while the CLI holds the validated next-day workflow. Large historic files, including the 103 MB CSV and prior `.venv` commits, remain in Git history; reducing history size requires a team decision. The old console's cleaning rules discard rows with missing optional weather variables, unlike the new forecasting loader.
 
 **Next steps.** Confirm data provenance and collect later observations for rolling-origin evaluation. Add only weather inputs that are actually available when forecasts are issued. Decide on storage/LFS or archival for large historical data with the team.
+
+## 2026-10-13 — Experimental multi-variable weather benchmark
+
+**Scope.** Added a separate next-day benchmark for temperature, wind speed, pressure, and rain occurrence probability. The original temperature policy and exploratory dashboard remain separate. The weather CLI compares persistence (or a 30-day wet-frequency baseline) with ridge regression (or logistic regression for rain) on chronological validation and test periods. Candidate models are not deployed as a live forecast.
+
+**Data contract.** Features use measurements no later than the issue day. Missing precipitation and pressure values are retained, excluded only when they are the target or required baseline, and imputed within the model's training pipeline when used as predictors. A new data card records the bundled CSV checksum, coverage, missingness, and unknown provenance, time zone, aggregation, and coordinates.
+
+**Internal results.** On the bundled file's 2024-07-01 to 2024-12-31 test period, aggregate baseline/candidate scores were: temperature MAE 1.1568/1.1229 °C; wind MAE 2.3888/1.9787 km/h; pressure MAE 1.9670/1.8732 hPa; rain Brier 0.1022/0.0986. Temperature candidate performance was worse in three cities; pressure was worse in two. These scores are internal diagnostics, not evidence of field accuracy.
+
+**Operational guard.** The bundled file ends in 2024. `weather-baseline` refuses to call its 2025-01-01 output a current forecast unless the user explicitly chooses `--allow-historical`. The output contains only baseline forecasts. A source-backed later dataset and rolling-origin evaluation remain necessary before model selection or a public accuracy claim.

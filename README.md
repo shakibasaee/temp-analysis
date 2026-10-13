@@ -1,12 +1,12 @@
-# Temperature Analysis Platform
+# City Weather Analysis and Forecasting
 
-Daily city temperature analysis with an exploratory Streamlit dashboard and a reproducible **one-day-ahead** forecasting benchmark. The historical notebooks, plots, reports, and data remain in the repository.
+A reproducible one-day temperature benchmark, an experimental four-target weather benchmark, and an exploratory Streamlit dashboard. Historical notebooks, plots, reports, and data remain in the repository.
 
 ## Current Project Status
 
-Active development resumed on 2026-09-28. The supported forecasting workflow validates daily city data, compares five models on chronological splits, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard and interactive console remain available for exploratory charts and calendar-only estimates. They do not display the newly selected one-day model.
+The supported temperature workflow validates daily city data, compares five models on chronological splits, saves a selected forecast policy, and predicts the day after the latest observation. A separate four-target weather benchmark is experimental. The dashboard and interactive console remain available for exploratory charts and calendar-only estimates; neither displays the CLI forecast policies.
 
-The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
+The supplied `data/new_weather_data.csv` contains 3,655 daily rows across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
 
 ## Install
 
@@ -21,7 +21,7 @@ python -m pip install -r requirements-forecast.txt
 
 For the dashboard, console charts, and PDF reporting tests, also install `requirements.txt`.
 
-## Forecasting commands
+## Temperature forecasting commands
 
 Run from the repository root. The default input and split dates are in `configs/forecast.json`; all commands accept explicit paths.
 
@@ -54,6 +54,17 @@ Forecasts are issued after today's observation for tomorrow's recorded daily tem
 
 The selected policy is persistence: ridge improves validation MAE by only 0.8%, below the preconfigured 2% practical improvement threshold. Ridge's test MAE advantage is also under 1%. The test period was not used to choose the policy. sMAPE and R² are included in the machine-readable benchmark; MAPE is avoided because temperatures can be near zero. Two years of data and one held-out period are insufficient to establish a durable performance advantage.
 
+## Experimental weather benchmark
+
+The new benchmark compares next-day **temperature, wind speed, pressure, and rain occurrence probability** with transparent baselines on the same chronological periods. Ridge regression is a candidate for the three numeric targets; logistic regression is a candidate for rain occurrence. Results include per-city scores and missing-target counts. The candidate models are **not** deployed as forecasts.
+
+```bash
+python -m forecasting.cli weather-benchmark --data data/new_weather_data.csv --config configs/forecast.json --report-out artifacts/weather-benchmark.json
+python -m forecasting.cli weather-baseline --data data/new_weather_data.csv --config configs/forecast.json --allow-historical
+```
+
+The second command is an explicitly dated replay: the bundled file ends on 2024-12-31, so its next day is **2025-01-01**, not tomorrow in 2026. Without `--allow-historical`, the baseline command rejects stale input. These results are internal diagnostics until the [data source and daily measurement definitions](docs/DATA_CARD.md) are verified. See the [forecasting method and measured results](docs/WEATHER_FORECASTING.md).
+
 ## Explore and test
 
 ```bash
@@ -70,9 +81,10 @@ The dashboard reads the bundled daily CSV via a repository-relative path. Its da
 - `forecasting/data.py`: CSV ingestion and daily-series validation.
 - `forecasting/features.py`: lag, rolling, and calendar features known at issue time.
 - `forecasting/experiment.py`: chronological splits, comparable baselines/models, metrics, model selection, save/load, inference.
-- `forecasting/cli.py`: benchmark, train, predict commands.
+- `forecasting/cli.py`: temperature and weather benchmark commands.
+- `forecasting/weather.py`: four-target validation, issue-time features, baselines, and model comparison.
 - `scripts/`: existing dashboard, console, visualizations, reporting, outlier analysis, and calendar model.
-- `tests/`: data, leakage, training, persistence, CLI, dashboard, and legacy-model checks.
+- `tests/`: data, leakage, training, persistence, weather benchmark, CLI, dashboard, and legacy-model checks.
 - `docs/WORKLOG.md`: decisions, tests, results, and team handoff.
 
 ## Next team work
