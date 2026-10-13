@@ -37,3 +37,13 @@ Ridge's validation improvement over persistence is about 0.8%, so persistence is
 **Internal results.** On the bundled file's 2024-07-01 to 2024-12-31 test period, aggregate baseline/candidate scores were: temperature MAE 1.1568/1.1229 °C; wind MAE 2.3888/1.9787 km/h; pressure MAE 1.9670/1.8732 hPa; rain Brier 0.1022/0.0986. Temperature candidate performance was worse in three cities; pressure was worse in two. These scores are internal diagnostics, not evidence of field accuracy.
 
 **Operational guard.** The bundled file ends in 2024. `weather-baseline` refuses to call its 2025-01-01 output a current forecast unless the user explicitly chooses `--allow-historical`. The output contains only baseline forecasts. A source-backed later dataset and rolling-origin evaluation remain necessary before model selection or a public accuracy claim.
+
+## 2026-10-13 — Documented ERA5 reanalysis snapshot
+
+**Source choice.** Selected Open-Meteo's explicitly pinned ECMWF ERA5 model for the five existing city labels because it provides all four variables, fixed grid locations, a consistent UTC day, and repeatable API requests. The new 2022–2025 snapshot has 7,305 rows; a manifest stores 20 request URLs, requested and returned grid coordinates, retrieval time, aggregation definitions, and SHA-256. The original CSV is retained separately with its unknown provenance. Open-Meteo and ECMWF are credited in the data card and README.
+
+**Time-boundary correction.** Temperature, wind and sea-level pressure use hourly UTC means. Precipitation uses the API's UTC `precipitation_sum` rather than an hourly sum because hourly precipitation is attributed to the preceding hour. The ingestion rejects missing hours, missing daily totals, changed units, or changed time zone.
+
+**Retrospective results.** On the held-out 2025 ERA5 test year, baseline/candidate scores were: temperature MAE 1.1459/1.0215 °C; wind MAE 1.4874/1.2753 km/h; sea-level pressure MAE 2.1321/1.9725 hPa; precipitation-occurrence Brier 0.1535/0.1245. Candidate scores are lower in all five city grid cells for each target. The models predict ERA5 values from preceding ERA5 values; ERA5's publication delay makes this an explanatory historical benchmark, not an operational forecast or station-observation validation.
+
+**Next stage.** Build an issue-time evaluation with archived model runs at fixed lead times and independent station observations where quality and coverage support them. Assess multiple rolling origins, event calibration, and local regressions before selecting a deployable policy.

@@ -1,0 +1,299 @@
+{
+  "source": "Open-Meteo Historical Weather API, ECMWF ERA5 reanalysis",
+  "source_url": "https://open-meteo.com/en/docs/historical-weather-api",
+  "model": "era5",
+  "nature": "Gridded reanalysis, not station observations or archived forecasts",
+  "retrieved_at_utc": "2026-10-13T07:36:01.099334+00:00",
+  "date_definition": "UTC daily total for precipitation; 00:00–23:00 UTC hourly instants for other variables",
+  "aggregation": {
+    "Temperature_C": "mean hourly 2 m air temperature",
+    "Precipitation_mm": "API daily precipitation_sum, including rain and snow",
+    "Wind_Speed_kmh": "mean hourly 10 m wind speed",
+    "Pressure_hPa": "mean hourly sea-level pressure"
+  },
+  "license": "Open-Meteo attribution required; free API is non-commercial",
+  "requests": [
+    {
+      "city": "Sanandaj",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.31495&longitude=46.99883&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        35.31495,
+        46.99883
+      ],
+      "response_grid_coordinates": [
+        35.25,
+        47.0
+      ],
+      "first_date": "2022-01-01",
+      "last_date": "2022-12-31"
+    },
+    {
+      "city": "Sanandaj",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.31495&longitude=46.99883&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        35.31495,
+        46.99883
+      ],
+      "response_grid_coordinates": [
+        35.25,
+        47.0
+      ],
+      "first_date": "2023-01-01",
+      "last_date": "2023-12-31"
+    },
+    {
+      "city": "Sanandaj",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.31495&longitude=46.99883&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        35.31495,
+        46.99883
+      ],
+      "response_grid_coordinates": [
+        35.25,
+        47.0
+      ],
+      "first_date": "2024-01-01",
+      "last_date": "2024-12-31"
+    },
+    {
+      "city": "Sanandaj",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.31495&longitude=46.99883&start_date=2025-01-01&end_date=2025-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        35.31495,
+        46.99883
+      ],
+      "response_grid_coordinates": [
+        35.25,
+        47.0
+      ],
+      "first_date": "2025-01-01",
+      "last_date": "2025-12-31"
+    },
+    {
+      "city": "Yazd",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=31.89722&longitude=54.3675&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        31.89722,
+        54.3675
+      ],
+      "response_grid_coordinates": [
+        32.0,
+        54.25
+      ],
+      "first_date": "2022-01-01",
+      "last_date": "2022-12-31"
+    },
+    {
+      "city": "Yazd",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=31.89722&longitude=54.3675&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        31.89722,
+        54.3675
+      ],
+      "response_grid_coordinates": [
+        32.0,
+        54.25
+      ],
+      "first_date": "2023-01-01",
+      "last_date": "2023-12-31"
+    },
+    {
+      "city": "Yazd",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=31.89722&longitude=54.3675&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        31.89722,
+        54.3675
+      ],
+      "response_grid_coordinates": [
+        32.0,
+        54.25
+      ],
+      "first_date": "2024-01-01",
+      "last_date": "2024-12-31"
+    },
+    {
+      "city": "Yazd",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=31.89722&longitude=54.3675&start_date=2025-01-01&end_date=2025-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        31.89722,
+        54.3675
+      ],
+      "response_grid_coordinates": [
+        32.0,
+        54.25
+      ],
+      "first_date": "2025-01-01",
+      "last_date": "2025-12-31"
+    },
+    {
+      "city": "Bandar_Abbas",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.1865&longitude=56.2808&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        27.1865,
+        56.2808
+      ],
+      "response_grid_coordinates": [
+        27.25,
+        56.25
+      ],
+      "first_date": "2022-01-01",
+      "last_date": "2022-12-31"
+    },
+    {
+      "city": "Bandar_Abbas",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.1865&longitude=56.2808&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        27.1865,
+        56.2808
+      ],
+      "response_grid_coordinates": [
+        27.25,
+        56.25
+      ],
+      "first_date": "2023-01-01",
+      "last_date": "2023-12-31"
+    },
+    {
+      "city": "Bandar_Abbas",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.1865&longitude=56.2808&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        27.1865,
+        56.2808
+      ],
+      "response_grid_coordinates": [
+        27.25,
+        56.25
+      ],
+      "first_date": "2024-01-01",
+      "last_date": "2024-12-31"
+    },
+    {
+      "city": "Bandar_Abbas",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.1865&longitude=56.2808&start_date=2025-01-01&end_date=2025-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        27.1865,
+        56.2808
+      ],
+      "response_grid_coordinates": [
+        27.25,
+        56.25
+      ],
+      "first_date": "2025-01-01",
+      "last_date": "2025-12-31"
+    },
+    {
+      "city": "Rasht",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.27611&longitude=49.58862&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        37.27611,
+        49.58862
+      ],
+      "response_grid_coordinates": [
+        37.25,
+        49.5
+      ],
+      "first_date": "2022-01-01",
+      "last_date": "2022-12-31"
+    },
+    {
+      "city": "Rasht",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.27611&longitude=49.58862&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        37.27611,
+        49.58862
+      ],
+      "response_grid_coordinates": [
+        37.25,
+        49.5
+      ],
+      "first_date": "2023-01-01",
+      "last_date": "2023-12-31"
+    },
+    {
+      "city": "Rasht",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.27611&longitude=49.58862&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        37.27611,
+        49.58862
+      ],
+      "response_grid_coordinates": [
+        37.25,
+        49.5
+      ],
+      "first_date": "2024-01-01",
+      "last_date": "2024-12-31"
+    },
+    {
+      "city": "Rasht",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.27611&longitude=49.58862&start_date=2025-01-01&end_date=2025-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        37.27611,
+        49.58862
+      ],
+      "response_grid_coordinates": [
+        37.25,
+        49.5
+      ],
+      "first_date": "2025-01-01",
+      "last_date": "2025-12-31"
+    },
+    {
+      "city": "Mashhad",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.29807&longitude=59.60567&start_date=2022-01-01&end_date=2022-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        36.29807,
+        59.60567
+      ],
+      "response_grid_coordinates": [
+        36.25,
+        59.5
+      ],
+      "first_date": "2022-01-01",
+      "last_date": "2022-12-31"
+    },
+    {
+      "city": "Mashhad",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.29807&longitude=59.60567&start_date=2023-01-01&end_date=2023-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        36.29807,
+        59.60567
+      ],
+      "response_grid_coordinates": [
+        36.25,
+        59.5
+      ],
+      "first_date": "2023-01-01",
+      "last_date": "2023-12-31"
+    },
+    {
+      "city": "Mashhad",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.29807&longitude=59.60567&start_date=2024-01-01&end_date=2024-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        36.29807,
+        59.60567
+      ],
+      "response_grid_coordinates": [
+        36.25,
+        59.5
+      ],
+      "first_date": "2024-01-01",
+      "last_date": "2024-12-31"
+    },
+    {
+      "city": "Mashhad",
+      "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.29807&longitude=59.60567&start_date=2025-01-01&end_date=2025-12-31&hourly=temperature_2m%2Cwind_speed_10m%2Cpressure_msl&daily=precipitation_sum&timezone=UTC&models=era5&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "requested_coordinates": [
+        36.29807,
+        59.60567
+      ],
+      "response_grid_coordinates": [
+        36.25,
+        59.5
+      ],
+      "first_date": "2025-01-01",
+      "last_date": "2025-12-31"
+    }
+  ],
+  "rows": 7305,
+  "csv_sha256": "68bb83a25acce304315edfdbbdd0cadac7575874bd75b94655d941f989fc0362"
+}

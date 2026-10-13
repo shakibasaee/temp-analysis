@@ -1,7 +1,7 @@
-"""Experimental next-day benchmark for four daily weather targets.
+"""Retrospective next-day benchmark for four daily weather targets.
 
-Forecasts are issued after the current day's measurements become available.
-The bundled CSV has unknown provenance, so scores are internal diagnostics.
+Issue-day values are treated as available for the next target date. Whether
+that assumption is operationally valid depends on the input data source.
 """
 
 from __future__ import annotations
@@ -31,8 +31,8 @@ NUMERIC_FEATURES = (
     "wind_mean_7",
     "pressure_today",
     "pressure_mean_7",
-    "rain_today",
-    "rain_rate_30",
+    "wet_today",
+    "wet_rate_30",
     "day_of_year_sin",
     "day_of_year_cos",
 )
@@ -41,7 +41,7 @@ TARGETS = {
     "temperature_c": ("target_temperature", "temp_today", "mae"),
     "wind_speed_kmh": ("target_wind", "wind_today", "mae"),
     "pressure_hpa": ("target_pressure", "pressure_today", "mae"),
-    "rain_probability": ("target_rain", "rain_rate_30", "brier"),
+    "precipitation_probability": ("target_precipitation", "wet_rate_30", "brier"),
 }
 
 
@@ -103,7 +103,7 @@ def make_weather_examples(
         result[f"{prefix}_mean_7"] = group[column].transform(
             lambda series: series.rolling(7, min_periods=3).mean()
         )
-    rain = pd.Series(
+    wet = pd.Series(
         np.where(
             data["Precipitation_mm"].isna(),
             np.nan,
@@ -111,8 +111,8 @@ def make_weather_examples(
         ),
         index=data.index,
     )
-    result["rain_today"] = rain
-    result["rain_rate_30"] = rain.groupby(data["City"], sort=False).transform(
+    result["wet_today"] = wet
+    result["wet_rate_30"] = wet.groupby(data["City"], sort=False).transform(
         lambda series: series.rolling(30, min_periods=15).mean()
     )
     day_of_year = result["target_date"].dt.dayofyear
@@ -121,7 +121,7 @@ def make_weather_examples(
     result["target_temperature"] = group["Temperature_C"].shift(-1)
     result["target_wind"] = group["Wind_Speed_kmh"].shift(-1)
     result["target_pressure"] = group["Pressure_hPa"].shift(-1)
-    result["target_rain"] = rain.groupby(data["City"], sort=False).shift(-1)
+    result["target_precipitation"] = wet.groupby(data["City"], sort=False).shift(-1)
     age = group.cumcount() + 1
     result = result.loc[age >= min_history_days].copy()
     if result.empty:
@@ -142,9 +142,11 @@ def _fit_model(task: str, train: pd.DataFrame) -> Pipeline:
             ("city", OneHotEncoder(handle_unknown="ignore"), ["City"]),
         ]
     )
-    if task == "rain_probability":
+    if task == "precipitation_probability":
         if train["target"].nunique() < 2:
-            raise ValueError("Rain training period needs both wet and dry days")
+            raise ValueError(
+                "Precipitation training period needs both wet and dry days"
+            )
         estimator = LogisticRegression(max_iter=1000)
     else:
         estimator = Ridge(alpha=10.0)
@@ -153,7 +155,7 @@ def _fit_model(task: str, train: pd.DataFrame) -> Pipeline:
 
 
 def _model_prediction(task: str, model: Pipeline, part: pd.DataFrame) -> np.ndarray:
-    if task == "rain_probability":
+    if task == "precipitation_probability":
         return model.predict_proba(part[list(FEATURES)])[:, 1]
     return np.asarray(model.predict(part[list(FEATURES)]), dtype=float)
 
@@ -162,7 +164,7 @@ def _metrics(
     task: str, part: pd.DataFrame, predictions: np.ndarray
 ) -> dict[str, float]:
     actual = part["target"].to_numpy(dtype=float)
-    if task == "rain_probability":
+    if task == "precipitation_probability":
         return {"brier": round(float(brier_score_loss(actual, predictions)), 4)}
     return {
         "mae": round(float(mean_absolute_error(actual, predictions)), 4),
@@ -210,9 +212,11 @@ def benchmark_weather(frame: pd.DataFrame, config: ForecastConfig) -> dict[str, 
         tasks[task] = {
             "target": target,
             "primary_metric": primary_metric,
-            "model": "logistic_regression" if task == "rain_probability" else "ridge",
+            "model": "logistic_regression"
+            if task == "precipitation_probability"
+            else "ridge",
             "baseline": "30_day_wet_frequency"
-            if task == "rain_probability"
+            if task == "precipitation_probability"
             else "persistence",
             "eligible_rows": int(len(eligible)),
             "excluded_missing_target_or_baseline": int(len(examples) - len(eligible)),
@@ -222,9 +226,9 @@ def benchmark_weather(frame: pd.DataFrame, config: ForecastConfig) -> dict[str, 
         }
     data = validate_weather_data(frame)
     return {
-        "task": "Next-day city weather after issue-day measurements are available",
-        "source_metadata": "Not supplied; document dataset origin before using scores as external evidence",
-        "evaluation": "Chronological target-date splits; model fit through each split boundary; daily actuals may update lag features",
+        "task": "Retrospective next-day city weather, conditional on issue-day values",
+        "source_metadata": "Not supplied with dataframe; verify the input manifest separately",
+        "evaluation": "Chronological target-date splits; daily actuals update lag features. Data publication delay is not simulated.",
         "config": config.to_dict(),
         "data": {
             "rows": int(len(data)),
@@ -265,6 +269,6 @@ def predict_weather_baselines(
             "Temperature_C_Baseline": latest["temp_today"].to_numpy(),
             "Wind_Speed_kmh_Baseline": latest["wind_today"].to_numpy(),
             "Pressure_hPa_Baseline": latest["pressure_today"].to_numpy(),
-            "Rain_Probability_Baseline": latest["rain_rate_30"].to_numpy(),
+            "Precipitation_Probability_Baseline": latest["wet_rate_30"].to_numpy(),
         }
     )

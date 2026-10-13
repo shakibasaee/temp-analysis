@@ -68,8 +68,8 @@ class WeatherBenchmarkTests(unittest.TestCase):
             "wind_mean_7",
             "pressure_today",
             "pressure_mean_7",
-            "rain_today",
-            "rain_rate_30",
+            "wet_today",
+            "wet_rate_30",
         ]
         pd.testing.assert_frame_equal(
             original.loc[earlier, feature_columns],
@@ -79,8 +79,8 @@ class WeatherBenchmarkTests(unittest.TestCase):
             original.issue_date == pd.Timestamp("2023-02-28")
         )
         self.assertNotEqual(
-            original.loc[previous, "target_rain"].item(),
-            altered.loc[previous, "target_rain"].item(),
+            original.loc[previous, "target_precipitation"].item(),
+            altered.loc[previous, "target_precipitation"].item(),
         )
 
     def test_benchmark_has_time_split_baselines_and_city_results(self):
@@ -92,7 +92,7 @@ class WeatherBenchmarkTests(unittest.TestCase):
             self.assertEqual(set(result["test"]["by_city"]), {"North", "South"})
             for candidate in ("baseline", "model"):
                 self.assertTrue(np.isfinite(result["test"][candidate][metric]))
-            if task == "rain_probability":
+            if task == "precipitation_probability":
                 self.assertLessEqual(result["test"]["model"]["brier"], 1)
 
     def test_stale_baselines_require_explicit_historical_replay(self):
@@ -104,7 +104,7 @@ class WeatherBenchmarkTests(unittest.TestCase):
         self.assertEqual(
             len(predict_weather_baselines(self.data, today=output.Date.iloc[0])), 2
         )
-        self.assertTrue(output.Rain_Probability_Baseline.between(0, 1).all())
+        self.assertTrue(output.Precipitation_Probability_Baseline.between(0, 1).all())
 
 
 if __name__ == "__main__":

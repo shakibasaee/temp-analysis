@@ -1,12 +1,12 @@
-# City Weather Analysis and Forecasting
+# City Weather Forecasting
 
-A reproducible one-day temperature benchmark, an experimental four-target weather benchmark, and an exploratory Streamlit dashboard. Historical notebooks, plots, reports, and data remain in the repository.
+A reproducible historical benchmark for temperature, wind, pressure, and precipitation occurrence across five Iranian city grid cells. The project keeps its original temperature workflow and exploratory dashboard, with their evidence clearly separated from the new sourced data.
 
 ## Current Project Status
 
-The supported temperature workflow validates daily city data, compares five models on chronological splits, saves a selected forecast policy, and predicts the day after the latest observation. A separate four-target weather benchmark is experimental. The dashboard and interactive console remain available for exploratory charts and calendar-only estimates; neither displays the CLI forecast policies.
+The four-target benchmark now has a documented 2022–2025 [ERA5 reanalysis snapshot](docs/ERA5_DATA_CARD.md), a retrieval manifest, fixed city coordinates, and a 2025 held-out test year. It compares simple baselines with ridge or logistic regression and reports each city's scores. This is a **retrospective grid-cell experiment**: ERA5 is published after the weather occurred, so these scores are not evidence of a real-time forecast service.
 
-The supplied `data/new_weather_data.csv` contains 3,655 daily rows across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
+The original `data/new_weather_data.csv` remains for historical reproducibility. Its external source and daily definitions are [unknown](docs/DATA_CARD.md), so its results remain internal diagnostics. The dashboard and console use this older file and calendar-only estimates; neither displays the four-target benchmark.
 
 ## Install
 
@@ -20,6 +20,29 @@ python -m pip install -r requirements-forecast.txt
 ```
 
 For the dashboard, console charts, and PDF reporting tests, also install `requirements.txt`.
+
+## Sourced ERA5 benchmark
+
+The committed CSV has 7,305 daily rows: 2022-01-01 through 2025-12-31 for Sanandaj, Yazd, Bandar Abbas, Rasht, and Mashhad. Open-Meteo serves ECMWF ERA5 **gridded reanalysis**. The [data card](docs/ERA5_DATA_CARD.md) explains the four variables, UTC aggregation, grid locations, attribution, and publication delay. The [manifest](data/era5_daily_2022_2025.manifest.json) records each request and the CSV checksum.
+
+```bash
+# Recreate a dated source snapshot (requires network access).
+python -m forecasting.cli fetch-era5 --start 2022-01-01 --end 2025-12-31 --out data/era5_daily_2022_2025.csv --manifest-out data/era5_daily_2022_2025.manifest.json
+
+# Evaluate against fixed chronological periods, with manifest checksum verified.
+python -m forecasting.cli weather-benchmark --data data/era5_daily_2022_2025.csv --manifest data/era5_daily_2022_2025.manifest.json --config configs/era5.json --report-out reports/era5-weather-benchmark.json
+```
+
+Training targets end in 2023, validation is 2024, and the held-out test year is 2025. Predictions use day D ERA5 values to estimate day D+1; day D values may not have been published at that time. The candidate models are **comparison tools**, not a selected or deployed forecast. Regenerating the snapshot can produce revised values and a different checksum.
+
+| 2025 test target | Simple baseline | Candidate model |
+| --- | ---: | ---: |
+| Temperature MAE (°C) | 1.1459 | 1.0215 |
+| Wind speed MAE (km/h) | 1.4874 | 1.2753 |
+| Sea-level pressure MAE (hPa) | 2.1321 | 1.9725 |
+| Precipitation occurrence Brier score | 0.1535 | 0.1245 |
+
+Lower is better. See the [method](docs/WEATHER_FORECASTING.md) and the committed [JSON report with per-city scores](reports/era5-weather-benchmark.json). Weather data by [Open-Meteo](https://open-meteo.com/), based on ECMWF ERA5; daily aggregates were calculated for this project.
 
 ## Temperature forecasting commands
 
@@ -54,9 +77,9 @@ Forecasts are issued after today's observation for tomorrow's recorded daily tem
 
 The selected policy is persistence: ridge improves validation MAE by only 0.8%, below the preconfigured 2% practical improvement threshold. Ridge's test MAE advantage is also under 1%. The test period was not used to choose the policy. sMAPE and R² are included in the machine-readable benchmark; MAPE is avoided because temperatures can be near zero. Two years of data and one held-out period are insufficient to establish a durable performance advantage.
 
-## Experimental weather benchmark
+## Legacy CSV weather benchmark
 
-The new benchmark compares next-day **temperature, wind speed, pressure, and rain occurrence probability** with transparent baselines on the same chronological periods. Ridge regression is a candidate for the three numeric targets; logistic regression is a candidate for rain occurrence. Results include per-city scores and missing-target counts. The candidate models are **not** deployed as forecasts.
+The same four-target benchmark can run against the original CSV for comparison with earlier work. Its source is unknown, so these scores are only internal diagnostics.
 
 ```bash
 python -m forecasting.cli weather-benchmark --data data/new_weather_data.csv --config configs/forecast.json --report-out artifacts/weather-benchmark.json
@@ -83,15 +106,17 @@ The dashboard reads the bundled daily CSV via a repository-relative path. Its da
 - `forecasting/experiment.py`: chronological splits, comparable baselines/models, metrics, model selection, save/load, inference.
 - `forecasting/cli.py`: temperature and weather benchmark commands.
 - `forecasting/weather.py`: four-target validation, issue-time features, baselines, and model comparison.
+- `forecasting/open_meteo.py`: fixed-location ERA5 ingestion, UTC aggregation, validation, and provenance manifest.
 - `scripts/`: existing dashboard, console, visualizations, reporting, outlier analysis, and calendar model.
 - `tests/`: data, leakage, training, persistence, weather benchmark, CLI, dashboard, and legacy-model checks.
 - `docs/WORKLOG.md`: decisions, tests, results, and team handoff.
 
 ## Next team work
 
-1. Establish provenance, collection method, units, and update process for the five-city dataset. Validate on genuinely later observations and several rolling origins.
-2. Add reliable observations or forecasts of humidity, pressure, wind, cloud, precipitation, and solar radiation before testing them as predictors. Same-day *future* observations must never enter a forecast.
-3. Decide with the team how to manage the historical 103 MB `data/weather_data.csv` and old virtual-environment blobs still present in Git history. The current tree no longer tracks `.venv`; rewriting shared history would need coordination.
+1. Establish provenance for the original CSV if it will remain a supported input. Keep its results separate from the ERA5 experiment.
+2. Add a genuine operational experiment using archived forecast runs and independent observations, with issuance times, publication delays, rolling origins, and per-city diagnostics. Never use a later reanalysis value as though it had existed at forecast time.
+3. Compare archived forecasts at fixed lead times against station observations or an explicitly named reanalysis reference. Check issue-time availability, rolling test periods, and city-level performance before making a live forecast claim.
+4. Decide with the team how to manage the historical 103 MB `data/weather_data.csv` and old virtual-environment blobs still present in Git history. The current tree no longer tracks `.venv`; rewriting shared history would need coordination.
 
 ## Collaboration
 

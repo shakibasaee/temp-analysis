@@ -1,0 +1,663 @@
+{
+  "task": "Retrospective next-day city weather, conditional on issue-day values",
+  "source_metadata": {
+    "source": "Open-Meteo Historical Weather API, ECMWF ERA5 reanalysis",
+    "source_url": "https://open-meteo.com/en/docs/historical-weather-api",
+    "model": "era5",
+    "nature": "Gridded reanalysis, not station observations or archived forecasts",
+    "license": "Open-Meteo attribution required; free API is non-commercial",
+    "retrieved_at_utc": "2026-10-13T07:36:01.099334+00:00",
+    "manifest": "data/era5_daily_2022_2025.manifest.json"
+  },
+  "evaluation": "Chronological target-date splits; daily actuals update lag features. Data publication delay is not simulated.",
+  "config": {
+    "train_end": "2023-12-31",
+    "validation_end": "2024-12-31",
+    "random_seed": 42,
+    "min_history_days": 30,
+    "minimum_relative_mae_gain": 0.02
+  },
+  "data": {
+    "rows": 7305,
+    "cities": [
+      "Bandar_Abbas",
+      "Mashhad",
+      "Rasht",
+      "Sanandaj",
+      "Yazd"
+    ],
+    "first_date": "2022-01-01",
+    "last_date": "2025-12-31",
+    "source_sha256": "68bb83a25acce304315edfdbbdd0cadac7575874bd75b94655d941f989fc0362"
+  },
+  "targets": {
+    "temperature_c": {
+      "target": "target_temperature",
+      "primary_metric": "mae",
+      "model": "ridge",
+      "baseline": "persistence",
+      "eligible_rows": 7155,
+      "excluded_missing_target_or_baseline": 5,
+      "train_rows": 3500,
+      "validation": {
+        "rows": 1830,
+        "baseline": {
+          "mae": 1.2163,
+          "rmse": 1.7467,
+          "bias": 0.0078
+        },
+        "model": {
+          "mae": 1.1314,
+          "rmse": 1.5947,
+          "bias": 0.0114
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 366,
+            "baseline": {
+              "mae": 0.6488,
+              "rmse": 0.9038,
+              "bias": 0.0054
+            },
+            "model": {
+              "mae": 0.6313,
+              "rmse": 0.8809,
+              "bias": -0.0691
+            }
+          },
+          "Mashhad": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.6427,
+              "rmse": 2.2897,
+              "bias": 0.0068
+            },
+            "model": {
+              "mae": 1.5113,
+              "rmse": 2.0731,
+              "bias": 0.0965
+            }
+          },
+          "Rasht": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.1499,
+              "rmse": 1.6575,
+              "bias": 0.0023
+            },
+            "model": {
+              "mae": 1.0648,
+              "rmse": 1.4902,
+              "bias": 0.0393
+            }
+          },
+          "Sanandaj": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.1891,
+              "rmse": 1.6445,
+              "bias": 0.0152
+            },
+            "model": {
+              "mae": 1.1101,
+              "rmse": 1.4917,
+              "bias": -0.0063
+            }
+          },
+          "Yazd": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.4512,
+              "rmse": 1.9349,
+              "bias": 0.0094
+            },
+            "model": {
+              "mae": 1.3395,
+              "rmse": 1.7877,
+              "bias": -0.0034
+            }
+          }
+        }
+      },
+      "test": {
+        "rows": 1825,
+        "baseline": {
+          "mae": 1.1459,
+          "rmse": 1.6009,
+          "bias": 0.0108
+        },
+        "model": {
+          "mae": 1.0215,
+          "rmse": 1.4154,
+          "bias": 0.0194
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 365,
+            "baseline": {
+              "mae": 0.6316,
+              "rmse": 0.8343,
+              "bias": 0.0113
+            },
+            "model": {
+              "mae": 0.5839,
+              "rmse": 0.7517,
+              "bias": -0.0265
+            }
+          },
+          "Mashhad": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.4704,
+              "rmse": 1.9895,
+              "bias": 0.0117
+            },
+            "model": {
+              "mae": 1.3506,
+              "rmse": 1.8021,
+              "bias": 0.0637
+            }
+          },
+          "Rasht": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.1521,
+              "rmse": 1.6326,
+              "bias": 0.0033
+            },
+            "model": {
+              "mae": 1.0109,
+              "rmse": 1.4174,
+              "bias": 0.0584
+            }
+          },
+          "Sanandaj": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.2094,
+              "rmse": 1.6067,
+              "bias": 0.0211
+            },
+            "model": {
+              "mae": 1.06,
+              "rmse": 1.4067,
+              "bias": -0.0174
+            }
+          },
+          "Yazd": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.2659,
+              "rmse": 1.7072,
+              "bias": 0.0065
+            },
+            "model": {
+              "mae": 1.1021,
+              "rmse": 1.4889,
+              "bias": 0.0186
+            }
+          }
+        }
+      }
+    },
+    "wind_speed_kmh": {
+      "target": "target_wind",
+      "primary_metric": "mae",
+      "model": "ridge",
+      "baseline": "persistence",
+      "eligible_rows": 7155,
+      "excluded_missing_target_or_baseline": 5,
+      "train_rows": 3500,
+      "validation": {
+        "rows": 1830,
+        "baseline": {
+          "mae": 1.6143,
+          "rmse": 2.2526,
+          "bias": 0.0006
+        },
+        "model": {
+          "mae": 1.3722,
+          "rmse": 1.9152,
+          "bias": -0.0137
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.3865,
+              "rmse": 2.1772,
+              "bias": 0.0005
+            },
+            "model": {
+              "mae": 1.1942,
+              "rmse": 1.8655,
+              "bias": -0.0609
+            }
+          },
+          "Mashhad": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.9707,
+              "rmse": 2.5241,
+              "bias": 0.0114
+            },
+            "model": {
+              "mae": 1.6528,
+              "rmse": 2.1044,
+              "bias": 0.0298
+            }
+          },
+          "Rasht": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.2749,
+              "rmse": 1.9024,
+              "bias": 0.0024
+            },
+            "model": {
+              "mae": 1.1524,
+              "rmse": 1.7213,
+              "bias": -0.0356
+            }
+          },
+          "Sanandaj": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.888,
+              "rmse": 2.4976,
+              "bias": -0.0026
+            },
+            "model": {
+              "mae": 1.594,
+              "rmse": 2.1239,
+              "bias": 0.0273
+            }
+          },
+          "Yazd": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.5512,
+              "rmse": 2.0982,
+              "bias": -0.0086
+            },
+            "model": {
+              "mae": 1.2677,
+              "rmse": 1.7195,
+              "bias": -0.0292
+            }
+          }
+        }
+      },
+      "test": {
+        "rows": 1825,
+        "baseline": {
+          "mae": 1.4874,
+          "rmse": 2.0685,
+          "bias": -0.0111
+        },
+        "model": {
+          "mae": 1.2753,
+          "rmse": 1.7392,
+          "bias": -0.0474
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.3606,
+              "rmse": 2.0078,
+              "bias": -0.0092
+            },
+            "model": {
+              "mae": 1.1988,
+              "rmse": 1.7378,
+              "bias": -0.0992
+            }
+          },
+          "Mashhad": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.7297,
+              "rmse": 2.24,
+              "bias": -0.0139
+            },
+            "model": {
+              "mae": 1.4555,
+              "rmse": 1.8435,
+              "bias": 0.0568
+            }
+          },
+          "Rasht": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.1646,
+              "rmse": 1.676,
+              "bias": -0.0281
+            },
+            "model": {
+              "mae": 0.9898,
+              "rmse": 1.4234,
+              "bias": 0.0141
+            }
+          },
+          "Sanandaj": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.7852,
+              "rmse": 2.366,
+              "bias": -0.003
+            },
+            "model": {
+              "mae": 1.5402,
+              "rmse": 1.9858,
+              "bias": -0.0798
+            }
+          },
+          "Yazd": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.397,
+              "rmse": 1.9844,
+              "bias": -0.0014
+            },
+            "model": {
+              "mae": 1.1923,
+              "rmse": 1.6545,
+              "bias": -0.1289
+            }
+          }
+        }
+      }
+    },
+    "pressure_hpa": {
+      "target": "target_pressure",
+      "primary_metric": "mae",
+      "model": "ridge",
+      "baseline": "persistence",
+      "eligible_rows": 7155,
+      "excluded_missing_target_or_baseline": 5,
+      "train_rows": 3500,
+      "validation": {
+        "rows": 1830,
+        "baseline": {
+          "mae": 2.1894,
+          "rmse": 3.0959,
+          "bias": -0.0099
+        },
+        "model": {
+          "mae": 2.0532,
+          "rmse": 2.8176,
+          "bias": 0.0778
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.2848,
+              "rmse": 1.6112,
+              "bias": -0.0016
+            },
+            "model": {
+              "mae": 1.3871,
+              "rmse": 1.7481,
+              "bias": 0.1274
+            }
+          },
+          "Mashhad": {
+            "rows": 366,
+            "baseline": {
+              "mae": 2.6897,
+              "rmse": 3.8138,
+              "bias": -0.0162
+            },
+            "model": {
+              "mae": 2.418,
+              "rmse": 3.3814,
+              "bias": 0.0524
+            }
+          },
+          "Rasht": {
+            "rows": 366,
+            "baseline": {
+              "mae": 2.9863,
+              "rmse": 3.9611,
+              "bias": -0.0256
+            },
+            "model": {
+              "mae": 2.7308,
+              "rmse": 3.5717,
+              "bias": -0.1163
+            }
+          },
+          "Sanandaj": {
+            "rows": 366,
+            "baseline": {
+              "mae": 1.9152,
+              "rmse": 2.5677,
+              "bias": -0.0063
+            },
+            "model": {
+              "mae": 1.8051,
+              "rmse": 2.3359,
+              "bias": 0.1712
+            }
+          },
+          "Yazd": {
+            "rows": 366,
+            "baseline": {
+              "mae": 2.0708,
+              "rmse": 2.9152,
+              "bias": 0.0003
+            },
+            "model": {
+              "mae": 1.9249,
+              "rmse": 2.6441,
+              "bias": 0.1543
+            }
+          }
+        }
+      },
+      "test": {
+        "rows": 1825,
+        "baseline": {
+          "mae": 2.1321,
+          "rmse": 2.8953,
+          "bias": 0.0122
+        },
+        "model": {
+          "mae": 1.9725,
+          "rmse": 2.6437,
+          "bias": -0.0802
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.2626,
+              "rmse": 1.6011,
+              "bias": 0.0014
+            },
+            "model": {
+              "mae": 1.2507,
+              "rmse": 1.6579,
+              "bias": 0.0569
+            }
+          },
+          "Mashhad": {
+            "rows": 365,
+            "baseline": {
+              "mae": 2.4444,
+              "rmse": 3.2978,
+              "bias": 0.0118
+            },
+            "model": {
+              "mae": 2.2492,
+              "rmse": 2.9478,
+              "bias": -0.1586
+            }
+          },
+          "Rasht": {
+            "rows": 365,
+            "baseline": {
+              "mae": 2.9586,
+              "rmse": 3.8027,
+              "bias": 0.0463
+            },
+            "model": {
+              "mae": 2.6781,
+              "rmse": 3.4482,
+              "bias": -0.1493
+            }
+          },
+          "Sanandaj": {
+            "rows": 365,
+            "baseline": {
+              "mae": 1.9839,
+              "rmse": 2.6319,
+              "bias": 0.0018
+            },
+            "model": {
+              "mae": 1.7939,
+              "rmse": 2.3876,
+              "bias": -0.063
+            }
+          },
+          "Yazd": {
+            "rows": 365,
+            "baseline": {
+              "mae": 2.0111,
+              "rmse": 2.6619,
+              "bias": -0.0002
+            },
+            "model": {
+              "mae": 1.8905,
+              "rmse": 2.4327,
+              "bias": -0.0868
+            }
+          }
+        }
+      }
+    },
+    "precipitation_probability": {
+      "target": "target_precipitation",
+      "primary_metric": "brier",
+      "model": "logistic_regression",
+      "baseline": "30_day_wet_frequency",
+      "eligible_rows": 7155,
+      "excluded_missing_target_or_baseline": 5,
+      "train_rows": 3500,
+      "validation": {
+        "rows": 1830,
+        "baseline": {
+          "brier": 0.1813
+        },
+        "model": {
+          "brier": 0.1506
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 366,
+            "baseline": {
+              "brier": 0.1485
+            },
+            "model": {
+              "brier": 0.1379
+            }
+          },
+          "Mashhad": {
+            "rows": 366,
+            "baseline": {
+              "brier": 0.1943
+            },
+            "model": {
+              "brier": 0.1628
+            }
+          },
+          "Rasht": {
+            "rows": 366,
+            "baseline": {
+              "brier": 0.2542
+            },
+            "model": {
+              "brier": 0.1921
+            }
+          },
+          "Sanandaj": {
+            "rows": 366,
+            "baseline": {
+              "brier": 0.1871
+            },
+            "model": {
+              "brier": 0.1511
+            }
+          },
+          "Yazd": {
+            "rows": 366,
+            "baseline": {
+              "brier": 0.1223
+            },
+            "model": {
+              "brier": 0.1089
+            }
+          }
+        }
+      },
+      "test": {
+        "rows": 1825,
+        "baseline": {
+          "brier": 0.1535
+        },
+        "model": {
+          "brier": 0.1245
+        },
+        "by_city": {
+          "Bandar_Abbas": {
+            "rows": 365,
+            "baseline": {
+              "brier": 0.1059
+            },
+            "model": {
+              "brier": 0.0851
+            }
+          },
+          "Mashhad": {
+            "rows": 365,
+            "baseline": {
+              "brier": 0.1516
+            },
+            "model": {
+              "brier": 0.123
+            }
+          },
+          "Rasht": {
+            "rows": 365,
+            "baseline": {
+              "brier": 0.25
+            },
+            "model": {
+              "brier": 0.1957
+            }
+          },
+          "Sanandaj": {
+            "rows": 365,
+            "baseline": {
+              "brier": 0.1613
+            },
+            "model": {
+              "brier": 0.1413
+            }
+          },
+          "Yazd": {
+            "rows": 365,
+            "baseline": {
+              "brier": 0.0988
+            },
+            "model": {
+              "brier": 0.0772
+            }
+          }
+        }
+      }
+    }
+  }
+}
