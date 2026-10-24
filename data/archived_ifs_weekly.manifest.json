@@ -1,0 +1,523 @@
+{
+  "source": "Open-Meteo Single Runs API; ECMWF IFS HRES archived runs",
+  "source_url": "https://open-meteo.com/en/docs/single-runs-api",
+  "model": "ecmwf_ifs",
+  "retrieved_at_utc": "2026-10-24T10:08:06.284612+00:00",
+  "protocol": "Monday 00 UTC initialization; conservative decision time Tuesday 12 UTC; target Wednesday UTC day (initialization lead 48-71 hours)",
+  "publication_delay": "Open-Meteo states global runs typically become available 4-6 hours after initialization; exact historical API delivery times are not archived. The 36-hour allowance is conservative but cannot prove each run was accessible then.",
+  "time_convention": "All dates and issue times UTC; daily API fields are full UTC days.",
+  "requested_coordinates": {
+    "Sanandaj": [
+      35.31495,
+      46.99883
+    ],
+    "Yazd": [
+      31.89722,
+      54.3675
+    ],
+    "Bandar_Abbas": [
+      27.1865,
+      56.2808
+    ],
+    "Rasht": [
+      37.27611,
+      49.58862
+    ],
+    "Mashhad": [
+      36.29807,
+      59.60567
+    ]
+  },
+  "license": "Open-Meteo attribution required (CC BY 4.0); free API is non-commercial.",
+  "requests": [
+    {
+      "run_utc": "2024-04-01T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-04-01T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "44ba1f5b5f3283ca74771d21048d5a503bd02dea21cf14ca873d31d948f14aaa"
+    },
+    {
+      "run_utc": "2024-04-08T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-04-08T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "f54fe20d141d72df5e1e7b0afc51d1e9b85ba491698fae5caf0dc9aa780a302d"
+    },
+    {
+      "run_utc": "2024-04-15T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-04-15T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "b2c62d685011525f2dc14c7eea5b505a3f25bc085e6b67f104de1df6ed05d4e3"
+    },
+    {
+      "run_utc": "2024-04-22T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-04-22T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "157d9cf4358fa5f8263582e9cca425fdd68319a50c774a8fcaa07a5b8c1422ea"
+    },
+    {
+      "run_utc": "2024-04-29T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-04-29T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "dd344975cbec9c011fabee69817412f9bee46a6756753531a76ba5e42124d9c6"
+    },
+    {
+      "run_utc": "2024-05-06T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-05-06T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "0f74385f8d33aa80d513087514cfc23d4f2c297608e6416cf88a14735e7fd22f"
+    },
+    {
+      "run_utc": "2024-05-13T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-05-13T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "c095025eb79bc4c61075ebc430ce3b0b491e4b3b88164e31247f571a836fe7ef"
+    },
+    {
+      "run_utc": "2024-05-20T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-05-20T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "e1bf8de2662cf52cc9391f496dd88c336d84697f360ed42c8ae13f5e0d08814f"
+    },
+    {
+      "run_utc": "2024-05-27T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-05-27T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "fb35a1b88b11f9d1c09d495fb01a3c31fc10ca1654ed0bb9f7b85924d82f2d6a"
+    },
+    {
+      "run_utc": "2024-06-03T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-06-03T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4f1ed89dccde53e85b40a38ad9c52fd025d4c79a34ad0b1477f58cd6680d17f8"
+    },
+    {
+      "run_utc": "2024-06-10T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-06-10T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "f0f29904162accea6136cf62c6d6ff1b454d5749bd7d64f0511f6716f9518389"
+    },
+    {
+      "run_utc": "2024-06-17T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-06-17T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "7238ed3f3ef43bcbd6bef6bbd45178e74de4c696b0c05ac5d4d4f23d46c6146d"
+    },
+    {
+      "run_utc": "2024-06-24T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-06-24T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4199cc880204856b4f901ac140e562f177adeb3e86827340d640dd008349c9c8"
+    },
+    {
+      "run_utc": "2024-07-01T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-07-01T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "991b32fb253b39107c6122345ca21d35d5f2f3ec9e1e89048ac849987eabb836"
+    },
+    {
+      "run_utc": "2024-07-08T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-07-08T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "495938b4cc1240986edf1319caaaa0f036c12cc315a6a533dbc18ff469c2bbf2"
+    },
+    {
+      "run_utc": "2024-07-15T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-07-15T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "99265a7ba04af9ff0cfb6c9726eb1b80330501348ca83a5c7f47998cd6da3150"
+    },
+    {
+      "run_utc": "2024-07-22T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-07-22T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "f16b59dfbdb010e1e96ddd476f247b6b26f236beb3b5408cd4a978f5004a3f47"
+    },
+    {
+      "run_utc": "2024-07-29T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-07-29T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "0bd1d95a8d63a97b1242591ee4434e1c65309dac5396ebd54a00801b8090be83"
+    },
+    {
+      "run_utc": "2024-08-05T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-08-05T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "c0e1674e55fc9334cef60d3e502fe6954acddfc269aad2c94006404fc0d49570"
+    },
+    {
+      "run_utc": "2024-08-12T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-08-12T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "b9adb4584e57d706f2293bc5e1f3779696f7d5161856a152c407cd7e65a22377"
+    },
+    {
+      "run_utc": "2024-08-19T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-08-19T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "136e4d46e8c04f1ebd3369b157d17c2f4c6e29c96628e7e4e64e8b021402f1f4"
+    },
+    {
+      "run_utc": "2024-08-26T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-08-26T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "9380acdb8c776f4bd4f63c661d157023ed03cab9b712018a8456aab290fb1ff4"
+    },
+    {
+      "run_utc": "2024-09-02T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-09-02T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "30c3279763bd3bbc75f2e9a28a2fb6158f62e2866a7fbbd3477a9f79ab402def"
+    },
+    {
+      "run_utc": "2024-09-09T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-09-09T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "2c1acd7e4436be2313227a8f38516416806cf07e99239a5285864483d3bb6c76"
+    },
+    {
+      "run_utc": "2024-09-16T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-09-16T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "9acebfd1c700a4e88145af1dad66f62faf23a5c04c7fd6c24ff2648f82dd9df2"
+    },
+    {
+      "run_utc": "2024-09-23T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-09-23T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "eb62bfdaeb86a70ecb6d7091465f8394af0df9da7f4e2ed5cfb75953a22f8804"
+    },
+    {
+      "run_utc": "2024-09-30T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-09-30T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "662e61cf3f37b0cb8f533c5d5b09c69fdb4cb4a68866c657365e0c08d40fabcc"
+    },
+    {
+      "run_utc": "2024-10-07T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-10-07T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "2ecdf68e3329b25dad060d92dc3d078604d99831a1a7045ea3eb3660162a604f"
+    },
+    {
+      "run_utc": "2024-10-14T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-10-14T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "3f427b3b1b196a2f597665abd2ea252a11f0646b3901311167a58fa6236a9512"
+    },
+    {
+      "run_utc": "2024-10-21T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-10-21T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4ff2df1876d19c3bfd323b79045b0ba9fcf9504c01794cb4a995de4539aed47f"
+    },
+    {
+      "run_utc": "2024-10-28T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-10-28T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "97af16e9f9deee0ce575a7b46c40366e61e5150edbef5a596e51fddc3e7b178f"
+    },
+    {
+      "run_utc": "2024-11-04T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-11-04T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "512cb2a27947faeff556a05da7c4c8c5cfde17d138cc2655fcbb57f0dffbe3ed"
+    },
+    {
+      "run_utc": "2024-11-11T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-11-11T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "bc48dcdd3ba220029d8bbfd84c3331347a95f9aaeebc742d2119f4ac961495b0"
+    },
+    {
+      "run_utc": "2024-11-18T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-11-18T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "ba1436a6502a1b724069301edbdd4eed3a4c7f894dfc18f5771231ce0507af51"
+    },
+    {
+      "run_utc": "2024-11-25T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-11-25T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4b3a272ab99f1b31b81071f057bf3da69ffcf0d544eba1cb4674ddb12422e6d2"
+    },
+    {
+      "run_utc": "2024-12-02T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-12-02T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "cd593c73d7b6c03891fd35b94d32e1b7ffbc6e53b244ac2c2e296e93482c6133"
+    },
+    {
+      "run_utc": "2024-12-09T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-12-09T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "2642d017017626d871c6f73af933fa1394bcd040d399ad6a19b246f4efefea87"
+    },
+    {
+      "run_utc": "2024-12-16T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-12-16T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "bbe06051632d7c2a51e660388d7a1fb6f6ddc69d011c0f17c069755d94c74fc8"
+    },
+    {
+      "run_utc": "2024-12-23T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-12-23T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "a6105bcd478a6d4f555f62dd765be8025a418b7abe4a33c28b954bcebf780496"
+    },
+    {
+      "run_utc": "2024-12-30T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2024-12-30T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4ccb9433f570bf387b8bfb12d092fd463a0a6129a53686d1998d0e945f9717a8"
+    },
+    {
+      "run_utc": "2025-01-06T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-01-06T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "e866cff386c93c1d4a2ed230d0dcff97c5402bf9bf539bfb2d37ee03e058405c"
+    },
+    {
+      "run_utc": "2025-01-13T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-01-13T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "0f59694553bdc126a26a18e979492794545fd4b4366c72f5502f6df2bb438c4e"
+    },
+    {
+      "run_utc": "2025-01-20T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-01-20T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "20d22d1df235d8663bc7b46f162441b1cc9ad79aa0e65dc57546e1c88d1a594a"
+    },
+    {
+      "run_utc": "2025-01-27T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-01-27T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "5df60fe7d2eba36f01b76cb88a975f1b35ade6b15900bbcb3136f5a84a392c50"
+    },
+    {
+      "run_utc": "2025-02-03T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-02-03T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "7734f636525a04cc86a5a75d79b4188861f30b772f7a28d9e807953472df2f2a"
+    },
+    {
+      "run_utc": "2025-02-10T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-02-10T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "3d87b2751c3e274feed1b2a78c0d6f4844b397ade67b594377b03e056b030678"
+    },
+    {
+      "run_utc": "2025-02-17T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-02-17T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "d3137473562e88b9295ae41271167fd3f81bcaff667169671b635db4752e10d2"
+    },
+    {
+      "run_utc": "2025-02-24T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-02-24T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "e4c72bd4b725489dd4ff7dae5b5342d591a9f637dc916a2688ca49a108952436"
+    },
+    {
+      "run_utc": "2025-03-03T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-03-03T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "58b6699b64628c56910ce399f940e607c408774d0904dac75cabd7798a72ece6"
+    },
+    {
+      "run_utc": "2025-03-10T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-03-10T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "5ebad03a918084f22b053bf55b00602d843cf955c285de0b3fd9d5c2a439914f"
+    },
+    {
+      "run_utc": "2025-03-17T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-03-17T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4d50d688e7410fc168fb9d2fdf1c0beff4b0bade8e770e88cd04bdf6b9ebb286"
+    },
+    {
+      "run_utc": "2025-03-24T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-03-24T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "35510c3d708bdc51c5197c6e30dab60b18cccff423eb051ee55d16a2e82e6071"
+    },
+    {
+      "run_utc": "2025-03-31T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-03-31T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4e4d0d6a2a0b0a72511a349fed95a2961e28444f5dc50385f256c5c3e1f74739"
+    },
+    {
+      "run_utc": "2025-04-07T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-04-07T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "0ca1c0bff407241a28ccd9731cbba9dda0fe90ea0322c18b4b63ad4de84fbe1e"
+    },
+    {
+      "run_utc": "2025-04-14T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-04-14T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "c244036b4d10fad9de3fc9bc2fce6df27b6e7a541553a5acfe389729d200d187"
+    },
+    {
+      "run_utc": "2025-04-21T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-04-21T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "738580f7668e798e59605d9baade694cb12052a2d7f2a8bcb08a71be0a772d32"
+    },
+    {
+      "run_utc": "2025-04-28T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-04-28T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "145ce38dc41fd610116ddc0f8839f021db90d080575a4163a589d933e9e795d7"
+    },
+    {
+      "run_utc": "2025-05-05T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-05-05T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "a676486bce6ff70b58d6ad4f781d394ac1dd6059e0a57d3df10f35295c10e190"
+    },
+    {
+      "run_utc": "2025-05-12T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-05-12T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "417100515be80f8085e2a9b42314b09fecd9090b34cd0d60db018a08841822c3"
+    },
+    {
+      "run_utc": "2025-05-19T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-05-19T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "842861a427f50eb0e770c92abd169e71b1fb97890c4635a4780fbcc317f663b4"
+    },
+    {
+      "run_utc": "2025-05-26T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-05-26T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "0764a15b974b1262eadaba59a50063378b3fa83fddff16c863eceab97b39aa3f"
+    },
+    {
+      "run_utc": "2025-06-02T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-06-02T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4e181c962e801c50023e5261696b7e5d722feb43bed78a9a0db8ea0310704fa3"
+    },
+    {
+      "run_utc": "2025-06-09T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-06-09T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "14403f866912b07fa40127058a240c15bad7beb9d0fc34320589143898dd7c58"
+    },
+    {
+      "run_utc": "2025-06-16T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-06-16T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "dfdcae3f2a0369156329983e9461ef08628ee624ec59596d3d1efeca819de5e2"
+    },
+    {
+      "run_utc": "2025-06-23T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-06-23T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "d1a6ed77c62dc81ddf2f252d15199d70a0b669c13434c2891f0ee549f2b4b78b"
+    },
+    {
+      "run_utc": "2025-06-30T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-06-30T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "b577d8c3e713d32bb4d85b309cf6ba5d803ee9fa6620adaea609dcb48def201c"
+    },
+    {
+      "run_utc": "2025-07-07T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-07-07T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "556a571d9096b0ab5ed2477cef6cfc35ee4ebb5fcaf48c287d4c4f2bb03e5d2c"
+    },
+    {
+      "run_utc": "2025-07-14T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-07-14T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "89408166e513a95313d3ebf72fc166df7b14f89933c193f7ab69bfc8a49b6db3"
+    },
+    {
+      "run_utc": "2025-07-21T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-07-21T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "e56adc1940e80ff6e317ed55224ba31163756eb188805b7f20a5f499a36177aa"
+    },
+    {
+      "run_utc": "2025-07-28T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-07-28T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "e854c37c4cc10a9885c7ed598b94a56b162a2705d737bb6522999df98173c2ef"
+    },
+    {
+      "run_utc": "2025-08-04T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-08-04T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "d706814c22d378a23be13ca8052c48e90643c8fce9f8c45a6947922390f3d344"
+    },
+    {
+      "run_utc": "2025-08-11T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-08-11T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "00b1d6fb127b53294fe27bdb561f5fd636c6edbd6ee31ea84cd5fb9b758b1da3"
+    },
+    {
+      "run_utc": "2025-08-18T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-08-18T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "89ed8d63703a30acd4749d5ebbfb43834b2fba5c54bce47d54ab39471fcf3b6e"
+    },
+    {
+      "run_utc": "2025-08-25T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-08-25T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "5ec4afc34fd188309350e28b852ba01aa107911bdcbfce6277914b243f6eae6c"
+    },
+    {
+      "run_utc": "2025-09-01T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-09-01T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "4638a84f6c07f899b9788bce5c666b4c579e1346eb7265e2cb89aaa4e51de709"
+    },
+    {
+      "run_utc": "2025-09-08T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-09-08T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "b28f6ff65b54222c79ece4961cb05730a2d29c5c3a159466c18aaed12c73a011"
+    },
+    {
+      "run_utc": "2025-09-15T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-09-15T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "2d28e644d0989025b9dee6152c152898f238217462e6a54a1be37b0ee79eb052"
+    },
+    {
+      "run_utc": "2025-09-22T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-09-22T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "5b36c7ac044a238350dc463422685a68b596d4e555bd2351e2e7ad2ed42d3df4"
+    },
+    {
+      "run_utc": "2025-09-29T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-09-29T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "44d049dbbe428f1ceca97ac0c8b835e741d3627c9730c9b521186373a1db403a"
+    },
+    {
+      "run_utc": "2025-10-06T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-10-06T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "ff4ade8c0e539a7545217a87c323bc3f85052a7cde5b35f7f6d214e8ee1ab732"
+    },
+    {
+      "run_utc": "2025-10-13T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-10-13T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "30251a3567f9e43a7b3e526b211c16d0e3170b62e44aeeb8a8c2ced2083858cd"
+    },
+    {
+      "run_utc": "2025-10-20T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-10-20T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "aca29de54b0dee1e8c44ca4804ceccc8be7445079710820a7f4bfa28d704032d"
+    },
+    {
+      "run_utc": "2025-10-27T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-10-27T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "972056a94bbb17da6d91159c96098529b3b9fd8b1e1e22b3afe0367347df04f2"
+    },
+    {
+      "run_utc": "2025-11-03T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-11-03T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "9d57c4c59ece0a78bd25af25081a76b979cd8440141177c9ddd6f1f2d399cdb7"
+    },
+    {
+      "run_utc": "2025-11-10T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-11-10T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "5b1231e90599a4e0a4cbb37127be3c64fcc1ca86a4ed18f0a26434fdcb139dec"
+    },
+    {
+      "run_utc": "2025-11-17T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-11-17T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "eee12179cc73123cdbc95d35ae882f4dfdb753a1d1e21de89d98ed67b53689c6"
+    },
+    {
+      "run_utc": "2025-11-24T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-11-24T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "96898746bc7ebaf8579e07a1a1326ce9ba7471019b200edc3d2ade36a23efb6c"
+    },
+    {
+      "run_utc": "2025-12-01T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-12-01T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "c93a6c3fbe6c503f2cda1548b770f1960b786b0084e91a69b7b255e4c4da440b"
+    },
+    {
+      "run_utc": "2025-12-08T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-12-08T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "33941d3ff71ee9b51edb22a631bfd223cf9bcc37c79711b61f8e9facd794d433"
+    },
+    {
+      "run_utc": "2025-12-15T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-12-15T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "c285dd685826e677ffda5b31b669ec6abb093726a8b9e1102cf203b5fdf80bfe"
+    },
+    {
+      "run_utc": "2025-12-22T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-12-22T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "314132d6315fca25fd57301cd6f90caed65115186798b9c1b991f80171355b64"
+    },
+    {
+      "run_utc": "2025-12-29T00:00Z",
+      "url": "https://single-runs-api.open-meteo.com/v1/forecast?latitude=35.31495%2C31.89722%2C27.1865%2C37.27611%2C36.29807&longitude=46.99883%2C54.3675%2C56.2808%2C49.58862%2C59.60567&run=2025-12-29T00%3A00&daily=temperature_2m_mean%2Cwind_speed_10m_mean%2Cpressure_msl_mean%2Cprecipitation_sum&timezone=UTC&models=ecmwf_ifs&forecast_days=3&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "response_sha256": "86b63b965ced6d3f766e5027669f1c8cc783b8ca4d200eac195ddf6ecabf702d"
+    }
+  ],
+  "rows": 460,
+  "csv_sha256": "e9dad84af1ad905143217412eb047c07110badd6f07beb6fa35dc03aa2f02765",
+  "response_grid_coordinates": [
+    {
+      "city": "Sanandaj",
+      "latitude": 35.32513,
+      "longitude": 46.95652
+    },
+    {
+      "city": "Yazd",
+      "latitude": 31.880491,
+      "longitude": 54.368233
+    },
+    {
+      "city": "Bandar_Abbas",
+      "latitude": 27.240772,
+      "longitude": 56.28763
+    },
+    {
+      "city": "Rasht",
+      "latitude": 37.223198,
+      "longitude": 49.5894
+    },
+    {
+      "city": "Mashhad",
+      "latitude": 36.309315,
+      "longitude": 59.648438
+    }
+  ]
+}

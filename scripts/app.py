@@ -1,5 +1,6 @@
-"""Streamlit exploration and the selected next-day forecast."""
+"""Streamlit view of archived-run scores and the legacy temperature workflow."""
 
+import json
 from datetime import date
 from pathlib import Path
 
@@ -23,6 +24,27 @@ from scripts.processing_data.data_cleaning import filter_by_date
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data" / "new_weather_data.csv"
 CONFIG_PATH = PROJECT_ROOT / "configs" / "forecast.json"
+ARCHIVED_REPORT = PROJECT_ROOT / "reports" / "archived-ifs-2025.json"
+
+
+def benchmark_tables(report: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Expose the same committed benchmark at all dashboard breakdowns."""
+    names = {
+        "temperature_c": "Daily mean temperature (°C)",
+        "wind_speed_kmh": "Daily mean wind (km/h)",
+        "pressure_hpa": "Daily mean sea-level pressure (hPa)",
+        "precipitation_gt_0mm": "Precipitation occurrence (>0 mm)",
+        "precipitation_ge_1mm": "Precipitation occurrence (≥1 mm)",
+    }
+    summary, cities, folds = [], [], []
+    for key, result in report["results"].items():
+        common = {"Variable": names[key], "Metric": result["metric"].upper()}
+        summary.append({**common, "Cases": result["n"], "Raw IFS": result["raw_ifs"], "Candidate": result["candidate"]})
+        for city, scores in result["by_city"].items():
+            cities.append({**common, "City": city, "Cases": scores["n"], "Raw IFS": scores["raw_ifs"], "Candidate": scores["candidate"]})
+        for fold, scores in result["by_fold"].items():
+            folds.append({**common, "Period": fold, "Cases": scores["n"], "Raw IFS": scores["raw_ifs"], "Candidate": scores["candidate"]})
+    return pd.DataFrame(summary), pd.DataFrame(cities), pd.DataFrame(folds)
 
 
 @st.cache_resource(show_spinner="Evaluating and fitting the next-day forecast...")
@@ -39,8 +61,26 @@ def forecast_bundle(
 
 
 def streamlit() -> None:
-    st.title("Weather Data Analysis")
-    st.write("Explore historical temperatures and the selected next-day forecast.")
+    st.title("Weather forecasting: historical evaluation")
+    st.write("Four daily variables across five Iranian city grid cells. These are archived forecasts scored against ERA5 reanalysis, not a live forecast service or station validation.")
+    try:
+        archived = json.loads(ARCHIVED_REPORT.read_text(encoding="utf-8"))
+        summary, city_scores, fold_scores = benchmark_tables(archived)
+    except (FileNotFoundError, KeyError, ValueError) as exc:
+        st.error(f"Archived-run benchmark unavailable: {exc}")
+        st.stop()
+    st.caption("Historical test: 2025-01-01 to 2025-12-31, weekly Wednesday UTC targets. Monday 00 UTC ECMWF IFS HRES runs; decision time Tuesday 12 UTC. Reference: Open-Meteo ERA5 grid cells. MAE uses each variable's displayed unit; Brier is unitless and lower is better.")
+    st.subheader("Raw model versus retrospective correction")
+    st.dataframe(summary, hide_index=True)
+    st.subheader("Results by city")
+    st.dataframe(city_scores, hide_index=True)
+    st.subheader("Results by rolling quarter")
+    st.dataframe(fold_scores, hide_index=True)
+    st.caption("Candidate: city-specific mean bias correction for continuous variables; logistic calibration for precipitation. Training uses only earlier archived runs and ERA5 labels assumed available seven days after the target. The two precipitation rows test different event thresholds. See the method and report for calibration bins and exceptions.")
+
+    st.divider()
+    st.header("Legacy temperature exploration")
+    st.write("The charts and next-day estimate below use the original dataset, whose provenance is unknown. The displayed estimate is historical and separate from the four-variable evaluation above.")
 
     try:
         data, report, predictions = forecast_bundle(
@@ -96,7 +136,7 @@ def streamlit() -> None:
     st.pyplot(figure)
     plt.close(figure)
 
-    st.subheader("Next-day forecast")
+    st.subheader("Historical next-day temperature estimate")
     selected_model = report["selected_model"]
     selected_report = report["models"][selected_model]
     st.caption(
