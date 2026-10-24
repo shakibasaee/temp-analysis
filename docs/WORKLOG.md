@@ -39,3 +39,31 @@ Ridge's validation improvement over persistence is about 0.8%, so persistence is
 **Known issues.** The dataset is only two years long and externally unverified. The dashboard/console use the older calendar model, while the CLI holds the validated next-day workflow. Large historic files, including the 103 MB CSV and prior `.venv` commits, remain in Git history; reducing history size requires a team decision. The old console's cleaning rules discard rows with missing optional weather variables, unlike the new forecasting loader.
 
 **Next steps.** Confirm data provenance and collect later observations for rolling-origin evaluation. Add only weather inputs that are actually available when forecasts are issued. Decide on storage/LFS or archival for large historical data with the team.
+
+## 2026-10-13 — Experimental multi-variable weather benchmark
+
+**Scope.** Added a separate next-day benchmark for temperature, wind speed, pressure, and rain occurrence probability. The original temperature policy and exploratory dashboard remain separate. The weather CLI compares persistence (or a 30-day wet-frequency baseline) with ridge regression (or logistic regression for rain) on chronological validation and test periods. Candidate models are not deployed as a live forecast.
+
+**Data contract.** Features use measurements no later than the issue day. Missing precipitation and pressure values are retained, excluded only when they are the target or required baseline, and imputed within the model's training pipeline when used as predictors. A new data card records the bundled CSV checksum, coverage, missingness, and unknown provenance, time zone, aggregation, and coordinates.
+
+**Internal results.** On the bundled file's 2024-07-01 to 2024-12-31 test period, aggregate baseline/candidate scores were: temperature MAE 1.1568/1.1229 °C; wind MAE 2.3888/1.9787 km/h; pressure MAE 1.9670/1.8732 hPa; rain Brier 0.1022/0.0986. Temperature candidate performance was worse in three cities; pressure was worse in two. These scores are internal diagnostics, not evidence of field accuracy.
+
+**Operational guard.** The bundled file ends in 2024. `weather-baseline` refuses to call its 2025-01-01 output a current forecast unless the user explicitly chooses `--allow-historical`. The output contains only baseline forecasts. A source-backed later dataset and rolling-origin evaluation remain necessary before model selection or a public accuracy claim.
+
+## 2026-10-13 — Documented ERA5 reanalysis snapshot
+
+**Source choice.** Selected Open-Meteo's explicitly pinned ECMWF ERA5 model for the five existing city labels because it provides all four variables, fixed grid locations, a consistent UTC day, and repeatable API requests. The new 2022–2025 snapshot has 7,305 rows; a manifest stores 20 request URLs, requested and returned grid coordinates, retrieval time, aggregation definitions, and SHA-256. The original CSV is retained separately with its unknown provenance. Open-Meteo and ECMWF are credited in the data card and README.
+
+**Time-boundary correction.** Temperature, wind and sea-level pressure use hourly UTC means. Precipitation uses the API's UTC `precipitation_sum` rather than an hourly sum because hourly precipitation is attributed to the preceding hour. The ingestion rejects missing hours, missing daily totals, changed units, or changed time zone.
+
+**Retrospective results.** On the held-out 2025 ERA5 test year, baseline/candidate scores were: temperature MAE 1.1459/1.0215 °C; wind MAE 1.4874/1.2753 km/h; sea-level pressure MAE 2.1321/1.9725 hPa; precipitation-occurrence Brier 0.1535/0.1245. Candidate scores are lower in all five city grid cells for each target. The models predict ERA5 values from preceding ERA5 values; ERA5's publication delay makes this an explanatory historical benchmark, not an operational forecast or station-observation validation.
+
+**Next stage.** Build an issue-time evaluation with archived model runs at fixed lead times and independent station observations where quality and coverage support them. Assess multiple rolling origins, event calibration, and local regressions before selecting a deployable policy.
+
+## 2026-10-24 — Archived-run evaluation and dashboard
+
+Integrated the rolling temperature backtests and dashboard work from PR #3 while preserving its commits. Added 92 weekly ECMWF IFS HRES archived runs at a fixed 48–71 hour initialization lead, five city grid cells and four daily weather targets. Request URLs, returned grids, raw response hashes and a CSV hash are committed. Tuesday 12 UTC is the declared decision time for Monday 00 UTC runs; exact historical delivery timestamps are not in the archive.
+
+The 2025 evaluation uses four expanding quarterly training windows and 265 held-out city-day cases against a delayed ERA5 grid-cell reference. Training excludes labels until seven days after their target. Temperature MAE is 1.2887/0.7934 °C (raw IFS/bias correction); wind 2.4343/1.6688 km/h; pressure 0.7494/0.7183 hPa. Precipitation Brier is 0.1170/0.1079 for >0 mm and 0.0830/0.0742 for ≥1 mm (raw occurrence/logistic calibration). City and quarter regressions, calibration bins and individual predictions are in the JSON report. These scores are historical against ERA5, not independent station or live-service validation.
+
+The README now leads with the question, verified result and direct evidence links. The dashboard presents the archived-run results first, including city and quarter breakdowns, and labels the older temperature estimate as historical. The previous long README is preserved as a superseded reference. No model was promoted for deployment. Next evidence: station daily coverage and quality by city and variable, actual historical delivery timestamps or prospective logs, and a longer prospective comparison.

@@ -1,86 +1,39 @@
-# Temperature Analysis Platform
+# Weather Forecasting: Archived-Run Evaluation
 
-Daily city temperature analysis with a Streamlit dashboard and a reproducible **one-day-ahead** forecasting benchmark. The historical notebooks, plots, reports, and data remain in the repository.
+Can a correction trained on earlier forecasts improve the next-day daily weather forecast for five Iranian city locations? This project evaluates archived ECMWF IFS runs for **temperature, wind speed, sea-level pressure, and precipitation occurrence** at a fixed lead time. It is a reproducible **historical evaluation against ERA5 grid-cell reanalysis**, not a live service or station-validated forecast.
 
-## Current Project Status
+**One measured result:** across 265 city-day cases in 2025, a city-specific temperature bias correction reduced mean absolute error from **1.2887 °C** for the raw IFS forecast to **0.7934 °C** against ERA5. The pressure correction was worse in Rasht and Sanandaj, and precipitation calibration was worse in some cities and quarters. See the complete [report](reports/archived-ifs-2025.json) before interpreting a pooled score.
 
-Active development resumed on 2026-09-28; the latest update is 2026-10-07. The forecasting workflow validates daily city data, compares five models across expanding monthly validation folds and a held-out test, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard shows that selected next-day forecast and per-city historical error alongside exploratory charts. The interactive console still uses the older calendar-only model.
+[Dashboard source](scripts/app.py) · [Archived-forecast data card](docs/ARCHIVED_FORECAST_DATA_CARD.md) · [Evaluation method](docs/ISSUE_TIME_METHOD.md) · [Measured report](reports/archived-ifs-2025.json)
 
-The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
+## What works
 
-## Install
+- A committed sample of 92 weekly archived IFS runs from April 2024 through December 2025, each for five fixed locations, with [request URLs, returned grid coordinates and checksums](data/archived_ifs_weekly.manifest.json).
+- Four rolling 2025 test quarters. Each case uses a Monday 00:00 UTC run, a conservative Tuesday 12:00 UTC decision time, and Wednesday's full UTC day as target. Training uses only earlier run data and ERA5 labels assumed available seven days after their target day.
+- Raw IFS forecasts are compared with a prior-data bias correction for the three continuous targets. For precipitation, a logistic probability calibration is compared with raw binary occurrence and historical city climatology at **>0 mm** and **≥1 mm** thresholds. Scores are broken down by city and quarter in the report and dashboard.
 
-Python 3.11 or newer is recommended. From the repository root:
+| 2025 ERA5 reference; 265 city-day cases | Raw IFS | Correction | Metric |
+| --- | ---: | ---: | --- |
+| Daily mean temperature | 1.2887 | 0.7934 | MAE, °C |
+| Daily mean wind speed | 2.4343 | 1.6688 | MAE, km/h |
+| Daily mean sea-level pressure | 0.7494 | 0.7183 | MAE, hPa |
+| Precipitation occurrence, >0 mm | 0.1170 | 0.1079 | Brier score |
+| Precipitation occurrence, ≥1 mm | 0.0830 | 0.0742 | Brier score |
+
+Lower is better. The archived run is a forecast known by initialization time; the reference is [ERA5 reanalysis](docs/ERA5_DATA_CARD.md), published later and from the same broad ECMWF model family. Exact historical delivery timestamps were not archived, and station coverage and quality have not been established for all four daily targets. These limits prevent a real-time or independent-observation skill claim. No correction is promoted for deployment.
+
+## Reproduce
+
+Use Python 3.11 or newer from the repository root:
 
 ```bash
-python -m venv .venv
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-# macOS/Linux: source .venv/bin/activate
 python -m pip install -r requirements-forecast.txt
-```
-
-For the dashboard, console charts, and PDF reporting tests, also install `requirements.txt`.
-
-## Forecasting commands
-
-Run from the repository root. The default input and split dates are in `configs/forecast.json`; all commands accept explicit paths.
-
-```bash
-# Evaluate the five candidates on the same chronological periods.
-python -m forecasting.cli benchmark --data data/new_weather_data.csv --config configs/forecast.json
-
-# Benchmark, select on validation, refit on all labelled observations, and save outputs.
-python -m forecasting.cli train --data data/new_weather_data.csv --config configs/forecast.json
-
-# Forecast 2025-01-01 from the supplied data, one row per city.
-python -m forecasting.cli predict --data data/new_weather_data.csv --model artifacts/temperature_model.joblib
-```
-
-`train` writes `artifacts/benchmark.json` and `artifacts/temperature_model.joblib`. The report includes the source file SHA-256, monthly validation folds, per-city test metrics, and selection rule. Artifacts are ignored by Git. Load joblib files only from trusted sources.
-
-Input CSV columns: `Date_Time`, `City`, `Temperature_C` (recorded daily temperature in Celsius). Each city must have unique, contiguous midnight daily dates, finite targets, and at least 30 days of history. An invalid or incomplete series is rejected rather than silently filled. Prediction requires at least the history used to train the saved artifact and rejects unseen cities. See `data/README.md` for the dataset provenance gap.
-
-### Actual benchmark on the supplied data
-
-Forecasts are issued after today's observation for tomorrow's recorded daily temperature. Examples are partitioned by **target date**: initial train 2023-01-31 to 2023-12-31 (1,675 rows), rolling validation 2024-01-01 to 2024-06-30 (six monthly folds, 910 rows), and held-out test 2024-07-01 to 2024-12-31 (920). Each validation fold trains on all earlier targets. During validation and test, yesterday's actual temperature is available before forecasting the next day. No randomly shuffled time-series split is used.
-
-| Model | Validation MAE (°C) | Test MAE (°C) | Test RMSE (°C) | Note |
-|---|---:|---:|---:|---|
-| Persistence | 1.5051 | 1.1568 | 1.6839 | Selected forecast policy |
-| Seasonal naive, 7 days | 3.4230 | 2.6522 | 3.6169 | Same weekday last week |
-| Original calendar linear | 2.9260 | 2.9943 | 3.7948 | Existing implementation, same folds |
-| Ridge with lags | **1.4916** | **1.1490** | **1.6114** | Best numeric MAE, marginal gain |
-| Extra Trees with lags | 1.5744 | 1.1950 | 1.7095 | No gain over persistence |
-
-The selected policy is persistence: ridge improves pooled rolling-validation MAE by about 0.9%, below the preconfigured 2% practical improvement threshold. Ridge's test MAE advantage is also under 1%. The test period was not used to choose the policy. The selected model's held-out MAE varies by city: Bandar_Abbas 0.5658, Mashhad 1.6630, Rasht 0.9859, Sanandaj 1.2799, and Yazd 1.2897 °C. sMAPE and R² are included in the machine-readable benchmark; MAPE is avoided because temperatures can be near zero. Two years of data remain insufficient to establish a durable performance advantage.
-
-## Explore and test
-
-```bash
+python -m scripts.evaluate_archived_runs
 python -m unittest discover -s tests -q
-streamlit run scripts/app.py
-python scripts/main.py
 ```
 
-The dashboard reads the bundled daily CSV via a repository-relative path, applies the same selection rule as the CLI, and displays a next-day forecast after the latest observation. Because the bundled data ends on 2024-12-31, the app warns that its 2025-01-01 estimate is historical rather than current weather. The console's regression estimate remains exploratory and calendar-only; its generated output goes under ignored `artifacts/`. `Report.md` and `plots/RESULTS.md` are historical project artifacts, not reports from the current benchmark.
+To regenerate the archived input from Open-Meteo, run `python -m scripts.fetch_archived_runs`; compare the new manifest and checksum before replacing the committed snapshot. Network responses and historical source revisions can change. To open the dashboard, install `requirements.txt` and run `streamlit run scripts/app.py`.
 
-## Architecture
+The dashboard also keeps the [original temperature workflow](docs/README_HISTORY.md) as a clearly labeled historical exploration. Its input has [unverified provenance](docs/DATA_CARD.md) and ends in 2024; its displayed next-day estimate refers to **2025-01-01**. The earlier [ERA5-only four-variable experiment](docs/WEATHER_FORECASTING.md) uses delayed reanalysis as a predictor and remains a retrospective diagnostic, separate from the archived-run evaluation.
 
-- `forecasting/config.py`: validated experiment settings.
-- `forecasting/data.py`: CSV ingestion and daily-series validation.
-- `forecasting/features.py`: lag, rolling, and calendar features known at issue time.
-- `forecasting/experiment.py`: chronological splits, comparable baselines/models, metrics, model selection, save/load, inference.
-- `forecasting/cli.py`: benchmark, train, predict commands.
-- `scripts/`: existing dashboard, console, visualizations, reporting, outlier analysis, and calendar model.
-- `tests/`: data, leakage, training, persistence, CLI, dashboard, and legacy-model checks.
-- `docs/WORKLOG.md`: decisions, tests, results, and team handoff.
-
-## Next team work
-
-1. Establish provenance, collection method, units, and update process for the five-city dataset. Validate on genuinely later observations and several rolling origins.
-2. Add reliable observations or forecasts of humidity, pressure, wind, cloud, precipitation, and solar radiation before testing them as predictors. Same-day *future* observations must never enter a forecast.
-3. Decide with the team how to manage the historical 103 MB `data/weather_data.csv` and old virtual-environment blobs still present in Git history. The current tree no longer tracks `.venv`; rewriting shared history would need coordination.
-
-## Collaboration
-
-The previous README credited [Shakiba](https://github.com/shakibasaee) and [Kasra](https://github.com/kasra-2004) as core collaborators. Git history records all contributors and retains their original authorship. New work is described in `docs/WORKLOG.md` and separate commits.
+Weather data by [Open-Meteo](https://open-meteo.com/), based on ECMWF IFS and ERA5. See the data cards for attribution, terms and definitions. Original collaborator commits remain in Git history.

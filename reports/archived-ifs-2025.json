@@ -1,0 +1,446 @@
+{
+  "reference": "ERA5 gridded reanalysis, not independent station observations",
+  "evaluation_period": "2025-01-01 through 2025-12-31 UTC; weekly Wednesday targets",
+  "issue_protocol": "Monday 00 UTC IFS run; declared decision Tuesday 12 UTC; Wednesday UTC daily target; ERA5 reference available for training no earlier than seven days after target day",
+  "promotion": "No model is promoted to an operational forecast; inspect all cities and folds before selecting a correction.",
+  "folds": [
+    {
+      "fold": "2025-Q1",
+      "train_n": 190,
+      "test_n": 65,
+      "train_last_target": "2024-12-18",
+      "first_issue_utc": "2024-12-31T12:00:00+00:00",
+      "test_first_target": "2025-01-01",
+      "test_last_target": "2025-03-26"
+    },
+    {
+      "fold": "2025-Q2",
+      "train_n": 255,
+      "test_n": 65,
+      "train_last_target": "2025-03-19",
+      "first_issue_utc": "2025-04-01T12:00:00+00:00",
+      "test_first_target": "2025-04-02",
+      "test_last_target": "2025-06-25"
+    },
+    {
+      "fold": "2025-Q3",
+      "train_n": 320,
+      "test_n": 65,
+      "train_last_target": "2025-06-18",
+      "first_issue_utc": "2025-07-01T12:00:00+00:00",
+      "test_first_target": "2025-07-02",
+      "test_last_target": "2025-09-24"
+    },
+    {
+      "fold": "2025-Q4",
+      "train_n": 385,
+      "test_n": 70,
+      "train_last_target": "2025-09-17",
+      "first_issue_utc": "2025-09-30T12:00:00+00:00",
+      "test_first_target": "2025-10-01",
+      "test_last_target": "2025-12-31"
+    }
+  ],
+  "results": {
+    "precipitation_ge_1mm": {
+      "n": 265,
+      "raw_ifs": 0.0830188679245283,
+      "candidate": 0.07415283565088869,
+      "climatology": 0.11801827451572586,
+      "metric": "brier",
+      "by_city": {
+        "Bandar_Abbas": {
+          "n": 53,
+          "raw_ifs": 0.018867924528301886,
+          "candidate": 0.023484328746118548,
+          "climatology": 0.03899957353905037
+        },
+        "Mashhad": {
+          "n": 53,
+          "raw_ifs": 0.05660377358490566,
+          "candidate": 0.04252348016186675,
+          "climatology": 0.1016377823050908
+        },
+        "Rasht": {
+          "n": 53,
+          "raw_ifs": 0.22641509433962265,
+          "candidate": 0.19282800467696054,
+          "climatology": 0.24378735364974716
+        },
+        "Sanandaj": {
+          "n": 53,
+          "raw_ifs": 0.05660377358490566,
+          "candidate": 0.05909985920432114,
+          "climatology": 0.10337376562093473
+        },
+        "Yazd": {
+          "n": 53,
+          "raw_ifs": 0.05660377358490566,
+          "candidate": 0.05282850546517654,
+          "climatology": 0.10229289746380628
+        }
+      },
+      "by_fold": {
+        "2025-Q1": {
+          "n": 65,
+          "raw_ifs": 0.07692307692307693,
+          "candidate": 0.07919556753175012,
+          "climatology": 0.1643511613040699
+        },
+        "2025-Q2": {
+          "n": 65,
+          "raw_ifs": 0.07692307692307693,
+          "candidate": 0.0568484302989506,
+          "climatology": 0.07526099429213616
+        },
+        "2025-Q3": {
+          "n": 65,
+          "raw_ifs": 0.07692307692307693,
+          "candidate": 0.07337890632639459,
+          "climatology": 0.057523287259615384
+        },
+        "2025-Q4": {
+          "n": 70,
+          "raw_ifs": 0.1,
+          "candidate": 0.08625732396106156,
+          "climatology": 0.17087198515769947
+        }
+      },
+      "event_rate": 0.15471698113207547,
+      "calibration": [
+        {
+          "bin": [
+            0.0,
+            0.2
+          ],
+          "n": 230,
+          "mean_probability": 0.07347651563714577,
+          "observed_rate": 0.06956521739130435
+        },
+        {
+          "bin": [
+            0.2,
+            0.4
+          ],
+          "n": 8,
+          "mean_probability": 0.2796545602890893,
+          "observed_rate": 0.25
+        },
+        {
+          "bin": [
+            0.4,
+            0.6
+          ],
+          "n": 4,
+          "mean_probability": 0.5095385542453844,
+          "observed_rate": 0.75
+        },
+        {
+          "bin": [
+            0.6,
+            0.8
+          ],
+          "n": 5,
+          "mean_probability": 0.7094770529207175,
+          "observed_rate": 0.8
+        },
+        {
+          "bin": [
+            0.8,
+            1.0
+          ],
+          "n": 18,
+          "mean_probability": 0.9499889094770528,
+          "observed_rate": 0.8888888888888888
+        }
+      ]
+    },
+    "precipitation_gt_0mm": {
+      "n": 265,
+      "raw_ifs": 0.1169811320754717,
+      "candidate": 0.10785825605645502,
+      "climatology": 0.16563040798175555,
+      "metric": "brier",
+      "by_city": {
+        "Bandar_Abbas": {
+          "n": 53,
+          "raw_ifs": 0.03773584905660377,
+          "candidate": 0.03956083060467064,
+          "climatology": 0.05722756874922601
+        },
+        "Mashhad": {
+          "n": 53,
+          "raw_ifs": 0.09433962264150944,
+          "candidate": 0.09503338257348369,
+          "climatology": 0.15959965651353777
+        },
+        "Rasht": {
+          "n": 53,
+          "raw_ifs": 0.2641509433962264,
+          "candidate": 0.18773752160081794,
+          "climatology": 0.2476237881172184
+        },
+        "Sanandaj": {
+          "n": 53,
+          "raw_ifs": 0.1320754716981132,
+          "candidate": 0.13087462667739921,
+          "climatology": 0.21284739639676958
+        },
+        "Yazd": {
+          "n": 53,
+          "raw_ifs": 0.05660377358490566,
+          "candidate": 0.08608491882590348,
+          "climatology": 0.15085363013202596
+        }
+      },
+      "by_fold": {
+        "2025-Q1": {
+          "n": 65,
+          "raw_ifs": 0.15384615384615385,
+          "candidate": 0.15702239416764838,
+          "climatology": 0.23256978478585127
+        },
+        "2025-Q2": {
+          "n": 65,
+          "raw_ifs": 0.15384615384615385,
+          "candidate": 0.13676177104640425,
+          "climatology": 0.18080619879927837
+        },
+        "2025-Q3": {
+          "n": 65,
+          "raw_ifs": 0.1076923076923077,
+          "candidate": 0.07501619877113204,
+          "climatology": 0.09870417668269231
+        },
+        "2025-Q4": {
+          "n": 70,
+          "raw_ifs": 0.05714285714285714,
+          "candidate": 0.06586305994176538,
+          "climatology": 0.15152639568223983
+        }
+      },
+      "event_rate": 0.25660377358490566,
+      "calibration": [
+        {
+          "bin": [
+            0.0,
+            0.2
+          ],
+          "n": 137,
+          "mean_probability": 0.14024217684204213,
+          "observed_rate": 0.0364963503649635
+        },
+        {
+          "bin": [
+            0.2,
+            0.4
+          ],
+          "n": 82,
+          "mean_probability": 0.2713896709989502,
+          "observed_rate": 0.32926829268292684
+        },
+        {
+          "bin": [
+            0.4,
+            0.6
+          ],
+          "n": 18,
+          "mean_probability": 0.4615067210254202,
+          "observed_rate": 0.4444444444444444
+        },
+        {
+          "bin": [
+            0.6,
+            0.8
+          ],
+          "n": 3,
+          "mean_probability": 0.7075020506896211,
+          "observed_rate": 1.0
+        },
+        {
+          "bin": [
+            0.8,
+            1.0
+          ],
+          "n": 25,
+          "mean_probability": 0.9666022517256511,
+          "observed_rate": 1.0
+        }
+      ]
+    },
+    "pressure_hpa": {
+      "n": 265,
+      "raw_ifs": 0.749370188679246,
+      "candidate": 0.7183228033189779,
+      "metric": "mae",
+      "by_city": {
+        "Bandar_Abbas": {
+          "n": 53,
+          "raw_ifs": 0.5055113207547106,
+          "candidate": 0.44885314929280934
+        },
+        "Mashhad": {
+          "n": 53,
+          "raw_ifs": 1.009194339622663,
+          "candidate": 0.9515320754136383
+        },
+        "Rasht": {
+          "n": 53,
+          "raw_ifs": 0.5168981132075461,
+          "candidate": 0.5516458315201186
+        },
+        "Sanandaj": {
+          "n": 53,
+          "raw_ifs": 0.6385999999999882,
+          "candidate": 0.6529535848998065
+        },
+        "Yazd": {
+          "n": 53,
+          "raw_ifs": 1.0766471698113218,
+          "candidate": 0.9866293754685167
+        }
+      },
+      "by_fold": {
+        "2025-Q1": {
+          "n": 65,
+          "raw_ifs": 0.7966046153846211,
+          "candidate": 1.119448744939298
+        },
+        "2025-Q2": {
+          "n": 65,
+          "raw_ifs": 0.8299969230769157,
+          "candidate": 0.6712977073906289
+        },
+        "2025-Q3": {
+          "n": 65,
+          "raw_ifs": 0.8166030769230807,
+          "candidate": 0.599108293269235
+        },
+        "2025-Q4": {
+          "n": 70,
+          "raw_ifs": 0.5682114285714289,
+          "candidate": 0.5002140630797661
+        }
+      }
+    },
+    "temperature_c": {
+      "n": 265,
+      "raw_ifs": 1.2887264150943396,
+      "candidate": 0.793386394972982,
+      "metric": "mae",
+      "by_city": {
+        "Bandar_Abbas": {
+          "n": 53,
+          "raw_ifs": 1.3557415094339627,
+          "candidate": 0.8959554867301599
+        },
+        "Mashhad": {
+          "n": 53,
+          "raw_ifs": 1.0062056603773581,
+          "candidate": 0.6720467182094354
+        },
+        "Rasht": {
+          "n": 53,
+          "raw_ifs": 1.2931622641509433,
+          "candidate": 0.7327596419379343
+        },
+        "Sanandaj": {
+          "n": 53,
+          "raw_ifs": 1.8814471698113209,
+          "candidate": 0.9243532541866504
+        },
+        "Yazd": {
+          "n": 53,
+          "raw_ifs": 0.9070754716981129,
+          "candidate": 0.74181687380073
+        }
+      },
+      "by_fold": {
+        "2025-Q1": {
+          "n": 65,
+          "raw_ifs": 1.6326276923076923,
+          "candidate": 0.9690554655870444
+        },
+        "2025-Q2": {
+          "n": 65,
+          "raw_ifs": 1.1723092307692307,
+          "candidate": 0.6847198491704375
+        },
+        "2025-Q3": {
+          "n": 65,
+          "raw_ifs": 0.9005753846153843,
+          "candidate": 0.6282076201923085
+        },
+        "2025-Q4": {
+          "n": 70,
+          "raw_ifs": 1.4379171428571431,
+          "candidate": 0.884550055658627
+        }
+      }
+    },
+    "wind_speed_kmh": {
+      "n": 265,
+      "raw_ifs": 2.434309056603773,
+      "candidate": 1.668808382165259,
+      "metric": "mae",
+      "by_city": {
+        "Bandar_Abbas": {
+          "n": 53,
+          "raw_ifs": 1.7841188679245281,
+          "candidate": 1.8063635789956844
+        },
+        "Mashhad": {
+          "n": 53,
+          "raw_ifs": 1.4726452830188677,
+          "candidate": 1.2939403237387315
+        },
+        "Rasht": {
+          "n": 53,
+          "raw_ifs": 2.005267924528302,
+          "candidate": 1.9600113337099305
+        },
+        "Sanandaj": {
+          "n": 53,
+          "raw_ifs": 2.3264150943396227,
+          "candidate": 1.1925101491542272
+        },
+        "Yazd": {
+          "n": 53,
+          "raw_ifs": 4.583098113207548,
+          "candidate": 2.091216525227723
+        }
+      },
+      "by_fold": {
+        "2025-Q1": {
+          "n": 65,
+          "raw_ifs": 2.204490769230769,
+          "candidate": 1.6343615384615386
+        },
+        "2025-Q2": {
+          "n": 65,
+          "raw_ifs": 2.52449076923077,
+          "candidate": 1.6390307390648573
+        },
+        "2025-Q3": {
+          "n": 65,
+          "raw_ifs": 2.7154492307692313,
+          "candidate": 1.5578391586538463
+        },
+        "2025-Q4": {
+          "n": 70,
+          "raw_ifs": 2.302912857142857,
+          "candidate": 1.8314882560296846
+        }
+      }
+    }
+  },
+  "input_sha256": {
+    "archived_forecasts": "e9dad84af1ad905143217412eb047c07110badd6f07beb6fa35dc03aa2f02765",
+    "era5_reference": "52e4657682a5c3834a69e29be0524ae90ac2861e4b25b5b999d446b6f51274f5"
+  },
+  "predictions_artifact": {
+    "path": "archived-ifs-2025-predictions.csv",
+    "rows": 1325,
+    "csv_sha256": "1b4127fcf05528080c8353b40a8126273f9eb5a256035031488b40b72b1dffcf"
+  }
+}
