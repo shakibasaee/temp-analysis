@@ -19,6 +19,7 @@ from forecasting.experiment import (
     predict_next_day,
     save_artifact,
     split_examples,
+    rolling_validation_folds,
     train_final,
 )
 from forecasting.features import FEATURES, make_examples
@@ -101,8 +102,18 @@ class ForecastingTests(unittest.TestCase):
             train.iloc[-1].issue_date + pd.Timedelta(days=1), train.iloc[-1].target_date
         )
 
+    def test_rolling_validation_expands_only_after_a_month_is_observed(self):
+        folds = rolling_validation_folds(make_examples(self.data), self.config)
+        self.assertEqual(len(folds), 2)
+        for history, month in folds:
+            self.assertLess(history.target_date.max(), month.target_date.min())
+            self.assertEqual(month.target_date.dt.to_period("M").nunique(), 1)
+        self.assertEqual(folds[0][0].target_date.max(), pd.Timestamp("2023-03-01"))
+        self.assertEqual(folds[1][0].target_date.max(), pd.Timestamp("2023-03-31"))
+
     def test_benchmark_train_save_load_and_prediction(self):
         report = benchmark(validate_daily_data(self.data), self.config)
+        self.assertEqual(len(report["validation_folds"]), 2)
         self.assertEqual(
             set(report["models"]),
             {
@@ -125,6 +136,9 @@ class ForecastingTests(unittest.TestCase):
             report["selected_model"],
             best if gain >= self.config.minimum_relative_mae_gain else "persistence",
         )
+        for model_report in report["models"].values():
+            self.assertEqual(len(model_report["validation_by_fold"]), 2)
+            self.assertEqual(set(model_report["test_by_city"]), {"North", "South"})
         artifact = train_final(
             validate_daily_data(self.data), self.config, report["selected_model"]
         )
