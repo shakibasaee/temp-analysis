@@ -98,6 +98,7 @@ class Era5IngestionTests(unittest.TestCase):
             )
             saved = json.loads(manifest_path.read_text(encoding="utf-8"))
             self.assertEqual(saved["csv_sha256"], manifest["csv_sha256"])
+            self.assertNotIn(b"\r\n", csv.read_bytes())
             self.assertIn("2025-01-01", csv.read_text(encoding="utf-8"))
 
 

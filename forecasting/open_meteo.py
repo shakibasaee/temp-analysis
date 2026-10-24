@@ -183,7 +183,13 @@ def save_snapshot(
 ) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     metadata.parent.mkdir(parents=True, exist_ok=True)
-    data.to_csv(output, index=False, date_format="%Y-%m-%d", float_format="%.4f")
+    data.to_csv(
+        output,
+        index=False,
+        date_format="%Y-%m-%d",
+        float_format="%.4f",
+        lineterminator="\n",
+    )
     manifest["csv_sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
     metadata.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"

@@ -2,7 +2,7 @@
 
 This is a separate, documented replacement for the original `new_weather_data.csv`. It is **ECMWF ERA5 gridded reanalysis served by Open-Meteo**, not measurements from five city weather stations. City names identify fixed requested coordinates; the actual ERA5 grid-cell centres returned by the API are recorded in the adjacent manifest.
 
-The committed snapshot has **7,305 rows**, one for each of five cities on every UTC day from 2022-01-01 through 2025-12-31. All four target columns are complete. Its CSV SHA-256 is `68bb83a25acce304315edfdbbdd0cadac7575874bd75b94655d941f989fc0362`.
+The committed snapshot has **7,305 rows**, one for each of five cities on every UTC day from 2022-01-01 through 2025-12-31. All four target columns are complete. Its CSV SHA-256 is `52e4657682a5c3834a69e29be0524ae90ac2861e4b25b5b999d446b6f51274f5`.
 
 | City label | Requested centre (lat, lon) | Returned ERA5 grid centre (lat, lon) |
 | --- | --- | --- |
