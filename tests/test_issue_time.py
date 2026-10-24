@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -19,6 +20,21 @@ REPORT = ROOT / "reports" / "archived-ifs-2025.json"
 
 
 class ArchivedRunTests(unittest.TestCase):
+    def assert_reports_close(self, actual, expected):
+        """Allow platform-level floating point differences, not changed scores."""
+        if isinstance(actual, dict):
+            self.assertEqual(set(actual), set(expected))
+            for key in actual:
+                self.assert_reports_close(actual[key], expected[key])
+        elif isinstance(actual, list):
+            self.assertEqual(len(actual), len(expected))
+            for left, right in zip(actual, expected, strict=True):
+                self.assert_reports_close(left, right)
+        elif isinstance(actual, float):
+            self.assertTrue(math.isclose(actual, expected, rel_tol=1e-9, abs_tol=1e-9))
+        else:
+            self.assertEqual(actual, expected)
+
     def test_snapshot_integrity_and_fixed_lead(self):
         metadata = json.loads(MANIFEST.read_text(encoding="utf-8"))
         self.assertEqual(
@@ -66,7 +82,7 @@ class ArchivedRunTests(unittest.TestCase):
     def test_reproducible_scores_and_thresholds(self):
         measured = evaluate(load_pairs(FORECAST, REFERENCE))
         committed = json.loads(REPORT.read_text(encoding="utf-8"))
-        self.assertEqual(measured["results"], committed["results"])
+        self.assert_reports_close(measured["results"], committed["results"])
         self.assertEqual(measured["folds"], committed["folds"])
         predictions = REPORT.with_name(committed["predictions_artifact"]["path"])
         self.assertEqual(
