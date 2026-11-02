@@ -14,6 +14,7 @@ from forecasting.cli import main
 from forecasting.config import ForecastConfig
 from forecasting.data import load_daily_data, validate_daily_data
 from forecasting.experiment import (
+    analyze_holdout_errors,
     benchmark,
     load_artifact,
     predict_next_day,
@@ -142,6 +143,15 @@ class ForecastingTests(unittest.TestCase):
                 model_report["validation_rows"], report["splits"]["validation"]["rows"]
             )
             self.assertEqual(model_report["test_rows"], report["splits"]["test"]["rows"])
+        analysis = report["selected_holdout_analysis"]
+        self.assertEqual(analysis["rows"], report["splits"]["test"]["rows"])
+        self.assertEqual(sum(month["rows"] for month in analysis["by_month"]), analysis["rows"])
+        self.assertTrue(
+            all(
+                sum(city["rows"] for city in month["by_city"].values()) == month["rows"]
+                for month in analysis["by_month"]
+            )
+        )
         artifact = train_final(
             validate_daily_data(self.data), self.config, report["selected_model"]
         )
@@ -216,6 +226,27 @@ class ForecastingTests(unittest.TestCase):
         self.assertEqual(data["Date_Time"].max(), pd.Timestamp("2024-12-31"))
         train, validation, test = split_examples(make_examples(data), ForecastConfig())
         self.assertEqual((len(train), len(validation), len(test)), (670, 364, 368))
+
+    def test_holdout_error_analysis_uses_target_dates_and_aligned_rows(self):
+        examples = pd.DataFrame(
+            {
+                "target_date": pd.to_datetime(
+                    ["2024-01-01", "2024-01-02", "2024-02-01", "2024-02-02"]
+                ),
+                "City": ["North", "South", "North", "South"],
+                "target": [10.0, 20.0, 10.0, 20.0],
+            }
+        )
+        analysis = analyze_holdout_errors(examples, np.array([9.0, 18.0, 14.0, 20.0]))
+        self.assertEqual(analysis["rows"], 4)
+        self.assertEqual([row["month"] for row in analysis["by_month"]], ["2024-01", "2024-02"])
+        self.assertEqual([row["mae"] for row in analysis["by_month"]], [1.5, 2.0])
+        self.assertEqual(analysis["by_month"][0]["by_city"]["South"]["mae"], 2.0)
+        self.assertEqual(analysis["absolute_error_quantiles_c"], {"p50": 1.5, "p90": 3.4})
+        self.assertEqual(analysis["largest_errors"][0]["date"], "2024-02-01")
+        self.assertEqual(analysis["largest_errors"][0]["absolute_error_c"], 4.0)
+        with self.assertRaisesRegex(ValueError, "align"):
+            analyze_holdout_errors(examples, np.array([1.0]))
 
 
 if __name__ == "__main__":

@@ -121,6 +121,27 @@ def streamlit() -> None:
     st.pyplot(figure)
     plt.close(figure)
 
+    analysis = report["selected_holdout_analysis"]
+    st.subheader("Held-out error by month")
+    st.caption(
+        "Across all cities in the historical test period; this analysis did not "
+        "select the model. "
+        f"Median absolute error: {analysis['absolute_error_quantiles_c']['p50']:.2f} °C; "
+        f"90th percentile: {analysis['absolute_error_quantiles_c']['p90']:.2f} °C."
+    )
+    monthly_rows = [
+        {
+            "Month": month["month"],
+            "City": city,
+            "Observations": month["by_city"][city]["rows"],
+            "MAE_C": month["by_city"][city]["mae"],
+        }
+        for month in analysis["by_month"]
+        for city in selected_cities
+        if city in month["by_city"]
+    ]
+    st.dataframe(pd.DataFrame(monthly_rows), hide_index=True)
+
 
 if __name__ == "__main__":
     streamlit()

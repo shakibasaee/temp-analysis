@@ -1,5 +1,13 @@
 # Project work log
 
+## 2026-11-02 — Book-guided error analysis and roadmap
+
+**Plan.** Adapt the end-to-end evaluation and error-analysis practices in *Hands-On Machine Learning* to a chronological weather forecast. Add diagnostics only after model selection, surface them in the dashboard, test the calculation, and define measurable next steps without claiming new forecasting skill.
+
+**Changes.** The selected policy's benchmark report now includes held-out monthly/city MAE, median and 90th-percentile absolute error, and the five largest errors. The dashboard shows monthly errors for selected cities. `docs/ML_ROADMAP.md` defines short- and long-term goals and prerequisites for stronger performance claims.
+
+**Verification.** On the bundled five-city holdout, the selected persistence policy covers 920 targets; monthly MAE is 0.9097 C in July and 1.4142 C in December, with 0.8 C median and 2.4 C 90th-percentile absolute error. These are retrospective diagnostics only. The 25-test suite and Ruff checks passed locally; Streamlit also rendered the synthetic-data path without exceptions.
+
 ## 2026-10-11 — Reproducibility review
 
 **Plan.** Audit the shipped dashboard, CLI, legacy console, data, dependencies, tests, and CI; describe feature boundaries accurately; provide a source-independent demo dataset; then run the forecast, dashboard, and tests. Keep existing unrelated files and Git history intact.

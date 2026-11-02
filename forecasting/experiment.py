@@ -141,6 +141,57 @@ def _by_city_metrics(examples: pd.DataFrame, predicted: np.ndarray) -> dict[str,
     return result
 
 
+def analyze_holdout_errors(examples: pd.DataFrame, predicted: np.ndarray) -> dict[str, Any]:
+    """Describe the selected model's errors after model selection is complete."""
+    scored = examples.loc[:, ["target_date", "City", "target"]].copy()
+    if len(scored) != len(predicted):
+        raise ValueError("Predictions must align with holdout target rows")
+    scored["predicted"] = np.asarray(predicted, dtype=float)
+    scored["absolute_error"] = (scored["target"] - scored["predicted"]).abs()
+    if not np.isfinite(scored[["target", "predicted", "absolute_error"]]).all().all():
+        raise ValueError("Holdout targets and predictions must be finite")
+
+    by_month = []
+    for month, rows in scored.groupby(scored["target_date"].dt.to_period("M")):
+        by_month.append(
+            {
+                "month": str(month),
+                "rows": int(len(rows)),
+                "mae": round(float(rows["absolute_error"].mean()), 4),
+                "by_city": {
+                    city: {
+                        "rows": int(len(city_rows)),
+                        "mae": round(float(city_rows["absolute_error"].mean()), 4),
+                    }
+                    for city, city_rows in rows.groupby("City")
+                },
+            }
+        )
+
+    worst = scored.sort_values(
+        ["absolute_error", "target_date", "City"], ascending=[False, True, True]
+    ).head(5)
+    return {
+        "note": "Exploratory holdout analysis; never used to select or tune a model",
+        "rows": int(len(scored)),
+        "absolute_error_quantiles_c": {
+            "p50": round(float(scored["absolute_error"].quantile(0.5)), 4),
+            "p90": round(float(scored["absolute_error"].quantile(0.9)), 4),
+        },
+        "by_month": by_month,
+        "largest_errors": [
+            {
+                "date": str(row.target_date.date()),
+                "city": row.City,
+                "actual_c": round(float(row.target), 4),
+                "predicted_c": round(float(row.predicted), 4),
+                "absolute_error_c": round(float(row.absolute_error), 4),
+            }
+            for row in worst.itertuples()
+        ],
+    }
+
+
 def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
     """Select using expanding monthly folds, then score held-out test once."""
     examples = make_examples(data, config.min_history_days)
@@ -176,6 +227,7 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
         (baseline_mae - raw_validation_mae[best]) / baseline_mae if baseline_mae > 0 else 0.0
     )
     selected = best if relative_gain >= config.minimum_relative_mae_gain else "persistence"
+    selected_holdout_analysis = None
     for name in MODEL_NAMES:
         test_model = _fit(name, pd.concat([train, validation]), config.random_seed)
         predicted = _predict(name, test_model, test)
@@ -183,6 +235,8 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
         results[name]["test"] = test_metrics
         results[name]["test_rows"] = int(len(test))
         results[name]["test_by_city"] = _by_city_metrics(test, predicted)
+        if name == selected:
+            selected_holdout_analysis = analyze_holdout_errors(test, predicted)
     return {
         "task": (
             "Next-day recorded daily temperature (C) by city; forecast issued "
@@ -225,6 +279,7 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
         ],
         "models": results,
         "selected_model": selected,
+        "selected_holdout_analysis": selected_holdout_analysis,
     }
 
 

@@ -22,6 +22,14 @@ class DashboardSmokeTests(unittest.TestCase):
         self.assertEqual(str(forecast["Date"].iloc[0]), "2025-01-01")
         self.assertEqual(float(forecast["Predicted_Temperature_C"].iloc[0]), 21.8)
         self.assertIn("bundled observations are stale", app.warning[0].value)
+        self.assertTrue(any("Across all cities" in caption.value for caption in app.caption))
+        self.assertEqual(
+            app.dataframe[1].value["Month"].tolist(),
+            ["2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12"],
+        )
+        self.assertEqual(app.dataframe[1].value["Observations"].sum(), 184)
         app.multiselect[0].set_value(["Rasht", "Yazd"]).run()
         self.assertEqual([error.message for error in app.exception], [])
         self.assertEqual(set(app.dataframe[0].value["City"]), {"Rasht", "Yazd"})
+        self.assertEqual(set(app.dataframe[1].value["City"]), {"Rasht", "Yazd"})
+        self.assertEqual(app.dataframe[1].value["Observations"].sum(), 368)

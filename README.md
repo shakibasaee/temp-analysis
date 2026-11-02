@@ -76,6 +76,8 @@ Forecasts are issued after today's observation for tomorrow's recorded daily tem
 
 The selected policy is persistence: ridge improves pooled rolling-validation MAE by about 0.9%, below the preconfigured 2% practical improvement threshold. Ridge's test MAE advantage is also under 1%. The test period was not used to choose the policy. The selected model's held-out MAE varies by city: Bandar_Abbas 0.5658, Mashhad 1.6630, Rasht 0.9859, Sanandaj 1.2799, and Yazd 1.2897 °C. sMAPE and R² are included in the machine-readable benchmark; MAPE is avoided because temperatures can be near zero. Two years of data remain insufficient to establish a durable performance advantage.
 
+The benchmark also reports post-selection error diagnostics for the selected policy: monthly and per-city held-out MAE, median and 90th-percentile absolute error, and the five largest errors. The dashboard shows monthly error for the selected cities. These diagnostics describe the 2024 test period; they do not change model selection. See [the ML roadmap](docs/ML_ROADMAP.md) for the next measurable steps, adapted from *Hands-On Machine Learning*.
+
 ## Explore and test
 
 ```bash
