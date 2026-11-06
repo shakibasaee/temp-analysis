@@ -1,0 +1,2 @@
+data/new_weather_data.csv text eol=lf
+configs/forecast.json text eol=lf

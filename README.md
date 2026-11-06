@@ -88,6 +88,8 @@ python scripts/main.py
 
 The dashboard reads the bundled daily CSV by default or the path in `TEMP_ANALYSIS_DATA`, applies the same selection rule as the CLI, and displays a next-day forecast after the latest observation. Because the bundled data ends on 2024-12-31, the app warns that its 2025-01-01 estimate is historical rather than current weather. The console's regression estimate remains exploratory and calendar-only; its generated output goes under ignored `artifacts/`. `Report.md` and `plots/RESULTS.md` are historical project artifacts, not reports from the current benchmark.
 
+The longer-term product request is a user-selected date up to 30 days ahead with daily mean/minimum/maximum temperatures. That capability is **not shipped**; the current CSV does not define all three targets. See the [product contract](docs/PRODUCT_CONTRACT.md), [historical source review](docs/DATA_SOURCE_REVIEW.md), and [baseline record](docs/BASELINE_LOCK.md) for the evidence required before implementation. The source review includes a read-only coverage probe; it does not establish forecast accuracy or change the bundled CSV.
+
 ## Architecture
 
 - `forecasting/config.py`: validated experiment settings.

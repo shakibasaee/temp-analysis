@@ -1,5 +1,6 @@
 """Contract tests for the chronological one-day forecasting workflow."""
 
+import hashlib
 import io
 import json
 import tempfile
@@ -226,6 +227,25 @@ class ForecastingTests(unittest.TestCase):
         self.assertEqual(data["Date_Time"].max(), pd.Timestamp("2024-12-31"))
         train, validation, test = split_examples(make_examples(data), ForecastConfig())
         self.assertEqual((len(train), len(validation), len(test)), (670, 364, 368))
+
+    def test_bundled_one_day_baseline_snapshot(self):
+        """Make changes to the historical benchmark explicit in code review."""
+        root = Path(__file__).resolve().parents[1]
+        source = root / "data" / "new_weather_data.csv"
+        config = ForecastConfig.from_json(root / "configs" / "forecast.json")
+        self.assertEqual(
+            hashlib.sha256(source.read_bytes()).hexdigest(),
+            "da870b3b780aed7edd1a64b75d54bd29fef768bc78538047214c2679539f3517",
+        )
+        report = benchmark(load_daily_data(source), config)
+        self.assertEqual(report["data"]["observations"], 3655)
+        self.assertEqual(
+            {name: part["rows"] for name, part in report["splits"].items()},
+            {"train": 1675, "validation": 910, "test": 920},
+        )
+        self.assertEqual(report["selected_model"], "persistence")
+        self.assertEqual(report["models"]["persistence"]["test"]["mae"], 1.1568)
+        self.assertEqual(report["models"]["seasonal_naive_7"]["test"]["mae"], 2.6522)
 
     def test_holdout_error_analysis_uses_target_dates_and_aligned_rows(self):
         examples = pd.DataFrame(
