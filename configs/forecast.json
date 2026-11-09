@@ -1,0 +1,7 @@
+{
+  "train_end": "2023-12-31",
+  "validation_end": "2024-06-30",
+  "random_seed": 42,
+  "min_history_days": 30,
+  "minimum_relative_mae_gain": 0.02
+}

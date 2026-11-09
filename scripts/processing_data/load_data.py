@@ -1,8 +1,9 @@
 import pandas as pd
 import os
+from pathlib import Path
 
 def load_data(file_path = None, file_type = None, **kwargs):
-    default_file_path = "..\\temp-analysis\\data\\new_weather_data.csv"
+    default_file_path = Path(__file__).resolve().parents[2] / "data" / "new_weather_data.csv"
     default_file_type = "csv"
 
     if not file_path:

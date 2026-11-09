@@ -10,7 +10,6 @@ import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.utils.validation import check_is_fitted
@@ -48,6 +47,8 @@ class LinearRegressionModel(BaseEstimator):
     def _validate_config(self) -> None:
         if not 0 < self.config.test_size < 1:
             raise ValueError("test_size must be strictly between 0 and 1")
+        if self.config.shuffle:
+            raise ValueError("shuffle=True is invalid for time-series evaluation")
         if self.config.feature_selection_mode not in {"all", "specific"}:
             raise ValueError("feature_selection_mode must be 'all' or 'specific'")
         if (
@@ -173,15 +174,6 @@ class LinearRegressionModel(BaseEstimator):
         """Split data reproducibly, keeping whole dates together by default."""
         self._validate_frame(df, require_target=True)
         data = self._filter_cities(df)
-        if self.config.shuffle:
-            train, test = train_test_split(
-                data,
-                test_size=self.config.test_size,
-                shuffle=True,
-                random_state=self.config.random_seed,
-            )
-            return train.copy(), test.copy()
-
         dates = pd.to_datetime(data[self.config.date_column], errors="coerce")
         if dates.isna().any():
             raise ValueError(f"{self.config.date_column} contains invalid dates")
