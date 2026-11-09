@@ -54,6 +54,25 @@ def split_examples(
     return train, validation, test
 
 
+def rolling_validation_folds(
+    examples: pd.DataFrame, config: ForecastConfig
+) -> list[tuple[pd.DataFrame, pd.DataFrame]]:
+    """Monthly validation with expanding training history and no future labels."""
+    train, validation, _ = split_examples(examples, config)
+    labelled = examples.loc[examples["target"].notna()]
+    folds = []
+    for _, month in validation.groupby(validation["target_date"].dt.to_period("M")):
+        history = labelled.loc[labelled["target_date"] < month["target_date"].min()]
+        if history.empty or history["target_date"].max() >= month["target_date"].min():
+            raise ValueError(
+                "A validation fold has no strictly earlier training history"
+            )
+        folds.append((history, month))
+    if not folds or len(train) == 0:
+        raise ValueError("No rolling validation folds are available")
+    return folds
+
+
 def _fit(name: str, train: pd.DataFrame, seed: int) -> Any:
     if name in ("persistence", "seasonal_naive_7"):
         return None
@@ -97,7 +116,7 @@ def _predict(name: str, model: Any, examples: pd.DataFrame) -> np.ndarray:
     return np.asarray(model.predict(examples[list(FEATURES)]), dtype=float)
 
 
-def _metrics(actual: pd.Series, predicted: np.ndarray) -> dict[str, float]:
+def _metrics(actual: pd.Series, predicted: np.ndarray) -> dict[str, float | None]:
     y = actual.to_numpy(dtype=float)
     denominator = np.abs(y) + np.abs(predicted)
     smape = (
@@ -115,25 +134,56 @@ def _metrics(actual: pd.Series, predicted: np.ndarray) -> dict[str, float]:
         "mae": round(float(mean_absolute_error(y, predicted)), 4),
         "rmse": round(float(np.sqrt(mean_squared_error(y, predicted))), 4),
         "smape_percent": round(float(smape), 4),
-        "r2": round(float(r2_score(y, predicted)), 4),
+        "r2": (
+            round(float(r2_score(y, predicted)), 4)
+            if len(y) > 1 and not np.all(y == y[0])
+            else None
+        ),
     }
 
 
+def _by_city_metrics(examples: pd.DataFrame, predicted: np.ndarray) -> dict[str, dict]:
+    result = {}
+    for city in sorted(examples["City"].unique()):
+        mask = examples["City"].to_numpy() == city
+        result[city] = _metrics(examples.loc[mask, "target"], predicted[mask])
+    return result
+
+
 def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
-    """Select on validation MAE, then evaluate all candidates once on held-out test."""
+    """Select using expanding monthly folds, then score held-out test once."""
     examples = make_examples(data, config.min_history_days)
     train, validation, test = split_examples(examples, config)
+    folds = rolling_validation_folds(examples, config)
     results: dict[str, Any] = {}
+    raw_validation_mae = {}
     for name in MODEL_NAMES:
-        validation_model = _fit(name, train, config.random_seed)
-        validation_metrics = _metrics(
-            validation["target"], _predict(name, validation_model, validation)
+        predicted_folds = []
+        fold_metrics = []
+        for history, month in folds:
+            fitted = _fit(name, history, config.random_seed)
+            predicted = _predict(name, fitted, month)
+            predicted_folds.append(predicted)
+            fold_metrics.append(
+                {
+                    "month": str(month["target_date"].dt.to_period("M").iloc[0]),
+                    "rows": int(len(month)),
+                    "metrics": _metrics(month["target"], predicted),
+                }
+            )
+        pooled_prediction = np.concatenate(predicted_folds)
+        pooled_actual = pd.concat([month["target"] for _, month in folds])
+        raw_validation_mae[name] = float(
+            mean_absolute_error(pooled_actual, pooled_prediction)
         )
-        results[name] = {"validation": validation_metrics}
-    best = min(MODEL_NAMES, key=lambda name: results[name]["validation"]["mae"])
-    baseline_mae = results["persistence"]["validation"]["mae"]
+        results[name] = {
+            "validation": _metrics(pooled_actual, pooled_prediction),
+            "validation_by_fold": fold_metrics,
+        }
+    best = min(MODEL_NAMES, key=raw_validation_mae.__getitem__)
+    baseline_mae = raw_validation_mae["persistence"]
     relative_gain = (
-        (baseline_mae - results[best]["validation"]["mae"]) / baseline_mae
+        (baseline_mae - raw_validation_mae[best]) / baseline_mae
         if baseline_mae > 0
         else 0.0
     )
@@ -142,11 +192,14 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
     )
     for name in MODEL_NAMES:
         test_model = _fit(name, pd.concat([train, validation]), config.random_seed)
-        test_metrics = _metrics(test["target"], _predict(name, test_model, test))
+        predicted = _predict(name, test_model, test)
+        test_metrics = _metrics(test["target"], predicted)
         results[name]["test"] = test_metrics
+        results[name]["test_by_city"] = _by_city_metrics(test, predicted)
     return {
         "task": "Next-day recorded daily temperature (C) by city; forecast issued after today's observation",
-        "selection_rule": "Minimum validation MAE, provided relative gain over persistence meets configured threshold; test untouched until selection",
+        "selection_rule": "Minimum pooled monthly rolling-validation MAE, provided relative gain over persistence meets configured threshold; test untouched until selection",
+        "validation_protocol": "Expanding training history; one fold per calendar month",
         "config": config.to_dict(),
         "data": {
             "observations": int(len(data)),
@@ -166,6 +219,16 @@ def benchmark(data: pd.DataFrame, config: ForecastConfig) -> dict[str, Any]:
                 ("test", test),
             )
         },
+        "validation_folds": [
+            {
+                "first_target": str(month["target_date"].min().date()),
+                "last_target": str(month["target_date"].max().date()),
+                "rows": int(len(month)),
+                "training_rows": int(len(history)),
+                "last_training_target": str(history["target_date"].max().date()),
+            }
+            for history, month in folds
+        ],
         "models": results,
         "selected_model": selected,
     }

@@ -117,6 +117,11 @@ def season_plot(df):
 
 
 def reg_plot(df, result_pred_df, cities):
+    prediction_column = (
+        "Predicted_Temperature_C"
+        if "Predicted_Temperature_C" in result_pred_df
+        else "Predicted_Temprature"
+    )
     if isinstance(cities, str):
         cities = [cities]
 
@@ -139,7 +144,7 @@ def reg_plot(df, result_pred_df, cities):
                 continue
             ax.scatter(
                 psub["Date"],
-                psub["Predicted_Temprature"],
+                psub[prediction_column],
                 marker="o",
                 s=120,
                 label=f"Predicted - {city}",
@@ -147,7 +152,7 @@ def reg_plot(df, result_pred_df, cities):
         pred_date = pd.to_datetime(result_pred_df["Date"].iloc[0]).date()
     else:
         # fallback if City wasn't attached
-        ax.scatter(result_pred_df["Date"], result_pred_df["Predicted_Temprature"],
+        ax.scatter(result_pred_df["Date"], result_pred_df[prediction_column],
                    marker="o", s=120, label="Predicted")
         pred_date = pd.to_datetime(result_pred_df["Date"].iloc[0]).date()
 
