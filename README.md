@@ -8,6 +8,8 @@ The supported workflow validates daily city data, compares five existing candida
 
 The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
 
+A separate **research backtest** uses a documented Open-Meteo ERA5 dataset for daily mean/min/max temperature in the same five cities. Run `python -m forecasting.multi_horizon --data data/era5_five_cities.csv --out artifacts/era5_horizon_evaluation.json` to reproduce 1–30-day comparisons of persistence, same-weekday naive, and Ridge on the 2025 holdout. The dataset is reanalysis, so these metrics measure agreement with ERA5, not station-observed or live forecast skill. This research path is not connected to the dashboard. See the [full Persian technical report](docs/PROJECT_REVIEW_FA.md) and [machine-readable results](docs/ERA5_EVALUATION.json).
+
 ### Feature status
 
 | Feature | Shipped behavior |

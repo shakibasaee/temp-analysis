@@ -29,7 +29,7 @@ VARIABLES = (
 ENDPOINT = "https://archive-api.open-meteo.com/v1/archive"
 
 
-def audit(start: date, end: date) -> dict:
+def fetch_archive(start: date, end: date) -> list[dict]:
     if end < start:
         raise ValueError("end date must be on or after start date")
     params = {
@@ -51,6 +51,10 @@ def audit(start: date, end: date) -> dict:
             if attempt == 2:
                 raise
             time.sleep(attempt + 1)
+    return payload
+
+
+def summarize_archive(payload: list[dict], start: date, end: date) -> dict:
     if not isinstance(payload, list) or len(payload) != len(CITY_POINTS):
         raise ValueError("expected one response per requested city")
 
@@ -101,6 +105,10 @@ def audit(start: date, end: date) -> dict:
         "timezone": "Asia/Tehran",
         "cities": results,
     }
+
+
+def audit(start: date, end: date) -> dict:
+    return summarize_archive(fetch_archive(start, end), start, end)
 
 
 def main() -> None:

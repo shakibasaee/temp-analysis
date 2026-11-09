@@ -60,3 +60,13 @@ The repository's [Issue #1](https://github.com/shakibasaee/temp-analysis/issues/
 contains an unfilled bug-report template (no reproduction steps, expected or
 actual behavior). It supplies no additional evidence about data provenance or
 an app defect; a concrete reproduction would be needed to investigate it.
+
+## Implemented research snapshot
+
+On 2026-11-09, the proposed Open-Meteo ERA5 input was retrieved for
+2020-01-01 through 2025-12-31 as `data/era5_five_cities.csv`, with a separate
+provenance manifest. All five points had 2,192 dates and all three targets,
+without missing values or minimum/mean/maximum ordering violations. The
+[technical report](PROJECT_REVIEW_FA.md) describes the independent 1–30-day
+research backtest. This does not resolve the missing station-observation check
+or the old CSV's provenance.

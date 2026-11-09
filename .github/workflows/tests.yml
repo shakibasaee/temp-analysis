@@ -15,5 +15,6 @@ jobs:
           cache: pip
       - run: python -m pip install -r requirements.txt ruff==0.7.1
       - run: python -m unittest discover -s tests -q
-      - run: ruff check forecasting tests/test_forecasting.py tests/test_dashboard_smoke.py tests/test_source_audit.py scripts/app.py scripts/generate_sample_data.py scripts/audit_open_meteo.py
-      - run: ruff format --check forecasting tests/test_forecasting.py tests/test_dashboard_smoke.py tests/test_source_audit.py scripts/app.py scripts/generate_sample_data.py scripts/audit_open_meteo.py
+      - run: python -m forecasting.multi_horizon --data data/era5_five_cities.csv --out artifacts/ci_era5_evaluation.json
+      - run: ruff check forecasting tests/test_forecasting.py tests/test_dashboard_smoke.py tests/test_source_audit.py tests/test_multi_horizon.py scripts/app.py scripts/generate_sample_data.py scripts/audit_open_meteo.py scripts/build_era5_dataset.py
+      - run: ruff format --check forecasting tests/test_forecasting.py tests/test_dashboard_smoke.py tests/test_source_audit.py tests/test_multi_horizon.py scripts/app.py scripts/generate_sample_data.py scripts/audit_open_meteo.py scripts/build_era5_dataset.py

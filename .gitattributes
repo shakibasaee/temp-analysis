@@ -1,2 +1,3 @@
 data/new_weather_data.csv text eol=lf
+data/era5_five_cities.csv text eol=lf
 configs/forecast.json text eol=lf
