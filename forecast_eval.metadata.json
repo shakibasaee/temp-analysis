@@ -1,0 +1,36 @@
+{
+  "dataset_sha256": "da870b3b780aed7edd1a64b75d54bd29fef768bc78538047214c2679539f3517",
+  "source_csv": "data/new_weather_data.csv",
+  "data_audit": {
+    "city": "Mashhad",
+    "rows": 731,
+    "first_date": "2023-01-01",
+    "last_date": "2024-12-31",
+    "invalid_dates": 0,
+    "non_midnight_dates": 0,
+    "invalid_temperatures": 0,
+    "duplicate_dates": 0,
+    "missing_dates": [],
+    "unit": "Celsius, as named by Temperature_C; daily meaning unverified"
+  },
+  "train_rows": 584,
+  "train_dates": [
+    "2023-01-01",
+    "2024-08-06"
+  ],
+  "test_rows": 147,
+  "test_dates": [
+    "2024-08-07",
+    "2024-12-31"
+  ],
+  "split": "first floor(80% of dates) for fitting, final 20% for evaluation",
+  "model": "scripts.models.linear_regression.LinearRegressionModel; calendar and city features only; fixed after training",
+  "forecast_issue": "day before each test target; target calendar date is known",
+  "signed_error": "actual - predicted; positive means underprediction",
+  "regression_mae_c": 3.2800411237649016,
+  "regression_mean_signed_error_c": -1.2482978342714226,
+  "persistence_mae_c": 1.8551020408163268,
+  "persistence_mean_signed_error_c": -0.1734693877551021,
+  "persistence_rule": "previous day's actual Temperature_C",
+  "forecast_eval_sha256": "0ad6d4632f8c701361071111758122c1b3a93e1b399f85f9fcb2e4b757e07da7"
+}
