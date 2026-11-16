@@ -1,5 +1,7 @@
 # Machine learning roadmap
 
+For the current dependency-based plan and acceptance criteria, see the [Persian project roadmap](PROFESSIONAL_ROADMAP_FA.md). This page retains the earlier learning path and historical one-day baseline.
+
 This plan adapts the end-to-end project workflow in [chapter 2 of *Hands-On Machine Learning*, third edition](https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/ch02.html): define the prediction task, check assumptions and data rights, reserve future observations for evaluation, fit preprocessing on training data, analyze errors, then monitor the system. The [author's companion notebooks](https://github.com/ageron/handson-ml3) are a learning reference, not code or data copied into this repository. Random cross-validation from a general tabular example is inappropriate here; forecasts are evaluated in date order.
 
 | Reading path | Practice in this repository |
@@ -12,7 +14,7 @@ This plan adapts the end-to-end project workflow in [chapter 2 of *Hands-On Mach
 
 The task is a one-day-ahead estimate of each city's recorded temperature after today's observation. The bundled five-city CSV ends on 2024-12-31. Its provider, temperature definition, timezone, and reuse license are unknown. On the July–December 2024 holdout (920 targets), persistence has MAE 1.1568 C, seven-day seasonal naive 2.6522 C, and the existing calendar linear regression 2.9943 C. Ridge's 1.1490 C test MAE does not justify changing the selected policy because its validation gain is below the configured 2% threshold. These are internal benchmark values, not evidence of current forecasting skill.
 
-The project owner's intended product is broader: a user-selected date 1–30 days ahead with daily mean, minimum, and maximum temperature, evaluated by MAE and the percentage within ±2 C. This has not been implemented or validated. The [Week 1 execution plan](WEEK1_PLAN.md) and [draft product contract](PRODUCT_CONTRACT.md) establish the data and evaluation gates before expanding the forecast horizon.
+The project owner's intended product is broader: a user-selected date 1–30 days ahead with daily mean, minimum, and maximum temperature, evaluated by MAE and the percentage within ±2 C. A separate ERA5 research backtest now covers these horizons, but the user flow and independent observational validation have not been implemented. The [product contract](PRODUCT_CONTRACT.md) and [technical report](PROJECT_REVIEW_FA.md) describe the remaining gates.
 
 The new diagnostic report shows persistence MAE rising from 0.9097 C in July to 1.4142 C in December 2024; median absolute error is 0.8 C and the 90th percentile is 2.4 C. Two of the largest errors occur on 2024-12-15 in Mashhad (12.3 C) and Yazd (10.7 C). This is a prompt to verify the source records and investigate cold-season performance, not evidence that the model or data is wrong. Do not use these holdout observations to tune a replacement model.
 
