@@ -34,11 +34,15 @@ MAX_HORIZON = 30
 
 
 def load_dataset(path: Path) -> pd.DataFrame:
-    data = pd.read_csv(path, parse_dates=["Date"])
+    data = pd.read_csv(path)
     if list(data.columns) != ["Date", "City", *TARGETS]:
         raise ValueError("Unexpected daily temperature schema")
+    data["Date"] = pd.to_datetime(data["Date"], format="%Y-%m-%d", errors="coerce")
+    data[list(TARGETS)] = data[list(TARGETS)].apply(pd.to_numeric, errors="coerce")
     if data.isna().any().any() or not np.isfinite(data[list(TARGETS)].to_numpy()).all():
-        raise ValueError("Missing or non-finite temperatures")
+        raise ValueError("Missing or invalid dates, cities, or temperatures")
+    if data["City"].astype(str).str.strip().eq("").any():
+        raise ValueError("City names must be nonempty")
     if (data["Min_C"] > data["Mean_C"]).any() or (data["Mean_C"] > data["Max_C"]).any():
         raise ValueError("Daily minimum, mean and maximum are inconsistent")
     if data.duplicated(["City", "Date"]).any():
@@ -94,7 +98,27 @@ def make_examples(data: pd.DataFrame, lag_days: int = LAG_DAYS) -> pd.DataFrame:
             parts.append(part)
     if not parts:
         raise ValueError("Insufficient daily history")
-    return pd.concat(parts, ignore_index=True)
+    examples = pd.concat(parts, ignore_index=True)
+    validate_temporal_contract(examples, lag_days)
+    return examples
+
+
+def validate_temporal_contract(examples: pd.DataFrame, lag_days: int = LAG_DAYS) -> None:
+    """Reject examples whose issue, available, and target dates do not agree."""
+    if examples.empty or lag_days < 1:
+        raise ValueError("Examples and positive publication lag are required")
+    horizon = examples["horizon"].to_numpy()
+    if not np.isfinite(horizon).all() or not ((horizon >= 1) & (horizon <= MAX_HORIZON)).all():
+        raise ValueError("Forecast horizon is outside 1..30 days")
+    issue = pd.to_datetime(examples["issue_date"])
+    available = pd.to_datetime(examples["available_through"])
+    target = pd.to_datetime(examples["target_date"])
+    if issue.isna().any() or available.isna().any() or target.isna().any():
+        raise ValueError("Forecast dates must be present")
+    if not (available + pd.Timedelta(days=lag_days)).eq(issue).all():
+        raise ValueError("Available data must end before the issue date by the publication lag")
+    if not (issue + pd.to_timedelta(horizon, unit="D")).eq(target).all():
+        raise ValueError("Target date must equal issue date plus horizon")
 
 
 def split_examples(examples: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
@@ -167,6 +191,83 @@ def score(frame: pd.DataFrame, predictions: dict[str, np.ndarray]) -> tuple[list
     return overall, detail
 
 
+def score_by_city_season(frame: pd.DataFrame, predictions: dict[str, np.ndarray]) -> list[dict]:
+    """Describe seasonal failures on the same forecast rows as the main score."""
+    months = frame["target_date"].dt.month
+    season = months.map(
+        {
+            12: "winter",
+            1: "winter",
+            2: "winter",
+            3: "spring",
+            4: "spring",
+            5: "spring",
+            6: "summer",
+            7: "summer",
+            8: "summer",
+            9: "autumn",
+            10: "autumn",
+            11: "autumn",
+        }
+    )
+    groups = frame.assign(season=season).groupby(["City", "season"], sort=True).indices
+    actual = frame[list(TARGETS)].to_numpy()
+    detail = []
+    for name, values in predictions.items():
+        if values.shape != actual.shape or not np.isfinite(values).all():
+            raise ValueError("Predictions must be finite and aligned with target rows")
+        for j, target in enumerate(TARGETS):
+            signed = actual[:, j] - values[:, j]
+            for (city, period), idx in groups.items():
+                item = signed[idx]
+                detail.append(
+                    {
+                        "model": name,
+                        "target": target,
+                        "city": city,
+                        "season": period,
+                        "n": len(item),
+                        "unique_target_days": int(frame.iloc[idx]["target_date"].nunique()),
+                        "mean_signed_error_c": round(float(item.mean()), 4),
+                        "mae_c": round(float(np.abs(item).mean()), 4),
+                        "within_2c_pct": round(float(100 * (np.abs(item) <= 2).mean()), 2),
+                    }
+                )
+    return detail
+
+
+def largest_ridge_errors(frame: pd.DataFrame, ridge: np.ndarray, top: int = 5) -> list[dict]:
+    """Return distinct city/target-day failures despite overlapping issue dates."""
+    actual = frame[list(TARGETS)].to_numpy()
+    if ridge.shape != actual.shape or not np.isfinite(ridge).all():
+        raise ValueError("Ridge predictions must be finite and aligned")
+    detail = []
+    for j, target in enumerate(TARGETS):
+        errors = np.abs(actual[:, j] - ridge[:, j])
+        seen = set()
+        for index in np.argsort(-errors, kind="stable"):
+            row = frame.iloc[index]
+            key = (row["City"], row["target_date"])
+            if key in seen:
+                continue
+            seen.add(key)
+            detail.append(
+                {
+                    "target": target,
+                    "city": row["City"],
+                    "issue_date": str(row["issue_date"].date()),
+                    "target_date": str(row["target_date"].date()),
+                    "horizon": int(row["horizon"]),
+                    "actual_c": round(float(actual[index, j]), 4),
+                    "predicted_c": round(float(ridge[index, j]), 4),
+                    "absolute_error_c": round(float(errors[index]), 4),
+                }
+            )
+            if len(seen) == top:
+                break
+    return detail
+
+
 def evaluate(path: Path) -> dict:
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     metadata_path = path.with_suffix(".metadata.json")
@@ -185,8 +286,12 @@ def evaluate(path: Path) -> dict:
     final_model = fit_ridge(pd.concat([train, validation], ignore_index=True))
     test_predictions = predict_all(test, final_model)
     test_overall, test_detail = score(test, test_predictions)
+    expected_cells = len(data["City"].unique()) * MAX_HORIZON * len(TARGETS) * len(test_predictions)
+    if len(test_detail) != expected_cells or any(item["n"] == 0 for item in test_detail):
+        raise ValueError("Test does not cover every city, target, horizon and method")
     ridge = test_predictions["ridge"]
     return {
+        "report_schema_version": 2,
         "data_sha256": digest,
         "retrieved_utc": metadata["retrieved_utc"],
         "source": "Open-Meteo ERA5 reanalysis; agreement with reanalysis, not station skill",
@@ -194,9 +299,17 @@ def evaluate(path: Path) -> dict:
         "cities": sorted(data["City"].unique().tolist()),
         "data_rows": len(data),
         "publication_lag_days": LAG_DAYS,
+        "issue_time_assumption": (
+            "ERA5 daily values through issue date minus 7 days; "
+            "historical reanalysis may have been revised later"
+        ),
         "horizons": [1, MAX_HORIZON],
         "train": {
             "n": len(train),
+            "unique_target_days": int(train["target_date"].nunique()),
+            "unique_city_target_days": int(
+                train[["City", "target_date"]].drop_duplicates().shape[0]
+            ),
             "target_dates": [
                 str(train["target_date"].min().date()),
                 str(train["target_date"].max().date()),
@@ -204,6 +317,10 @@ def evaluate(path: Path) -> dict:
         },
         "validation": {
             "n": len(validation),
+            "unique_target_days": int(validation["target_date"].nunique()),
+            "unique_city_target_days": int(
+                validation[["City", "target_date"]].drop_duplicates().shape[0]
+            ),
             "issue_dates": [
                 str(validation["issue_date"].min().date()),
                 str(validation["issue_date"].max().date()),
@@ -216,6 +333,11 @@ def evaluate(path: Path) -> dict:
         },
         "test": {
             "n": len(test),
+            "unique_target_days": int(test["target_date"].nunique()),
+            "unique_city_target_days": int(
+                test[["City", "target_date"]].drop_duplicates().shape[0]
+            ),
+            "complete_city_target_horizon_cells": expected_cells,
             "issue_dates": [
                 str(test["issue_date"].min().date()),
                 str(test["issue_date"].max().date()),
@@ -229,6 +351,8 @@ def evaluate(path: Path) -> dict:
             ),
             "overall": test_overall,
             "by_city_horizon": test_detail,
+            "by_city_season": score_by_city_season(test, test_predictions),
+            "largest_ridge_errors": largest_ridge_errors(test, ridge),
         },
     }
 
