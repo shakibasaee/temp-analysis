@@ -1,0 +1,110 @@
+{
+  "river_version": "0.27.0",
+  "settings": {
+    "min_instances": 30,
+    "delta": 0.005,
+    "threshold": 50.0,
+    "alpha": 0.9999,
+    "mode": "both"
+  },
+  "window_days_requested": 14,
+  "holdout_dates": [
+    "2024-08-07",
+    "2024-12-31"
+  ],
+  "overall": {
+    "count": 147,
+    "regression_mean_signed_error_c": -1.2482978342706124,
+    "regression_mae_c": 3.280041123762585,
+    "persistence_mean_signed_error_c": -0.1734693877551021,
+    "persistence_mae_c": 1.8551020408163268
+  },
+  "alerts": [
+    {
+      "detected_date": "2024-09-10",
+      "index": 34,
+      "comparison_days_each_side": 14,
+      "before_dates": [
+        "2024-08-27",
+        "2024-09-09"
+      ],
+      "after_dates": [
+        "2024-09-11",
+        "2024-09-24"
+      ],
+      "before": {
+        "count": 14,
+        "regression_mean_signed_error_c": -0.7435848028499998,
+        "regression_mae_c": 1.8376899480642856,
+        "persistence_mean_signed_error_c": -0.6714285714285716,
+        "persistence_mae_c": 1.5999999999999996
+      },
+      "after": {
+        "count": 14,
+        "regression_mean_signed_error_c": 0.06324089367142806,
+        "regression_mae_c": 1.6750085581857144,
+        "persistence_mean_signed_error_c": 0.507142857142857,
+        "persistence_mae_c": 1.1642857142857144
+      }
+    },
+    {
+      "detected_date": "2024-11-11",
+      "index": 96,
+      "comparison_days_each_side": 14,
+      "before_dates": [
+        "2024-10-28",
+        "2024-11-10"
+      ],
+      "after_dates": [
+        "2024-11-12",
+        "2024-11-25"
+      ],
+      "before": {
+        "count": 14,
+        "regression_mean_signed_error_c": -1.8385790833571427,
+        "regression_mae_c": 3.9514884154714287,
+        "persistence_mean_signed_error_c": -0.26428571428571435,
+        "persistence_mae_c": 2.1785714285714284
+      },
+      "after": {
+        "count": 14,
+        "regression_mean_signed_error_c": -0.9603050275800004,
+        "regression_mae_c": 2.288635961505715,
+        "persistence_mean_signed_error_c": 0.014285714285714362,
+        "persistence_mae_c": 2.114285714285714
+      }
+    },
+    {
+      "detected_date": "2024-12-11",
+      "index": 126,
+      "comparison_days_each_side": 14,
+      "before_dates": [
+        "2024-11-27",
+        "2024-12-10"
+      ],
+      "after_dates": [
+        "2024-12-12",
+        "2024-12-25"
+      ],
+      "before": {
+        "count": 14,
+        "regression_mean_signed_error_c": -5.6063395624907155,
+        "regression_mae_c": 6.625329790035001,
+        "persistence_mean_signed_error_c": -0.8428571428571427,
+        "persistence_mae_c": 1.742857142857143
+      },
+      "after": {
+        "count": 14,
+        "regression_mean_signed_error_c": -6.039573540030715,
+        "regression_mae_c": 6.039573540030715,
+        "persistence_mean_signed_error_c": 0.2714285714285713,
+        "persistence_mae_c": 2.914285714285714
+      }
+    }
+  ],
+  "interpretation": "Alert date is detection time, not necessarily change onset. Alerts are exploratory, not proof of causal or meteorological drift.",
+  "city": "Mashhad",
+  "source_dataset_sha256": "da870b3b780aed7edd1a64b75d54bd29fef768bc78538047214c2679539f3517",
+  "evaluation_csv_sha256": "0ad6d4632f8c701361071111758122c1b3a93e1b399f85f9fcb2e4b757e07da7",
+  "unit_caveat": "Celsius, as named by Temperature_C; daily meaning unverified"
+}

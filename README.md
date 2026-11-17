@@ -16,7 +16,7 @@ The supplied `data/new_weather_data.csv` contains 3,655 daily observations acros
 
 A separate **research backtest** uses a documented Open-Meteo ERA5 dataset for daily mean/min/max temperature in the same five cities. Run `python -m forecasting.multi_horizon --data data/era5_five_cities.csv --out artifacts/era5_horizon_evaluation.json` to reproduce 1–30-day comparisons of persistence, same-weekday naive, and Ridge on the 2025 holdout. The dataset is reanalysis, so these metrics measure agreement with ERA5, not station-observed or live forecast skill. This research path is not connected to the dashboard. See the [full Persian technical report](docs/PROJECT_REVIEW_FA.md) and [machine-readable results](docs/ERA5_EVALUATION.json).
 
-An [isolated one-city experiment](docs/ONE_CITY_FORECAST_EVAL.md) evaluates the existing calendar linear regression for Mashhad's next-day temperature and saves aligned `date,actual,predicted` rows in `forecast_eval.csv`. It also compares persistence on the same dates. Drift detection has not been run on these errors.
+An [isolated one-city experiment](docs/ONE_CITY_FORECAST_EVAL.md) evaluates the existing calendar linear regression for Mashhad's next-day temperature and saves aligned `date,actual,predicted` rows in `forecast_eval.csv`. It also compares persistence on the same dates. A separate [signed-error Page–Hinkley check](docs/FORECAST_DRIFT_FA.md) records exploratory detection dates and equal-window error comparisons; it is not evidence of meteorological drift or live forecast skill.
 
 ### Feature status
 

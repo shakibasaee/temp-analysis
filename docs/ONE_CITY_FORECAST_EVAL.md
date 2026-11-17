@@ -1,7 +1,8 @@
 # One-city next-day forecast evaluation
 
-This isolated experiment prepares the input for a later signed-error drift
-check. It does **not** run Page–Hinkley or claim that drift was detected.
+This isolated experiment prepares the input for the separate
+[signed-error Page–Hinkley check](FORECAST_DRIFT_FA.md). Detection is run by
+that script, not during forecast fitting or selection.
 
 ## Data and validation
 
@@ -43,7 +44,7 @@ negative means overprediction (forecast too warm).
 The simple comparator performs better on this holdout. The regression's
 negative average signed error indicates overprediction *on average across
 the whole test period*; it does not show when a change began or establish
-drift. No alert date is asserted.
+drift. Detection dates and their limits are reported separately.
 
 ## Reproduce
 
@@ -57,7 +58,7 @@ python -m unittest tests.test_one_city_forecast_eval -v
 The script writes `forecast_eval.csv` and
 [`forecast_eval.metadata.json`](../forecast_eval.metadata.json), which records
 the source and output hashes, split dates/counts, model, units caveat, and
-both methods' metrics. This input file is ready for the proposed
+both methods' metrics. This input file is used for the separate
 Page–Hinkley check on the **ordered signed errors**. A separate check of
 seasonal temperature anomalies would address a different question and
 requires a justified multiyear observational reference.
