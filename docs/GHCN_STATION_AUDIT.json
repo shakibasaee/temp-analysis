@@ -1,0 +1,395 @@
+{
+  "source": "NOAA NCEI GHCN-Daily",
+  "station_index": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt",
+  "documentation": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt",
+  "retrieved_utc": "2026-11-17T07:26:32.971898+00:00",
+  "years": [
+    2020,
+    2025
+  ],
+  "daily_denominator": 2192,
+  "quality_rule": "exclude -9999 and nonblank QFLAG; counts only, not archived values",
+  "stations": [
+    {
+      "city": "Bandar_Abbas",
+      "station_id": "IRM00040875",
+      "station_name": "BANDAR ABBASS INTL",
+      "station_latitude": 27.218,
+      "station_longitude": 56.378,
+      "city_latitude": 27.1865,
+      "city_longitude": 56.2808,
+      "distance_km": 10.2,
+      "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/IRM00040875.dly",
+      "file_sha256": "d39af5fcecb886a1732c621f84a42d1a5be502c64ebe95d18817d3ebd76d98fc",
+      "element_days": {
+        "TAVG": 2040,
+        "TMIN": 1300,
+        "TMAX": 1577
+      },
+      "latest_date": {
+        "TAVG": "2025-08-24",
+        "TMIN": "2025-08-22",
+        "TMAX": "2025-08-24"
+      },
+      "all_three_days": 1024,
+      "ordering_violations": 0,
+      "by_year": {
+        "2020": {
+          "TAVG": 366,
+          "TMIN": 227,
+          "TMAX": 284,
+          "all_three": 185
+        },
+        "2021": {
+          "TAVG": 362,
+          "TMIN": 225,
+          "TMAX": 274,
+          "all_three": 167
+        },
+        "2022": {
+          "TAVG": 365,
+          "TMIN": 240,
+          "TMAX": 282,
+          "all_three": 187
+        },
+        "2023": {
+          "TAVG": 365,
+          "TMIN": 246,
+          "TMAX": 288,
+          "all_three": 193
+        },
+        "2024": {
+          "TAVG": 355,
+          "TMIN": 221,
+          "TMAX": 276,
+          "all_three": 180
+        },
+        "2025": {
+          "TAVG": 227,
+          "TMIN": 141,
+          "TMAX": 173,
+          "all_three": 112
+        }
+      },
+      "source_flags": {
+        "TMAX": {
+          "S": 1577
+        },
+        "TMIN": {
+          "S": 1300
+        },
+        "TAVG": {
+          "S": 2040
+        }
+      },
+      "quality_rejected": {},
+      "malformed_fields_or_lines": 0
+    },
+    {
+      "city": "Mashhad",
+      "station_id": "IR000040745",
+      "station_name": "MASHHAD",
+      "station_latitude": 36.267,
+      "station_longitude": 59.633,
+      "city_latitude": 36.29807,
+      "city_longitude": 59.60567,
+      "distance_km": 4.2,
+      "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/IR000040745.dly",
+      "file_sha256": "12e2b77041fd2ab86b06efc4db1b3f282fcd5ed1aaaa05089381ed415e6b6220",
+      "element_days": {
+        "TAVG": 2041,
+        "TMIN": 1205,
+        "TMAX": 1564
+      },
+      "latest_date": {
+        "TAVG": "2025-08-24",
+        "TMIN": "2025-08-22",
+        "TMAX": "2025-08-23"
+      },
+      "all_three_days": 955,
+      "ordering_violations": 0,
+      "by_year": {
+        "2020": {
+          "TAVG": 366,
+          "TMIN": 234,
+          "TMAX": 285,
+          "all_three": 186
+        },
+        "2021": {
+          "TAVG": 362,
+          "TMIN": 232,
+          "TMAX": 295,
+          "all_three": 201
+        },
+        "2022": {
+          "TAVG": 365,
+          "TMIN": 208,
+          "TMAX": 288,
+          "all_three": 167
+        },
+        "2023": {
+          "TAVG": 365,
+          "TMIN": 233,
+          "TMAX": 267,
+          "all_three": 171
+        },
+        "2024": {
+          "TAVG": 356,
+          "TMIN": 189,
+          "TMAX": 276,
+          "all_three": 152
+        },
+        "2025": {
+          "TAVG": 227,
+          "TMIN": 109,
+          "TMAX": 153,
+          "all_three": 78
+        }
+      },
+      "source_flags": {
+        "TMAX": {
+          "S": 1564
+        },
+        "TMIN": {
+          "S": 1205
+        },
+        "TAVG": {
+          "S": 2041
+        }
+      },
+      "quality_rejected": {},
+      "malformed_fields_or_lines": 0
+    },
+    {
+      "city": "Rasht",
+      "station_id": "IRM00040718",
+      "station_name": "ANZALI",
+      "station_latitude": 37.467,
+      "station_longitude": 49.467,
+      "city_latitude": 37.27611,
+      "city_longitude": 49.58862,
+      "distance_km": 23.8,
+      "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/IRM00040718.dly",
+      "file_sha256": "4f29ef9638bb6e616cbf0f9f8dc13fb024d03ea7d9795bab0137ef20ed0dc75a",
+      "element_days": {
+        "TAVG": 2124,
+        "TMIN": 1748,
+        "TMAX": 2042
+      },
+      "latest_date": {
+        "TAVG": "2025-12-31",
+        "TMIN": "2025-12-31",
+        "TMAX": "2025-12-31"
+      },
+      "all_three_days": 1706,
+      "ordering_violations": 0,
+      "by_year": {
+        "2020": {
+          "TAVG": 366,
+          "TMIN": 278,
+          "TMAX": 352,
+          "all_three": 274
+        },
+        "2021": {
+          "TAVG": 354,
+          "TMIN": 280,
+          "TMAX": 329,
+          "all_three": 272
+        },
+        "2022": {
+          "TAVG": 364,
+          "TMIN": 285,
+          "TMAX": 349,
+          "all_three": 280
+        },
+        "2023": {
+          "TAVG": 365,
+          "TMIN": 297,
+          "TMAX": 348,
+          "all_three": 281
+        },
+        "2024": {
+          "TAVG": 352,
+          "TMIN": 288,
+          "TMAX": 345,
+          "all_three": 282
+        },
+        "2025": {
+          "TAVG": 323,
+          "TMIN": 320,
+          "TMAX": 319,
+          "all_three": 317
+        }
+      },
+      "source_flags": {
+        "TMAX": {
+          "S": 1723,
+          "2": 319
+        },
+        "TMIN": {
+          "S": 1428,
+          "2": 320
+        },
+        "TAVG": {
+          "S": 1801,
+          "2": 323
+        }
+      },
+      "quality_rejected": {
+        "TMAX": 5,
+        "TMIN": 3
+      },
+      "malformed_fields_or_lines": 0
+    },
+    {
+      "city": "Sanandaj",
+      "station_id": "IRM00040747",
+      "station_name": "SANANDAJ",
+      "station_latitude": 35.247,
+      "station_longitude": 47.009,
+      "city_latitude": 35.31495,
+      "city_longitude": 46.99883,
+      "distance_km": 7.6,
+      "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/IRM00040747.dly",
+      "file_sha256": "14daacee7e4d2c1166d30b6330dff8aa801230cad579da0e257f6b738613005d",
+      "element_days": {
+        "TAVG": 2039,
+        "TMIN": 1417,
+        "TMAX": 1766
+      },
+      "latest_date": {
+        "TAVG": "2025-08-24",
+        "TMIN": "2025-08-24",
+        "TMAX": "2025-08-24"
+      },
+      "all_three_days": 1235,
+      "ordering_violations": 0,
+      "by_year": {
+        "2020": {
+          "TAVG": 366,
+          "TMIN": 261,
+          "TMAX": 338,
+          "all_three": 239
+        },
+        "2021": {
+          "TAVG": 361,
+          "TMIN": 262,
+          "TMAX": 326,
+          "all_three": 241
+        },
+        "2022": {
+          "TAVG": 365,
+          "TMIN": 236,
+          "TMAX": 306,
+          "all_three": 203
+        },
+        "2023": {
+          "TAVG": 365,
+          "TMIN": 253,
+          "TMAX": 306,
+          "all_three": 209
+        },
+        "2024": {
+          "TAVG": 355,
+          "TMIN": 249,
+          "TMAX": 306,
+          "all_three": 215
+        },
+        "2025": {
+          "TAVG": 227,
+          "TMIN": 156,
+          "TMAX": 184,
+          "all_three": 128
+        }
+      },
+      "source_flags": {
+        "TMAX": {
+          "S": 1766
+        },
+        "TMIN": {
+          "S": 1417
+        },
+        "TAVG": {
+          "S": 2039
+        }
+      },
+      "quality_rejected": {},
+      "malformed_fields_or_lines": 0
+    },
+    {
+      "city": "Yazd",
+      "station_id": "IRM00040821",
+      "station_name": "YAZD SHAHID SADOOGHI",
+      "station_latitude": 31.905,
+      "station_longitude": 54.277,
+      "city_latitude": 31.89722,
+      "city_longitude": 54.3675,
+      "distance_km": 8.6,
+      "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/all/IRM00040821.dly",
+      "file_sha256": "0ac542ddf0089d368f39e8c7ce9870eec13f0d52df763e57cb7abc1a8deedfa0",
+      "element_days": {
+        "TAVG": 2043,
+        "TMIN": 1343,
+        "TMAX": 1664
+      },
+      "latest_date": {
+        "TAVG": "2025-08-24",
+        "TMIN": "2025-08-20",
+        "TMAX": "2025-08-23"
+      },
+      "all_three_days": 1117,
+      "ordering_violations": 0,
+      "by_year": {
+        "2020": {
+          "TAVG": 366,
+          "TMIN": 237,
+          "TMAX": 307,
+          "all_three": 203
+        },
+        "2021": {
+          "TAVG": 362,
+          "TMIN": 233,
+          "TMAX": 286,
+          "all_three": 193
+        },
+        "2022": {
+          "TAVG": 365,
+          "TMIN": 233,
+          "TMAX": 301,
+          "all_three": 199
+        },
+        "2023": {
+          "TAVG": 365,
+          "TMIN": 251,
+          "TMAX": 309,
+          "all_three": 212
+        },
+        "2024": {
+          "TAVG": 358,
+          "TMIN": 242,
+          "TMAX": 290,
+          "all_three": 196
+        },
+        "2025": {
+          "TAVG": 227,
+          "TMIN": 147,
+          "TMAX": 171,
+          "all_three": 114
+        }
+      },
+      "source_flags": {
+        "TMAX": {
+          "S": 1664
+        },
+        "TMIN": {
+          "S": 1343
+        },
+        "TAVG": {
+          "S": 2043
+        }
+      },
+      "quality_rejected": {},
+      "malformed_fields_or_lines": 0
+    }
+  ]
+}

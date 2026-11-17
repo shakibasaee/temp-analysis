@@ -61,6 +61,17 @@ contains an unfilled bug-report template (no reproduction steps, expected or
 actual behavior). It supplies no additional evidence about data provenance or
 an app defect; a concrete reproduction would be needed to investigate it.
 
+## Independent station observation audit
+
+The [GHCN-Daily station audit](OBSERVATION_SOURCE_AUDIT_FA.md) checks five
+candidate stations for 2020-01-01 through 2025-12-31. It records station IDs,
+distance, per-target coverage, quality flags, and source hashes without
+committing daily observations. Only 955–1,706 days per candidate have all three
+targets. The closest candidate for Rasht is at Anzali, 23.8 km away. Four
+stations have no valid observations after August 2025 in this audit. GHCN dates
+and temperature definitions also need alignment with the app's local-day
+targets. The independent five-city accuracy gate therefore remains **unmet**.
+
 ## Implemented research snapshot
 
 On 2026-11-09, the proposed Open-Meteo ERA5 input was retrieved for

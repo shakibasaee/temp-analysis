@@ -4,6 +4,12 @@ Daily city temperature analysis with a Streamlit dashboard and a reproducible **
 
 ## Current Project Status
 
+An [independent station-source audit](docs/OBSERVATION_SOURCE_AUDIT_FA.md)
+checked candidate GHCN-Daily stations for all five cities and three daily
+temperature targets. Coverage, location, and day-definition gaps prevent a
+credible station-observed accuracy claim. The audit publishes station IDs,
+coverage counts, and source hashes; it does not redistribute daily station data.
+
 The supported workflow validates daily city data, compares five existing candidates across expanding monthly validation folds and a held-out test, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard shows that selected next-day forecast and per-city historical error alongside exploratory charts. The interactive console still uses the older calendar-only model.
 
 The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.
