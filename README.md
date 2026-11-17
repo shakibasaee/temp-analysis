@@ -6,9 +6,17 @@ Daily city temperature analysis with a Streamlit dashboard and a reproducible **
 
 An [independent station-source audit](docs/OBSERVATION_SOURCE_AUDIT_FA.md)
 checked candidate GHCN-Daily stations for all five cities and three daily
-temperature targets. Coverage, location, and day-definition gaps prevent a
-credible station-observed accuracy claim. The audit publishes station IDs,
+temperature targets. Those candidates have coverage, location, and day-definition
+gaps. The audit publishes station IDs,
 coverage counts, and source hashes; it does not redistribute daily station data.
+
+A [local-day NOAA GHCNh station comparison](docs/LOCAL_STATION_VALIDATION_FA.md)
+now checks all five cities against quality-screened 2025 hourly station readings
+aggregated to `Asia/Tehran` days. Ridge's matched-row MAE is 2.5627, 2.8447,
+and 3.2714 °C for daily mean, minimum, and maximum proxies; Rasht has only
+160 eligible station days. The [UTC-day SSODv2 check](docs/SSOD_VALIDATION_FA.md)
+is a separate supplementary comparison. Both are retrospective research
+backtests, not live operational forecasts or measured true daily extrema.
 
 The supported workflow validates daily city data, compares five existing candidates across expanding monthly validation folds and a held-out test, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard shows that selected next-day forecast and per-city historical error alongside exploratory charts. The interactive console still uses the older calendar-only model.
 

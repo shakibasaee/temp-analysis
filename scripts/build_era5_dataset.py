@@ -18,9 +18,9 @@ from scripts.audit_open_meteo import (
 )
 
 
-def build(start: date, end: date, output: Path) -> dict:
-    payload = fetch_archive(start, end)
-    summary = summarize_archive(payload, start, end)
+def build(start: date, end: date, output: Path, timezone: str = "Asia/Tehran") -> dict:
+    payload = fetch_archive(start, end, timezone)
+    summary = summarize_archive(payload, start, end, timezone)
     if any(
         any(city["missing"].values()) or city["inconsistent_min_mean_max"]
         for city in summary["cities"]
@@ -48,7 +48,7 @@ def build(start: date, end: date, output: Path) -> dict:
         "api_endpoint": ENDPOINT,
         "model": "era5",
         "variables": list(VARIABLES),
-        "timezone": "Asia/Tehran",
+        "timezone": timezone,
         "unit": "Celsius",
         "license": "CC BY 4.0; attribution required",
         "license_url": "https://open-meteo.com/en/terms",
@@ -71,8 +71,9 @@ def main() -> None:
     parser.add_argument("--start", type=date.fromisoformat, default=date(2020, 1, 1))
     parser.add_argument("--end", type=date.fromisoformat, default=date(2025, 12, 31))
     parser.add_argument("--out", type=Path, default=Path("data/era5_five_cities.csv"))
+    parser.add_argument("--timezone", default="Asia/Tehran")
     args = parser.parse_args()
-    print(json.dumps(build(args.start, args.end, args.out), indent=2))
+    print(json.dumps(build(args.start, args.end, args.out, args.timezone), indent=2))
 
 
 if __name__ == "__main__":

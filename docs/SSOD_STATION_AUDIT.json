@@ -1,0 +1,152 @@
+{
+  "source": "NOAA NCEI SSODv2",
+  "station_index": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-station-list.txt",
+  "documentation": "https://www.ncei.noaa.gov/oa/synoptic-summary-of-the-day/v2/doc/ssodv2_DOCUMENTATION.pdf",
+  "retrieved_utc": "2026-11-17T08:42:30.389819+00:00",
+  "year": 2025,
+  "day_definition": "00:00\u201323:59 UTC, not Asia/Tehran local day",
+  "denominator_days": 365,
+  "temperature_rule": "finite values strictly between -100 and 70 C; exclude missing sentinel -9999.9",
+  "stations": [
+    {
+      "city": "Bandar_Abbas",
+      "station_id": "IRI0000OIKB",
+      "station_name": "BANDAR ABBASS INTL",
+      "station_latitude": 27.2182,
+      "station_longitude": 56.3779,
+      "city_latitude": 27.1865,
+      "city_longitude": 56.2808,
+      "distance_km": 10.2,
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=synoptic-summary-of-the-day-v2&stations=IRI0000OIKB&startDate=2025-01-01&endDate=2025-12-31&format=json",
+      "response_sha256": "abfda596c44e6e85e22ed8075555b03e2c064582d88d8e88aa64a8357dc283cc",
+      "rows": 353,
+      "distinct_dates": 353,
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "element_days": {
+        "mean_temperature": 347,
+        "min_temperature": 347,
+        "max_temperature": 347
+      },
+      "all_three_days": 347,
+      "ordering_violations": 0,
+      "latest_date": {
+        "mean_temperature": "2025-12-31",
+        "min_temperature": "2025-12-31",
+        "max_temperature": "2025-12-31"
+      }
+    },
+    {
+      "city": "Mashhad",
+      "station_id": "IRU040745-1",
+      "station_name": "MASHHAD",
+      "station_latitude": 36.27,
+      "station_longitude": 59.63,
+      "city_latitude": 36.29807,
+      "city_longitude": 59.60567,
+      "distance_km": 3.8,
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=synoptic-summary-of-the-day-v2&stations=IRU040745-1&startDate=2025-01-01&endDate=2025-12-31&format=json",
+      "response_sha256": "3d2f4ec531d15c5871cb913eebb5b718a3661e57df2431bbe032f553d96a8cd6",
+      "rows": 353,
+      "distinct_dates": 353,
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "element_days": {
+        "mean_temperature": 347,
+        "min_temperature": 347,
+        "max_temperature": 347
+      },
+      "all_three_days": 347,
+      "ordering_violations": 0,
+      "latest_date": {
+        "mean_temperature": "2025-12-31",
+        "min_temperature": "2025-12-31",
+        "max_temperature": "2025-12-31"
+      }
+    },
+    {
+      "city": "Rasht",
+      "station_id": "IRI0000OIGG",
+      "station_name": "RASHT",
+      "station_latitude": 37.3254,
+      "station_longitude": 49.6057,
+      "city_latitude": 37.27611,
+      "city_longitude": 49.58862,
+      "distance_km": 5.7,
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=synoptic-summary-of-the-day-v2&stations=IRI0000OIGG&startDate=2025-01-01&endDate=2025-12-31&format=json",
+      "response_sha256": "3133f367efdedc2d2838d33aef12b7bbeba3a56c09810543a8d2b1d09d44c9a6",
+      "rows": 350,
+      "distinct_dates": 350,
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "element_days": {
+        "mean_temperature": 335,
+        "min_temperature": 335,
+        "max_temperature": 335
+      },
+      "all_three_days": 335,
+      "ordering_violations": 0,
+      "latest_date": {
+        "mean_temperature": "2025-12-31",
+        "min_temperature": "2025-12-31",
+        "max_temperature": "2025-12-31"
+      }
+    },
+    {
+      "city": "Sanandaj",
+      "station_id": "IRI0000OICS",
+      "station_name": "SANANDAJ",
+      "station_latitude": 35.2469,
+      "station_longitude": 47.009,
+      "city_latitude": 35.31495,
+      "city_longitude": 46.99883,
+      "distance_km": 7.6,
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=synoptic-summary-of-the-day-v2&stations=IRI0000OICS&startDate=2025-01-01&endDate=2025-12-31&format=json",
+      "response_sha256": "7eacdac69e1ccd69f93df2f0ce72e5f617f3b2eae865540ff4b6f728517035e8",
+      "rows": 353,
+      "distinct_dates": 353,
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "element_days": {
+        "mean_temperature": 347,
+        "min_temperature": 347,
+        "max_temperature": 347
+      },
+      "all_three_days": 347,
+      "ordering_violations": 0,
+      "latest_date": {
+        "mean_temperature": "2025-12-31",
+        "min_temperature": "2025-12-31",
+        "max_temperature": "2025-12-31"
+      }
+    },
+    {
+      "city": "Yazd",
+      "station_id": "IRI0000OIYY",
+      "station_name": "YAZD SHAHID SADOOGHI",
+      "station_latitude": 31.9049,
+      "station_longitude": 54.2765,
+      "city_latitude": 31.89722,
+      "city_longitude": 54.3675,
+      "distance_km": 8.6,
+      "url": "https://www.ncei.noaa.gov/access/services/data/v1?dataset=synoptic-summary-of-the-day-v2&stations=IRI0000OIYY&startDate=2025-01-01&endDate=2025-12-31&format=json",
+      "response_sha256": "20944e4c3ed8647c6f516bb8719678461d176b9cd6a7ee9a3671c512d15de71e",
+      "rows": 353,
+      "distinct_dates": 353,
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "element_days": {
+        "mean_temperature": 347,
+        "min_temperature": 347,
+        "max_temperature": 347
+      },
+      "all_three_days": 347,
+      "ordering_violations": 0,
+      "latest_date": {
+        "mean_temperature": "2025-12-31",
+        "min_temperature": "2025-12-31",
+        "max_temperature": "2025-12-31"
+      }
+    }
+  ]
+}

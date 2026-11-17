@@ -63,6 +63,21 @@ an app defect; a concrete reproduction would be needed to investigate it.
 
 ## Independent station observation audit
 
+The [local-day GHCNh station validation](LOCAL_STATION_VALIDATION_FA.md) aggregates
+quality-screened 2025 hourly observations for five stations to `Asia/Tehran`
+days and scores the same 1–30-day research forecasts on matched observations.
+It provides an observation-based check for the requested day boundary, but
+hourly-sampled extrema are proxies and Rasht has only 160 eligible days. The
+station files are kept out of Git pending a redistribution-rights review.
+
+The newer [SSODv2 station validation](SSOD_VALIDATION_FA.md) found 335–347
+three-target UTC days per proposed city station in 2025, including a Rasht
+station about 5.7 km from the provisional city point. It compares a separately
+retrieved **GMT-day** ERA5 backtest against station summaries on matched dates.
+This is a supplementary UTC-day diagnostic, not validation of the requested
+`Asia/Tehran`-day product. NOAA notes that synoptic min/max can miss actual
+daily extremes; station redistribution rights also need review.
+
 The [GHCN-Daily station audit](OBSERVATION_SOURCE_AUDIT_FA.md) checks five
 candidate stations for 2020-01-01 through 2025-12-31. It records station IDs,
 distance, per-target coverage, quality flags, and source hashes without

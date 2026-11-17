@@ -11,6 +11,7 @@ import json
 import math
 import time
 from datetime import date, timedelta
+from http.client import IncompleteRead
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -29,7 +30,7 @@ VARIABLES = (
 ENDPOINT = "https://archive-api.open-meteo.com/v1/archive"
 
 
-def fetch_archive(start: date, end: date) -> list[dict]:
+def fetch_archive(start: date, end: date, timezone: str = "Asia/Tehran") -> list[dict]:
     if end < start:
         raise ValueError("end date must be on or after start date")
     params = {
@@ -38,23 +39,25 @@ def fetch_archive(start: date, end: date) -> list[dict]:
         "start_date": start.isoformat(),
         "end_date": end.isoformat(),
         "daily": ",".join(VARIABLES),
-        "timezone": "Asia/Tehran",
+        "timezone": timezone,
         "models": "era5",
         "temperature_unit": "celsius",
     }
-    for attempt in range(3):
+    for attempt in range(5):
         try:
             with urlopen(f"{ENDPOINT}?{urlencode(params)}", timeout=60) as response:
                 payload = json.load(response)
             break
-        except OSError:
-            if attempt == 2:
+        except (OSError, IncompleteRead):
+            if attempt == 4:
                 raise
             time.sleep(attempt + 1)
     return payload
 
 
-def summarize_archive(payload: list[dict], start: date, end: date) -> dict:
+def summarize_archive(
+    payload: list[dict], start: date, end: date, timezone: str = "Asia/Tehran"
+) -> dict:
     if not isinstance(payload, list) or len(payload) != len(CITY_POINTS):
         raise ValueError("expected one response per requested city")
 
@@ -64,7 +67,7 @@ def summarize_archive(payload: list[dict], start: date, end: date) -> dict:
     results = []
     for (city, geocoding_id, lat, lon), item in zip(CITY_POINTS, payload, strict=True):
         daily = item["daily"]
-        if item.get("timezone") != "Asia/Tehran" or daily.get("time") != expected_dates:
+        if item.get("timezone") != timezone or daily.get("time") != expected_dates:
             raise ValueError(f"{city}: unexpected timezone or date coverage")
         missing = {}
         for variable in VARIABLES:
@@ -102,21 +105,22 @@ def summarize_archive(payload: list[dict], start: date, end: date) -> dict:
         "source": "Open-Meteo Historical Weather API / ERA5",
         "start": start.isoformat(),
         "end": end.isoformat(),
-        "timezone": "Asia/Tehran",
+        "timezone": timezone,
         "cities": results,
     }
 
 
-def audit(start: date, end: date) -> dict:
-    return summarize_archive(fetch_archive(start, end), start, end)
+def audit(start: date, end: date, timezone: str = "Asia/Tehran") -> dict:
+    return summarize_archive(fetch_archive(start, end, timezone), start, end, timezone)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--start", type=date.fromisoformat, default=date(2023, 1, 1))
     parser.add_argument("--end", type=date.fromisoformat, default=date(2024, 12, 31))
+    parser.add_argument("--timezone", default="Asia/Tehran")
     args = parser.parse_args()
-    print(json.dumps(audit(args.start, args.end), indent=2))
+    print(json.dumps(audit(args.start, args.end, args.timezone), indent=2))
 
 
 if __name__ == "__main__":
