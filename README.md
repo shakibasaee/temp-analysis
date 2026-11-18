@@ -18,6 +18,12 @@ and 3.2714 °C for daily mean, minimum, and maximum proxies; Rasht has only
 is a separate supplementary comparison. Both are retrospective research
 backtests, not live operational forecasts or measured true daily extrema.
 
+A [later 2026 station check](docs/LATER_STATION_EVALUATION_FA.md) uses a
+predeclared model-acceptance rule. Its outcome is **indeterminate**: the NOAA
+files contain later reports, but quality-code-1 temperature observations yield
+only 6–55 matched target days per city, below the required 100. No model upgrade
+or operational accuracy claim follows from this partial holdout.
+
 The supported workflow validates daily city data, compares five existing candidates across expanding monthly validation folds and a held-out test, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard shows that selected next-day forecast and per-city historical error alongside exploratory charts. The interactive console still uses the older calendar-only model.
 
 The supplied `data/new_weather_data.csv` contains 3,655 daily observations across five cities from 2023-01-01 through 2024-12-31. Temperature targets and dates are complete; precipitation has 19 missing values and pressure has 10. The forecasting workflow uses only city, date, and previously observed temperature, so no future weather measurements are assumed. Dataset provenance and external validity are not documented. Treat the results as an internal benchmark, not a deployed weather service.

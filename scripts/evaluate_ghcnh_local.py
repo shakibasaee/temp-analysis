@@ -69,7 +69,10 @@ def parse_local_station(raw: bytes, station_id: str, year: int) -> tuple[pd.Data
         raise ValueError("No valid, physically ordered local station days")
     return daily, {
         "raw_reports": len(frame),
+        "latest_raw_utc_timestamp": stamps.max().isoformat(),
+        "reports_with_missing_quality_code": int(quality.isna().sum()),
         "quality_accepted_reports": int(accepted.sum()),
+        "latest_quality_accepted_utc_timestamp": stamps[accepted].max().isoformat(),
         "distinct_local_hour_bins": len(hourly),
         "local_days_with_any_accepted_hour": len(hours),
         "eligible_local_days": len(daily),
