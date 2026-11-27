@@ -32,12 +32,14 @@ class LaterStationHoldoutTests(unittest.TestCase):
         frame, predictions = example(100)
         result = decision(frame, predictions)
         self.assertEqual("pass", result["status"])
+        self.assertEqual("research_ridge_retained", result["disposition"])
         self.assertEqual(100, result["unique_station_target_days_by_city"]["Rasht"])
 
     def test_few_days_are_indeterminate_despite_many_overlapping_forecasts(self):
         frame, predictions = example(99)
         result = decision(frame, predictions)
         self.assertEqual("indeterminate", result["status"])
+        self.assertEqual("no_model_promoted_insufficient_station_coverage", result["disposition"])
         self.assertIsNone(result["by_city_target"][0]["city_gate_pass"])
 
     def test_fails_when_accuracy_gain_does_not_meet_gate(self):
@@ -45,6 +47,7 @@ class LaterStationHoldoutTests(unittest.TestCase):
         predictions["ridge"][:] = 12.9
         result = decision(frame, predictions)
         self.assertEqual("fail", result["status"])
+        self.assertEqual("no_model_promoted_acceptance_gate_failed", result["disposition"])
         self.assertFalse(result["by_target"][0]["mae_gate_pass"])
 
     def test_rejects_misaligned_predictions(self):

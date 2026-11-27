@@ -23,6 +23,8 @@ predeclared model-acceptance rule. Its outcome is **indeterminate**: the NOAA
 files contain later reports, but quality-code-1 temperature observations yield
 only 6–55 matched target days per city, below the required 100. No model upgrade
 or operational accuracy claim follows from this partial holdout.
+The [model decision](docs/MODEL_DECISION_FA.md) closes the current comparison:
+no 1–30-day model is promoted to the app without adequate station coverage.
 
 The supported workflow validates daily city data, compares five existing candidates across expanding monthly validation folds and a held-out test, saves a selected forecast policy, and predicts the day after the latest observation. The dashboard shows that selected next-day forecast and per-city historical error alongside exploratory charts. The interactive console still uses the older calendar-only model.
 

@@ -1,6 +1,6 @@
 {
   "report_schema_version": 1,
-  "created_utc": "2026-11-27T08:14:04.503829+00:00",
+  "created_utc": "2026-11-27T08:52:30.861900+00:00",
   "source": "Open-Meteo ERA5 retrospective estimates vs NOAA GHCNh hourly station proxies",
   "acceptance_policy_sha256": "e1412c81aa3fb22ae34e1a4671a80af18b3003daf96ae1056c20040da6cd2abb",
   "day_definition": "Asia/Tehran local calendar day",
@@ -13476,7 +13476,8 @@
         "city_gate_pass": null
       }
     ],
-    "status": "indeterminate"
+    "status": "indeterminate",
+    "disposition": "no_model_promoted_insufficient_station_coverage"
   },
   "limitations": "ERA5 was downloaded retrospectively and can be revised. Station daily targets are proxies from quality-screened hourly reports, not true daily extrema. Overlapping forecasts and adjacent dates are dependent. This is not live forecast skill."
 }

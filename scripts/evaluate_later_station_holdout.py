@@ -112,6 +112,13 @@ def decision(matched: pd.DataFrame, predictions: dict[str, np.ndarray]) -> dict:
         "by_target": by_target,
         "by_city_target": by_city_target,
         "status": "indeterminate" if missing else "pass" if all_pass else "fail",
+        "disposition": (
+            "research_ridge_retained"
+            if not missing and all_pass
+            else "no_model_promoted_insufficient_station_coverage"
+            if missing
+            else "no_model_promoted_acceptance_gate_failed"
+        ),
     }
 
 
