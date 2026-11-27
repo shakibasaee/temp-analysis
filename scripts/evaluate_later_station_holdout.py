@@ -115,6 +115,45 @@ def decision(matched: pd.DataFrame, predictions: dict[str, np.ndarray]) -> dict:
     }
 
 
+def failure_diagnostics(matched: pd.DataFrame, predictions: dict[str, np.ndarray]) -> dict:
+    """Describe physical ordering and horizon failures without selecting a model."""
+    actual = matched[list(TARGETS)].to_numpy()
+    buckets = ((1, 7), (8, 14), (15, 30))
+    result = []
+    for model, values in predictions.items():
+        if values.shape != actual.shape or not np.isfinite(values).all():
+            raise ValueError("Predictions must be finite and aligned")
+        violations = (values[:, 1] > values[:, 0]) | (values[:, 0] > values[:, 2])
+        by_horizon = []
+        for lower, upper in buckets:
+            selected = matched["horizon"].between(lower, upper).to_numpy()
+            if not selected.any():
+                continue
+            errors = np.abs(actual[selected] - values[selected])
+            by_horizon.append(
+                {
+                    "horizon_days": [lower, upper],
+                    "n_forecasts": int(selected.sum()),
+                    "unique_city_target_days": int(
+                        matched.loc[selected, ["City", "target_date"]].drop_duplicates().shape[0]
+                    ),
+                    "mae_c": {
+                        target: round(float(errors[:, index].mean()), 4)
+                        for index, target in enumerate(TARGETS)
+                    },
+                }
+            )
+        result.append(
+            {
+                "model": model,
+                "ordering_violations": int(violations.sum()),
+                "ordering_violation_pct": round(float(100 * violations.mean()), 2),
+                "by_horizon": by_horizon,
+            }
+        )
+    return {"models": result, "note": "Diagnostic only; no threshold or model selection"}
+
+
 def evaluate(base_path: Path, extension_path: Path, station_dir: Path) -> tuple[dict, dict]:
     base, base_meta = verified_data(base_path)
     extension, extension_meta = verified_data(extension_path)
@@ -198,6 +237,7 @@ def evaluate(base_path: Path, extension_path: Path, station_dir: Path) -> tuple[
         "station_overall": overall,
         "station_by_city_horizon": detail,
         "station_by_city_season": score_by_city_season(matched, paired),
+        "failure_diagnostics": failure_diagnostics(matched, paired),
         "decision": gate,
         "limitations": (
             "ERA5 was downloaded retrospectively and can be revised. Station daily targets "

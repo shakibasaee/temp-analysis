@@ -1,6 +1,6 @@
 {
   "report_schema_version": 1,
-  "created_utc": "2026-11-18T18:31:38.650295+00:00",
+  "created_utc": "2026-11-27T08:14:04.503829+00:00",
   "source": "Open-Meteo ERA5 retrospective estimates vs NOAA GHCNh hourly station proxies",
   "acceptance_policy_sha256": "e1412c81aa3fb22ae34e1a4671a80af18b3003daf96ae1056c20040da6cd2abb",
   "day_definition": "Asia/Tehran local calendar day",
@@ -13136,6 +13136,149 @@
       "within_2c_pct": 15.71
     }
   ],
+  "failure_diagnostics": {
+    "models": [
+      {
+        "model": "persistence",
+        "ordering_violations": 0,
+        "ordering_violation_pct": 0.0,
+        "by_horizon": [
+          {
+            "horizon_days": [
+              1,
+              7
+            ],
+            "n_forecasts": 1442,
+            "unique_city_target_days": 218,
+            "mae_c": {
+              "Mean_C": 4.4672,
+              "Min_C": 4.2321,
+              "Max_C": 5.954
+            }
+          },
+          {
+            "horizon_days": [
+              8,
+              14
+            ],
+            "n_forecasts": 1246,
+            "unique_city_target_days": 190,
+            "mae_c": {
+              "Mean_C": 5.4213,
+              "Min_C": 4.9542,
+              "Max_C": 6.8612
+            }
+          },
+          {
+            "horizon_days": [
+              15,
+              30
+            ],
+            "n_forecasts": 2106,
+            "unique_city_target_days": 162,
+            "mae_c": {
+              "Mean_C": 6.9911,
+              "Min_C": 6.1117,
+              "Max_C": 8.4546
+            }
+          }
+        ]
+      },
+      {
+        "model": "seasonal_weekday",
+        "ordering_violations": 0,
+        "ordering_violation_pct": 0.0,
+        "by_horizon": [
+          {
+            "horizon_days": [
+              1,
+              7
+            ],
+            "n_forecasts": 1442,
+            "unique_city_target_days": 218,
+            "mae_c": {
+              "Mean_C": 4.8304,
+              "Min_C": 4.4962,
+              "Max_C": 6.3067
+            }
+          },
+          {
+            "horizon_days": [
+              8,
+              14
+            ],
+            "n_forecasts": 1246,
+            "unique_city_target_days": 190,
+            "mae_c": {
+              "Mean_C": 5.6879,
+              "Min_C": 5.0681,
+              "Max_C": 6.9769
+            }
+          },
+          {
+            "horizon_days": [
+              15,
+              30
+            ],
+            "n_forecasts": 2106,
+            "unique_city_target_days": 162,
+            "mae_c": {
+              "Mean_C": 7.0572,
+              "Min_C": 6.2261,
+              "Max_C": 8.4585
+            }
+          }
+        ]
+      },
+      {
+        "model": "ridge",
+        "ordering_violations": 0,
+        "ordering_violation_pct": 0.0,
+        "by_horizon": [
+          {
+            "horizon_days": [
+              1,
+              7
+            ],
+            "n_forecasts": 1442,
+            "unique_city_target_days": 218,
+            "mae_c": {
+              "Mean_C": 3.4351,
+              "Min_C": 3.2044,
+              "Max_C": 4.6002
+            }
+          },
+          {
+            "horizon_days": [
+              8,
+              14
+            ],
+            "n_forecasts": 1246,
+            "unique_city_target_days": 190,
+            "mae_c": {
+              "Mean_C": 3.8404,
+              "Min_C": 3.4028,
+              "Max_C": 5.012
+            }
+          },
+          {
+            "horizon_days": [
+              15,
+              30
+            ],
+            "n_forecasts": 2106,
+            "unique_city_target_days": 162,
+            "mae_c": {
+              "Mean_C": 4.3633,
+              "Min_C": 3.5858,
+              "Max_C": 5.6981
+            }
+          }
+        ]
+      }
+    ],
+    "note": "Diagnostic only; no threshold or model selection"
+  },
   "decision": {
     "policy": "docs/MODEL_ACCEPTANCE_POLICY_FA.md",
     "unique_station_target_days_by_city": {

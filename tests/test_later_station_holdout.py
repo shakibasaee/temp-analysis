@@ -7,7 +7,7 @@ import pandas as pd
 
 from forecasting.multi_horizon import TARGETS
 from scripts.audit_ssod import STATIONS
-from scripts.evaluate_later_station_holdout import decision
+from scripts.evaluate_later_station_holdout import decision, failure_diagnostics
 
 
 def example(days: int) -> tuple[pd.DataFrame, dict[str, np.ndarray]]:
@@ -52,6 +52,16 @@ class LaterStationHoldoutTests(unittest.TestCase):
         predictions["ridge"] = predictions["ridge"][:-1]
         with self.assertRaisesRegex(ValueError, "aligned"):
             decision(frame, predictions)
+
+    def test_failure_diagnostics_count_ordering_and_horizon(self):
+        frame, predictions = example(1)
+        frame["horizon"] = 1
+        predictions["ridge"][:, 1] = 12.0
+        result = failure_diagnostics(frame, predictions)
+        ridge = next(item for item in result["models"] if item["model"] == "ridge")
+        self.assertEqual(len(frame), ridge["ordering_violations"])
+        self.assertEqual(5, ridge["by_horizon"][0]["unique_city_target_days"])
+        self.assertEqual([1, 7], ridge["by_horizon"][0]["horizon_days"])
 
 
 if __name__ == "__main__":
